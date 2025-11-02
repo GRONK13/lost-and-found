@@ -51,8 +51,7 @@ export default async function ClaimsPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-8">Claims Management</h1>
-
+      
       <Tabs defaultValue="received" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="received">

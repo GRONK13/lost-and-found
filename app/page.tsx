@@ -26,7 +26,7 @@ export default async function HomePage() {
         <p className="text-xl text-muted-foreground mb-8">
           Find what you've lost, return what you've found
         </p>
-        
+
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link href="/items">
             <Button size="lg" className="w-full sm:w-auto">
@@ -34,7 +34,7 @@ export default async function HomePage() {
               Browse Items
             </Button>
           </Link>
-          
+
           {user ? (
             <Link href="/report">
               <Button size="lg" variant="outline" className="w-full sm:w-auto">
@@ -49,39 +49,6 @@ export default async function HomePage() {
               </Button>
             </Link>
           )}
-        </div>
-      </div>
-
-      {/* Features Section */}
-      <div className="grid md:grid-cols-3 gap-8 mb-16">
-        <div className="text-center p-6">
-          <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-            <Search className="h-6 w-6 text-primary-foreground" />
-          </div>
-          <h3 className="text-lg font-semibold mb-2">Browse Items</h3>
-          <p className="text-muted-foreground">
-            Search through lost and found items with powerful filters
-          </p>
-        </div>
-
-        <div className="text-center p-6">
-          <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-            <PlusCircle className="h-6 w-6 text-primary-foreground" />
-          </div>
-          <h3 className="text-lg font-semibold mb-2">Report Items</h3>
-          <p className="text-muted-foreground">
-            Easily report lost or found items with photos and details
-          </p>
-        </div>
-
-        <div className="text-center p-6">
-          <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-            <Shield className="h-6 w-6 text-primary-foreground" />
-          </div>
-          <h3 className="text-lg font-semibold mb-2">Secure Claims</h3>
-          <p className="text-muted-foreground">
-            Claim items securely - reporters approve legitimate claims
-          </p>
         </div>
       </div>
 
@@ -100,19 +67,6 @@ export default async function HomePage() {
               <ItemCard key={item.id} item={item} />
             ))}
           </div>
-        </div>
-      )}
-
-      {/* CTA Section */}
-      {!user && (
-        <div className="mt-16 bg-muted rounded-lg p-8 text-center">
-          <h2 className="text-2xl font-bold mb-4">Ready to get started?</h2>
-          <p className="text-muted-foreground mb-6">
-            Join our community to report items and help reunite lost belongings with their owners
-          </p>
-          <Link href="/auth/register">
-            <Button size="lg">Sign Up Now</Button>
-          </Link>
         </div>
       )}
     </div>

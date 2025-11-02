@@ -9,6 +9,7 @@ import { FileQuestion } from 'lucide-react'
 export default function MyReportsPage() {
   const [items, setItems] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [userId, setUserId] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchMyReports = async () => {
@@ -20,6 +21,8 @@ export default function MyReportsPage() {
         window.location.href = '/auth/login'
         return
       }
+
+      setUserId(user.id)
 
       const { data, error } = await supabase
         .from('items')
@@ -49,12 +52,6 @@ export default function MyReportsPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">My Reports</h1>
-        <p className="text-muted-foreground">
-          Items you've reported as lost or found
-        </p>
-      </div>
 
       {items.length === 0 ? (
         <Card>
@@ -69,7 +66,7 @@ export default function MyReportsPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {items.map((item) => (
-            <ItemCard key={item.id} item={item} />
+            <ItemCard key={item.id} item={item} showActions={true} userId={userId || undefined} />
           ))}
         </div>
       )}

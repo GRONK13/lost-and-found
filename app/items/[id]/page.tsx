@@ -11,7 +11,20 @@ import { ImageModal } from '@/components/ImageModal'
 import { UpdateItemStatusButton } from '@/components/UpdateItemStatusButton'
 import { ChatWithReporterButton } from '@/components/ChatWithReporterButton'
 import { ClaimItemModal } from '@/components/ClaimItemModal'
-import { MapPin, Calendar, User, Hand } from 'lucide-react'
+import { MapPin, Calendar, User, Hand, Edit, Trash2 } from 'lucide-react'
+import Link from 'next/link'
+import { toast } from '@/components/ui/use-toast'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 export default function ItemDetailPage({ params }: { params: { id: string } }) {
   const [item, setItem] = useState<any>(null)
@@ -20,8 +33,46 @@ export default function ItemDetailPage({ params }: { params: { id: string } }) {
   const [loading, setLoading] = useState(true)
   const [imageModalOpen, setImageModalOpen] = useState(false)
   const [claimModalOpen, setClaimModalOpen] = useState(false)
+  const [deleting, setDeleting] = useState(false)
   const router = useRouter()
   const supabase = createClient()
+
+  const handleDelete = async () => {
+    setDeleting(true)
+
+    try {
+      // Delete photo from storage if exists
+      if (item.photo_url) {
+        const fileName = item.photo_url.split('/').pop()
+        if (fileName) {
+          await supabase.storage.from('item-photos').remove([fileName])
+        }
+      }
+
+      // Delete item
+      const { error } = await supabase
+        .from('items')
+        .delete()
+        .eq('id', item.id)
+
+      if (error) throw error
+
+      toast({
+        title: 'Success',
+        description: 'Item deleted successfully',
+      })
+
+      router.push('/my-reports')
+    } catch (error) {
+      console.error('Error deleting item:', error)
+      toast({
+        title: 'Error',
+        description: 'Failed to delete item',
+        variant: 'destructive',
+      })
+      setDeleting(false)
+    }
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -122,7 +173,42 @@ export default function ItemDetailPage({ params }: { params: { id: string } }) {
         
         {/* Details Section */}
         <div>
-          <h1 className="text-3xl font-bold mb-4">{item.title}</h1>
+          <div className="flex items-start justify-between mb-4">
+            <h1 className="text-3xl font-bold">{item.title}</h1>
+            {isReporter && (
+              <div className="flex gap-2">
+                <Link href={`/items/${item.id}/edit`}>
+                  <Button variant="outline" size="sm">
+                    <Edit className="h-4 w-4 mr-2" />
+                    Edit
+                  </Button>
+                </Link>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="outline" size="sm" disabled={deleting}>
+                      <Trash2 className="h-4 w-4 mr-2" />
+                      Delete
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently delete your report
+                        and remove all associated data.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground">
+                        {deleting ? 'Deleting...' : 'Delete'}
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
+            )}
+          </div>
           
           <div className="flex gap-2 mb-6">
             <StatusBadge status={item.status} />
