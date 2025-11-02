@@ -109,12 +109,16 @@ export function ChatBox({ claimId, currentUserId, currentUserName = 'You', other
 
   const markMessagesAsRead = async () => {
     // Mark all unread messages in this claim as read (except those sent by current user)
-    await supabase
+    console.log('📖 Marking messages as read for claim:', claimId)
+    const { data, error } = await supabase
       .from('messages')
       .update({ read: true })
       .eq('claim_id', claimId)
       .eq('read', false)
       .neq('sender_id', currentUserId)
+      .select()
+    
+    console.log('📖 Marked messages:', data, 'Error:', error)
   }
 
   const markMessageAsRead = async (messageId: number) => {

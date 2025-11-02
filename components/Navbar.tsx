@@ -56,7 +56,8 @@ export function Navbar() {
               schema: 'public',
               table: 'messages',
             },
-            () => {
+            (payload) => {
+              console.log('📨 New message inserted:', payload)
               // Refresh unread count when new message arrives
               fetchUnreadMessagesCount(user.id)
             }
@@ -68,7 +69,8 @@ export function Navbar() {
               schema: 'public',
               table: 'messages',
             },
-            () => {
+            (payload) => {
+              console.log('📝 Message updated:', payload)
               // Refresh unread count when message is marked as read
               fetchUnreadMessagesCount(user.id)
             }
@@ -107,29 +109,57 @@ export function Navbar() {
   }
 
   const fetchUnreadMessagesCount = async (userId: string) => {
-    // Get all chat-type claims where user is involved (as claimant or reporter)
-    const { data: userClaims } = await supabase
+    console.log('📊 Fetching unread messages for user:', userId)
+    
+    // Get claims where user is claimant
+    const { data: claimsAsClaimant } = await supabase
       .from('claims')
-      .select('id, item_id, items!inner(reporter_id)')
-      .or(`claimant_id.eq.${userId},items.reporter_id.eq.${userId}`)
+      .select('id')
+      .eq('claimant_id', userId)
       .eq('chat_type', 'chat')
       .in('status', ['pending', 'approved'])
 
-    if (!userClaims || userClaims.length === 0) {
+    // Get claims where user is reporter
+    const { data: claimsAsReporter } = await supabase
+      .from('claims')
+      .select('id, items!inner(reporter_id)')
+      .eq('items.reporter_id', userId)
+      .eq('chat_type', 'chat')
+      .in('status', ['pending', 'approved'])
+
+    const allClaims = [
+      ...(claimsAsClaimant || []),
+      ...(claimsAsReporter || [])
+    ]
+
+    console.log('📋 User claims:', allClaims)
+
+    if (allClaims.length === 0) {
+      console.log('❌ No chat claims found')
       setUnreadMessagesCount(0)
       return
     }
 
-    const claimIds = userClaims.map(c => c.id)
+    const claimIds = allClaims.map(c => c.id)
+    console.log('🔑 Claim IDs to check:', claimIds)
 
     // Count unread messages in these claims (not sent by current user)
-    const { count } = await supabase
+    const { count, error } = await supabase
       .from('messages')
       .select('*', { count: 'exact', head: true })
       .in('claim_id', claimIds)
       .eq('read', false)
       .neq('sender_id', userId)
 
+    console.log('💬 Unread count:', count, 'Error:', error)
+
+    if (error) {
+      console.error('Error counting unread messages:', error)
+      setUnreadMessagesCount(0)
+      return
+    }
+
+    console.log('✅ Setting unread count to:', count)
     setUnreadMessagesCount(count || 0)
   }
 
@@ -186,19 +216,17 @@ export function Navbar() {
                   
                   <Link
                     href="/chats"
-                    className={`text-sm font-medium transition-colors hover:text-primary ${
+                    className={`text-sm font-medium transition-colors hover:text-primary relative ${
                       pathname === '/chats' ? 'text-primary' : 'text-muted-foreground'
                     }`}
                   >
                     <MessageCircle className="inline-block w-4 h-4 mr-1" />
-                    <div className="relative inline-block">
-                      Chats
-                      {unreadMessagesCount > 0 && (
-                        <span className="absolute -top-2 -right-4 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                          {unreadMessagesCount}
-                        </span>
-                      )}
-                    </div>
+                    Chats
+                    {unreadMessagesCount > 0 && (
+                      <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold">
+                        {unreadMessagesCount}
+                      </span>
+                    )}
                   </Link>
                   
                   <Link

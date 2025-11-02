@@ -18,6 +18,7 @@ interface Claim {
   otherUserName: string
   itemTitle: string
   itemId: number
+  unreadCount: number
 }
 
 function ChatsContent() {
@@ -28,6 +29,25 @@ function ChatsContent() {
   const [loading, setLoading] = useState(true)
   const searchParams = useSearchParams()
   const claimIdFromUrl = searchParams.get('claimId')
+  const supabase = createClient()
+
+  // Function to refresh unread count for all claims
+  const refreshUnreadCounts = async (userId: string) => {
+    const updatedClaims = [...allClaims]
+    
+    for (const claim of updatedClaims) {
+      const { count } = await supabase
+        .from('messages')
+        .select('*', { count: 'exact', head: true })
+        .eq('claim_id', claim.id)
+        .eq('read', false)
+        .neq('sender_id', userId)
+      
+      claim.unreadCount = count || 0
+    }
+    
+    setAllClaims(updatedClaims)
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -90,6 +110,7 @@ function ChatsContent() {
           otherUserName: claim.items?.users?.name || claim.items?.users?.email || 'Reporter',
           itemTitle: claim.items?.title || 'Unknown Item',
           itemId: claim.items?.id,
+          unreadCount: 0, // Will be populated below
         })),
         ...(claimsAsReporter || []).map(claim => ({
           id: claim.id,
@@ -99,8 +120,21 @@ function ChatsContent() {
           otherUserName: claim.users?.name || claim.users?.email || 'Claimant',
           itemTitle: claim.items?.title || 'Unknown Item',
           itemId: claim.items?.id,
+          unreadCount: 0, // Will be populated below
         })),
       ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+
+      // Fetch unread count for each claim
+      for (const claim of claims) {
+        const { count } = await supabase
+          .from('messages')
+          .select('*', { count: 'exact', head: true })
+          .eq('claim_id', claim.id)
+          .eq('read', false)
+          .neq('sender_id', currentUser.id)
+        
+        claim.unreadCount = count || 0
+      }
 
       setAllClaims(claims)
       
@@ -121,6 +155,43 @@ function ChatsContent() {
 
     fetchData()
   }, [claimIdFromUrl])
+
+  // Subscribe to message updates to refresh unread counts in real-time
+  useEffect(() => {
+    if (!user) return
+
+    const channel = supabase
+      .channel('chats-page-messages')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'messages',
+        },
+        () => {
+          // Refresh unread counts when any message is inserted or updated
+          refreshUnreadCounts(user.id)
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [user, allClaims])
+
+  // Refresh unread counts when a conversation is selected
+  useEffect(() => {
+    if (user && selectedClaimId) {
+      // Small delay to allow ChatBox to mark messages as read first
+      const timer = setTimeout(() => {
+        refreshUnreadCounts(user.id)
+      }, 500)
+      
+      return () => clearTimeout(timer)
+    }
+  }, [selectedClaimId, user])
 
   const statusColor: Record<'pending' | 'approved' | 'rejected', 'default' | 'destructive'> = {
     pending: 'default',
@@ -158,9 +229,17 @@ function ChatsContent() {
           <div className="md:col-span-4 lg:col-span-3">
             <Card>
               <CardHeader>
-                <CardTitle className="text-sm font-medium text-muted-foreground">
-                  Conversations
-                </CardTitle>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-sm font-medium text-muted-foreground">
+                    Conversations
+                  </CardTitle>
+                  <Link 
+                    href="/chats/all" 
+                    className="text-xs text-primary hover:underline"
+                  >
+                    View all
+                  </Link>
+                </div>
               </CardHeader>
               <CardContent className="p-0">
                 <div className="space-y-1">
@@ -169,27 +248,30 @@ function ChatsContent() {
                       key={claim.id}
                       onClick={() => setSelectedClaimId(claim.id)}
                       className={cn(
-                        "w-full text-left px-4 py-3 hover:bg-muted/50 transition-colors border-l-2",
+                        "w-full text-left px-4 py-3 hover:bg-muted/50 transition-colors border-l-2 relative",
                         selectedClaimId === claim.id
                           ? "bg-muted border-l-primary"
-                          : "border-l-transparent"
+                          : "border-l-transparent",
+                        claim.unreadCount > 0 && "bg-primary/5"
                       )}
                     >
                       <div className="flex items-start gap-3">
-                        <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 relative">
                           <User2 className="h-5 w-5 text-primary" />
+                          {claim.unreadCount > 0 && (
+                            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold">
+                              {claim.unreadCount}
+                            </span>
+                          )}
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between gap-2 mb-1">
-                            <p className="font-medium text-sm truncate">
+                            <p className={cn(
+                              "text-sm truncate",
+                              claim.unreadCount > 0 ? "font-bold" : "font-medium"
+                            )}>
                               {claim.otherUserName}
                             </p>
-                            <Badge 
-                              variant={statusColor[claim.status as keyof typeof statusColor]}
-                              className="text-xs flex-shrink-0"
-                            >
-                              {claim.status}
-                            </Badge>
                           </div>
                           <p className="text-xs text-muted-foreground truncate">
                             {claim.itemTitle}

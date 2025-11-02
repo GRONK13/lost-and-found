@@ -47,7 +47,7 @@ export default function ItemDetailPage({ params }: { params: { id: string } }) {
       setUser(currentUser)
 
       if (currentUser) {
-        // Check if current user has claimed this item
+        // Check if current user has a CLAIM-TYPE claim on this item (not chat-type)
         const { data } = await supabase
           .from('claims')
           .select(`
@@ -56,6 +56,7 @@ export default function ItemDetailPage({ params }: { params: { id: string } }) {
           `)
           .eq('item_id', itemData.id)
           .eq('claimant_id', currentUser.id)
+          .eq('chat_type', 'claim')
           .single()
 
         setUserClaim(data)
@@ -182,15 +183,16 @@ export default function ItemDetailPage({ params }: { params: { id: string } }) {
            !isReporter && 
            !isLostItem &&
            item.status !== 'claimed' && 
-           item.status !== 'returned' && 
-           !userClaim && (
+           item.status !== 'returned' && (
             <div className="flex gap-3 mb-4">
               <Button 
                 onClick={() => setClaimModalOpen(true)}
                 className="flex-1"
+                disabled={!!userClaim}
+                variant={userClaim ? "outline" : "default"}
               >
                 <Hand className="mr-2 h-4 w-4" />
-                This is mine
+                {userClaim ? 'Claim Submitted' : 'This is mine'}
               </Button>
               <ChatWithReporterButton
                 itemId={item.id}
