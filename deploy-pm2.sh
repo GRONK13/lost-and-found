@@ -27,7 +27,7 @@ if [ ! -f .env.production.local ]; then
     echo "  SUPABASE_SERVICE_ROLE_KEY=your-service-role-key"
     echo "  SITE_URL=https://your-subdomain.school.edu"
     echo "  NODE_ENV=production"
-    echo "  PORT=3000"
+    echo "  PORT=20089"
     exit 1
 fi
 
@@ -65,7 +65,7 @@ case $choice in
         echo "✅ Deployment complete!"
         echo "📊 View status: pm2 status"
         echo "📋 View logs: pm2 logs lost-and-found"
-        echo "🌐 Access your app at: http://localhost:3000"
+        echo "🌐 Access your app at: http://localhost:20089"
         echo ""
         echo "⚙️  To start on server boot:"
         echo "   Run: pm2 startup"
