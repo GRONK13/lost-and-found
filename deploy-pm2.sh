@@ -62,14 +62,24 @@ case $choice in
         pm2 save
         
         echo ""
+        echo "⚙️  Configuring auto-startup on server boot..."
+        pm2 startup | grep -E "^sudo" | bash || true
+        pm2 save
+        
+        echo ""
         echo "✅ Deployment complete!"
         echo "📊 View status: pm2 status"
         echo "📋 View logs: pm2 logs lost-and-found"
         echo "🌐 Access your app at: http://localhost:20089"
         echo ""
-        echo "⚙️  To start on server boot:"
-        echo "   Run: pm2 startup"
-        echo "   Then execute the command it provides"
+        echo "✨ App will now automatically start when server boots!"
+        echo ""
+        echo "📝 Next: Set up GitHub auto-deploy webhook"
+        echo "   1. Go to your GitHub repo → Settings → Webhooks"
+        echo "   2. Add webhook URL: https://lost-n-found.dcism.org/api/deploy"
+        echo "   3. Content type: application/json"
+        echo "   4. Secret: (generate a random secret and add to .env.production.local)"
+        echo "   5. Select: Just the push event"
         ;;
     2)
         echo "⬇️  Pulling latest changes..."

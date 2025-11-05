@@ -186,6 +186,22 @@ The app runs on **port 20089** as configured in `ecosystem.config.js`.
 
 For production, ensure `.env.production.local` has your Supabase credentials before building.
 
+### Auto-Startup & Auto-Deployment
+
+**Auto-start on server boot** and **auto-deploy on GitHub push** are configured automatically during first deployment.
+
+For detailed setup instructions, see **[AUTO_DEPLOY_SETUP.md](AUTO_DEPLOY_SETUP.md)**
+
+Quick setup:
+- ✅ PM2 auto-startup configured during first deployment
+- ✅ GitHub webhook at `/api/deploy` for auto-deployment
+- ✅ Push to main branch → automatic deployment (like Vercel!)
+
+**Required for auto-deploy:**
+1. Add `GITHUB_WEBHOOK_SECRET` to `.env.production.local`
+2. Configure webhook in GitHub repo settings
+3. Webhook URL: `https://lost-n-found.dcism.org/api/deploy`
+
 ## 📁 Project Structure
 
 ```
