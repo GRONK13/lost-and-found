@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu'
 import { Avatar, AvatarFallback } from './ui/avatar'
-import { Menu, Search, PlusCircle, User, LogOut, Shield, MessageCircle, FileText } from 'lucide-react'
+import { Menu, Search, PlusCircle, User, LogOut, Shield, MessageCircle, FileText, EyeOff } from 'lucide-react'
 import { ThemeToggle } from './theme-toggle'
 
 export function Navbar() {
@@ -268,12 +268,20 @@ export function Navbar() {
                     </Link>
                   </DropdownMenuItem>
                   {userRole === 'admin' && (
-                    <DropdownMenuItem asChild>
-                      <Link href="/admin">
-                        <Shield className="mr-2 h-4 w-4" />
-                        Admin Panel
-                      </Link>
-                    </DropdownMenuItem>
+                    <>
+                      <DropdownMenuItem asChild>
+                        <Link href="/admin">
+                          <Shield className="mr-2 h-4 w-4" />
+                          Admin Panel
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link href="/admin/hidden">
+                          <EyeOff className="mr-2 h-4 w-4" />
+                          Hidden Posts Review
+                        </Link>
+                      </DropdownMenuItem>
+                    </>
                   )}
                   <DropdownMenuItem onClick={handleSignOut}>
                     <LogOut className="mr-2 h-4 w-4" />
@@ -316,6 +324,11 @@ export function Navbar() {
                     <DropdownMenuItem asChild>
                       <Link href="/claims">My Claims</Link>
                     </DropdownMenuItem>
+                    {userRole === 'admin' && (
+                      <DropdownMenuItem asChild>
+                        <Link href="/admin/hidden">Hidden Posts Review</Link>
+                      </DropdownMenuItem>
+                    )}
                   </>
                 )}
               </DropdownMenuContent>

@@ -12,7 +12,7 @@ export const createItemSchema = z.object({
   status: ItemStatus,
   location: z.string().min(2, 'Location is required').max(200),
   campus: Campus,
-  photo: z.instanceof(File).optional().nullable(),
+  photo: z.instanceof(File, { message: 'Photo is required' }),
 })
 
 export const updateItemSchema = createItemSchema.partial().extend({

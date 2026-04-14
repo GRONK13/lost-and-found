@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
 import { toast } from '@/components/ui/use-toast'
 import { Loader2 } from 'lucide-react'
 
@@ -24,6 +25,16 @@ export default function ReportItemPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    if (!photoFile) {
+      toast({
+        title: 'Photo required',
+        description: 'Please upload a photo before submitting your report.',
+        variant: 'destructive',
+      })
+      return
+    }
+
     setLoading(true)
 
     const formData = new FormData(e.currentTarget)
@@ -41,46 +52,54 @@ export default function ReportItemPage() {
         return
       }
 
-      // Upload photo if provided
+      // Upload photo (required)
       let photoUrl = null
-      if (photoFile) {
-        try {
-          console.log('Starting photo upload...')
-          photoUrl = await uploadItemPhoto(photoFile)
-          console.log('Photo uploaded, URL:', photoUrl)
-          
-          if (!photoUrl) {
-            throw new Error('Photo upload failed - no URL returned')
-          }
-        } catch (uploadError) {
-          console.error('Photo upload error:', uploadError)
-          toast({
-            title: 'Upload Error',
-            description: 'Failed to upload photo. Please check if the storage bucket "item-photos" exists and is public.',
-            variant: 'destructive',
-          })
-          setLoading(false)
-          return
+      try {
+        console.log('Starting photo upload...')
+        photoUrl = await uploadItemPhoto(photoFile)
+        console.log('Photo uploaded, URL:', photoUrl)
+
+        if (!photoUrl) {
+          throw new Error('Photo upload failed - no URL returned')
         }
+      } catch (uploadError) {
+        console.error('Photo upload error:', uploadError)
+        toast({
+          title: 'Upload Error',
+          description: 'Failed to upload photo. Please check if the storage bucket "item-photos" exists and is public.',
+          variant: 'destructive',
+        })
+        setLoading(false)
+        return
       }
 
-      // Create item
-      const { error } = await supabase.from('items').insert({
-        title: formData.get('title') as string,
-        description: formData.get('description') as string,
-        category: category,
-        status: status,
-        location: formData.get('location') as string,
-        campus: campus,
-        photo_url: photoUrl,
-        reporter_id: user.id,
+      const response = await fetch('/api/items/report', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: formData.get('title') as string,
+          description: formData.get('description') as string,
+          category,
+          status,
+          location: formData.get('location') as string,
+          campus,
+          photo_url: photoUrl,
+        }),
       })
 
-      if (error) throw error
+      const payload = await response.json()
+
+      if (!response.ok) {
+        throw new Error(payload?.error || 'Failed to submit report')
+      }
 
       toast({
-        title: 'Success',
-        description: 'Item reported successfully!',
+        title: payload?.item?.hidden ? 'Report submitted for admin review' : 'Success',
+        description: payload?.item?.hidden
+          ? 'Your item was automatically hidden by AI moderation and is now awaiting admin review.'
+          : 'Item reported successfully!',
       })
 
       router.push('/items')
@@ -190,16 +209,22 @@ export default function ReportItemPage() {
             </div>
 
             <div>
-              <Label htmlFor="photo">Photo (optional)</Label>
+              <Label htmlFor="photo">Photo *</Label>
               <Input
                 id="photo"
                 type="file"
                 accept="image/*"
+                required
                 onChange={(e) => setPhotoFile(e.target.files?.[0] || null)}
               />
               <p className="text-sm text-muted-foreground mt-1">
-                Max file size: 5MB. Accepted formats: JPG, PNG, WebP
+                Required for new reports. Max file size: 5MB. Accepted formats: JPG, PNG, WebP
               </p>
+            </div>
+
+            <div className="flex items-center justify-between gap-3">
+              <Badge variant="secondary">Photo Required</Badge>
+              <p className="text-xs text-muted-foreground">New reports must include an image.</p>
             </div>
 
             <Button type="submit" className="w-full" disabled={loading}>
