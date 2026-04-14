@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import dynamic from "next/dynamic";
+import nextDynamic from "next/dynamic";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
 
 export const dynamic = 'force-dynamic';
 
-const Navbar = dynamic(() => import("@/components/Navbar").then((mod) => mod.Navbar), {
+const Navbar = nextDynamic(() => import("@/components/Navbar").then((mod) => mod.Navbar), {
   ssr: false,
 });
 
