@@ -5,6 +5,8 @@ import { AdminDashboardClient } from '../../components/admin/AdminDashboardClien
 import { Button } from '@/components/ui/button'
 import { Shield } from 'lucide-react'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AdminPage() {
   const supabase = await createClient()
   

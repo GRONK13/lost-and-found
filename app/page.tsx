@@ -4,6 +4,8 @@ import { createClient } from '@/lib/supabase/server'
 import { ItemCard } from '@/components/ItemCard'
 import { Search, PlusCircle, Shield } from 'lucide-react'
 
+export const dynamic = 'force-dynamic'
+
 export default async function HomePage() {
   const supabase = await createClient()
 

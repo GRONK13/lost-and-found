@@ -3,6 +3,9 @@ import { moderateImageUrl } from '@/lib/image-moderation'
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 const reportItemSchema = z.object({
   title: z.string().min(3).max(100),
   description: z.string().min(10).max(1000),

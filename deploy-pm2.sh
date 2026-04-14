@@ -3,7 +3,7 @@
 # Lost & Found Portal - PM2 Deployment Script
 # Quick deployment script for school server
 
-set -e
+set -Eeuo pipefail
 
 echo "🚀 Lost & Found Portal - PM2 Deployment"
 echo "========================================"
@@ -50,7 +50,7 @@ read -p "Enter your choice (1-8): " choice
 case $choice in
     1)
         echo "📦 Installing dependencies..."
-        npm install
+        npm install --no-audit --no-fund
         
         echo "🔨 Building application..."
         npm run build
@@ -86,13 +86,13 @@ case $choice in
         git pull origin main
         
         echo "📦 Installing dependencies..."
-        npm install
+        npm install --no-audit --no-fund
         
         echo "🔨 Building application..."
         npm run build
         
         echo "🔄 Reloading with PM2 (zero downtime)..."
-        pm2 reload lost-and-found
+        pm2 reload lost-and-found --update-env
         
         echo "✅ Update complete!"
         ;;

@@ -8,6 +8,8 @@ import { ItemCard } from '@/components/ItemCard'
 import { AdminItemActions } from '@/components/admin/AdminItemActions'
 import { ArrowLeft, EyeOff, ShieldAlert } from 'lucide-react'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AdminHiddenPostsPage() {
   const supabase = await createClient()
 
