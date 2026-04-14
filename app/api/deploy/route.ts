@@ -3,6 +3,9 @@ import { exec } from 'child_process';
 import { promisify } from 'util';
 import crypto from 'crypto';
 
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 const execAsync = promisify(exec);
 
 /**
