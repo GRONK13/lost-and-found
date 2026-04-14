@@ -1,14 +1,8 @@
 import type { Metadata } from "next";
-import nextDynamic from "next/dynamic";
 import "./globals.css";
+import { Navbar } from "@/components/Navbar";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
-
-export const dynamic = 'force-dynamic';
-
-const Navbar = nextDynamic(() => import("@/components/Navbar").then((mod) => mod.Navbar), {
-  ssr: false,
-});
 
 export const metadata: Metadata = {
   title: "Lost & Found Portal",
