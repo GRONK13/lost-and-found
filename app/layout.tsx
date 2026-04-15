@@ -4,6 +4,8 @@ import { Navbar } from "@/components/Navbar";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: "Lost & Found Portal",
   description: "Find what you've lost, return what you've found",

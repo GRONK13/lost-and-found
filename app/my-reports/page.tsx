@@ -6,6 +6,8 @@ import { ItemCard } from '@/components/ItemCard'
 import { Card, CardContent } from '@/components/ui/card'
 import { FileQuestion } from 'lucide-react'
 
+export const dynamic = 'force-dynamic'
+
 export default function MyReportsPage() {
   const [items, setItems] = useState<any[]>([])
   const [loading, setLoading] = useState(true)

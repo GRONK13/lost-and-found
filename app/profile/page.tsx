@@ -9,6 +9,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { User } from 'lucide-react'
 
+export const dynamic = 'force-dynamic'
+
 export default function ProfilePage() {
   const [user, setUser] = useState<any>(null)
   const [userData, setUserData] = useState<any>(null)

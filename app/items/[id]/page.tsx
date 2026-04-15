@@ -26,6 +26,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
+export const dynamic = 'force-dynamic'
+
 export default function ItemDetailPage({ params }: { params: { id: string } }) {
   const [item, setItem] = useState<any>(null)
   const [user, setUser] = useState<any>(null)

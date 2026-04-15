@@ -10,6 +10,8 @@ import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { cn } from '@/lib/utils'
 
+export const dynamic = 'force-dynamic'
+
 interface Claim {
   id: number
   status: string

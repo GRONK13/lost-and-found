@@ -25,6 +25,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
+export const dynamic = 'force-dynamic'
+
 export default function EditItemPage() {
   const params = useParams()
   const router = useRouter()

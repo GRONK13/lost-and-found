@@ -6,6 +6,8 @@ import { ItemCard } from '@/components/ItemCard'
 import { FiltersBar } from '@/components/FiltersBar'
 import { Loader2 } from 'lucide-react'
 
+export const dynamic = 'force-dynamic'
+
 export default function ItemsPage() {
   const [items, setItems] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
