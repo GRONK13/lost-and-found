@@ -18,7 +18,7 @@ git pull origin main 2>&1 | tee -a logs/deploy.log
 
 # Install dependencies (in case package.json changed)
 echo "📦 Installing dependencies..." | tee -a logs/deploy.log
-npm install --no-audit --no-fund 2>&1 | tee -a logs/deploy.log
+npm ci --no-audit --no-fund 2>&1 | tee -a logs/deploy.log
 
 # Build the application
 echo "🔨 Building application..." | tee -a logs/deploy.log
