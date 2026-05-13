@@ -2,8 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'lost-and-found',
-      script: 'node_modules/next/dist/bin/next',
-      args: 'start',
+      script: '.next/standalone/server.js',
       cwd: './',
       instances: 1,
       autorestart: true,
