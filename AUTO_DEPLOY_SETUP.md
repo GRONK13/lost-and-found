@@ -36,6 +36,21 @@ When the server restarts (e.g., after a power outage), the app will automaticall
    # You should see "lost-and-found" running
    ```
 
+### Quick Repair After Unexpected Server Changes
+
+If the school server was reset and PM2 startup config was removed, run:
+
+```bash
+bash deploy-pm2.sh
+# Select option 9 (Repair auto-start after reboot)
+```
+
+This now does all of the following automatically:
+- Re-saves PM2 process list (`pm2 save`)
+- Re-registers PM2 startup service for your user
+- Adds a `@reboot pm2 resurrect` crontab fallback
+- Verifies startup persistence for future reboots
+
 ### Manual Setup (if needed)
 
 If auto-startup didn't configure automatically:
