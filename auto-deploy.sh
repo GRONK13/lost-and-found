@@ -12,6 +12,21 @@ LOCK_FILE="$PROJECT_DIR/.deploy.lock"
 
 mkdir -p "$LOG_DIR"
 
+install_dependencies() {
+	echo "📦 Installing dependencies..." | tee -a "$LOG_DIR/deploy.log"
+
+	if [ -f package-lock.json ]; then
+		echo "🔒 Trying npm ci for clean reproducible install..." | tee -a "$LOG_DIR/deploy.log"
+		if npm ci 2>&1 | tee -a "$LOG_DIR/deploy.log"; then
+			return 0
+		fi
+
+		echo "⚠️  npm ci failed (likely lockfile mismatch). Falling back to npm install..." | tee -a "$LOG_DIR/deploy.log"
+	fi
+
+	npm install 2>&1 | tee -a "$LOG_DIR/deploy.log"
+}
+
 # Prevent overlapping deploy runs if multiple webhooks arrive together.
 exec 200>"$LOCK_FILE"
 flock -n 200 || {
@@ -29,8 +44,7 @@ echo "⬇️  Pulling latest changes from main..." | tee -a "$LOG_DIR/deploy.log
 git pull origin main 2>&1 | tee -a "$LOG_DIR/deploy.log"
 
 # Install dependencies (in case package.json changed)
-echo "📦 Installing dependencies..." | tee -a "$LOG_DIR/deploy.log"
-npm install 2>&1 | tee -a "$LOG_DIR/deploy.log"
+install_dependencies
 
 # Build the application
 echo "🔨 Building application..." | tee -a "$LOG_DIR/deploy.log"

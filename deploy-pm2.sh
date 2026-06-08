@@ -9,6 +9,21 @@ APP_NAME="lost-and-found"
 PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
 LOG_DIR="$PROJECT_DIR/logs"
 
+install_dependencies() {
+    echo "📦 Installing dependencies..."
+
+    if [ -f package-lock.json ]; then
+        echo "🔒 Trying npm ci for clean reproducible install..."
+        if npm ci; then
+            return 0
+        fi
+
+        echo "⚠️  npm ci failed (likely lockfile mismatch). Falling back to npm install..."
+    fi
+
+    npm install
+}
+
 ensure_pm2_startup() {
     mkdir -p "$LOG_DIR"
 
@@ -125,8 +140,7 @@ read -p "Enter your choice (1-9): " choice
 
 case $choice in
     1)
-        echo "📦 Installing dependencies..."
-        npm install
+        install_dependencies
         
         echo "🔨 Building application..."
         npm run build
@@ -154,9 +168,8 @@ case $choice in
     2)
         echo "⬇️  Pulling latest changes..."
         git pull origin main
-        
-        echo "📦 Installing dependencies..."
-        npm install
+
+        install_dependencies
         
         echo "🔨 Building application..."
         npm run build
