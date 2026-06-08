@@ -5,6 +5,96 @@
 
 set -Eeuo pipefail
 
+APP_NAME="lost-and-found"
+PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
+LOG_DIR="$PROJECT_DIR/logs"
+
+install_dependencies() {
+    echo "📦 Installing dependencies..."
+
+    if [ -f package-lock.json ]; then
+        echo "🔒 Trying npm ci for clean reproducible install..."
+        if npm ci --no-audit --no-fund; then
+            return 0
+        fi
+
+        echo "⚠️  npm ci failed (likely lockfile mismatch). Falling back to npm install..."
+    fi
+
+    npm install --no-audit --no-fund
+}
+
+ensure_pm2_startup() {
+    mkdir -p "$LOG_DIR"
+
+    echo ""
+    echo "⚙️  Ensuring app auto-starts after server reboot..."
+
+    # Save current process list first so PM2 can resurrect the app.
+    pm2 save
+
+    local service_name="pm2-$USER"
+    local startup_configured="false"
+
+    if command -v systemctl &> /dev/null; then
+        if systemctl list-unit-files | grep -q "^${service_name}\\.service"; then
+            startup_configured="true"
+            echo "✅ PM2 startup service already configured: ${service_name}.service"
+        fi
+    fi
+
+    if [ "$startup_configured" = "false" ]; then
+        echo "🔧 Configuring PM2 system startup..."
+        local startup_output
+        startup_output="$(pm2 startup systemd -u "$USER" --hp "$HOME" 2>&1 || true)"
+        echo "$startup_output"
+
+        local startup_cmd
+        startup_cmd="$(echo "$startup_output" | grep -E '^sudo ' | tail -n 1 || true)"
+
+        if [ -n "$startup_cmd" ]; then
+            if command -v sudo &> /dev/null; then
+                echo "🔐 Running startup command with sudo..."
+                sudo bash -lc "$startup_cmd" || true
+            else
+                echo "⚠️  sudo is unavailable. Run this manually once:"
+                echo "   $startup_cmd"
+            fi
+        fi
+    fi
+
+    # Fallback: ensure PM2 resurrect runs at reboot even if systemd service fails.
+    local resurrect_line="@reboot cd $PROJECT_DIR && pm2 resurrect >> $LOG_DIR/pm2-resurrect.log 2>&1"
+    local existing_cron
+    existing_cron="$(crontab -l 2>/dev/null || true)"
+
+    if ! echo "$existing_cron" | grep -Fq "$resurrect_line"; then
+        echo "🛟 Adding @reboot fallback via crontab (pm2 resurrect)..."
+        {
+            echo "$existing_cron"
+            echo "$resurrect_line"
+        } | awk 'NF' | crontab -
+        echo "✅ Added crontab reboot fallback"
+    else
+        echo "✅ Crontab reboot fallback already exists"
+    fi
+
+    pm2 save
+    echo "✅ Auto-start configuration complete"
+}
+
+ensure_process_running() {
+    if pm2 describe "$APP_NAME" > /dev/null 2>&1; then
+        echo "🔄 Reloading $APP_NAME with PM2 (zero downtime)..."
+        pm2 reload "$APP_NAME"
+    else
+        echo "🚀 $APP_NAME is not running. Starting it now..."
+        pm2 start ecosystem.config.js
+    fi
+
+    pm2 save
+}
+
 echo "🚀 Lost & Found Portal - PM2 Deployment"
 echo "========================================"
 echo ""
@@ -32,7 +122,7 @@ if [ ! -f .env.production.local ]; then
 fi
 
 # Create logs directory
-mkdir -p logs
+mkdir -p "$LOG_DIR"
 
 # Menu
 echo "Select deployment action:"
@@ -44,27 +134,21 @@ echo "5) Restart application"
 echo "6) View logs"
 echo "7) Monitor application"
 echo "8) Remove application from PM2"
+echo "9) Repair auto-start after reboot"
 echo ""
-read -p "Enter your choice (1-8): " choice
+read -p "Enter your choice (1-9): " choice
 
 case $choice in
     1)
-        echo "📦 Installing dependencies..."
-        npm install --no-audit --no-fund
+        install_dependencies
         
         echo "🔨 Building application..."
         npm run build
         
         echo "🚀 Starting with PM2..."
         pm2 start ecosystem.config.js
-        
-        echo "💾 Saving PM2 process list..."
-        pm2 save
-        
-        echo ""
-        echo "⚙️  Configuring auto-startup on server boot..."
-        pm2 startup | grep -E "^sudo" | bash || true
-        pm2 save
+
+        ensure_pm2_startup
         
         echo ""
         echo "✅ Deployment complete!"
@@ -84,21 +168,21 @@ case $choice in
     2)
         echo "⬇️  Pulling latest changes..."
         git pull origin main
-        
-        echo "📦 Installing dependencies..."
-        npm install --no-audit --no-fund
+
+        install_dependencies
         
         echo "🔨 Building application..."
         npm run build
         
-        echo "🔄 Reloading with PM2 (zero downtime)..."
-        pm2 reload lost-and-found --update-env
+        ensure_process_running
+        ensure_pm2_startup
         
         echo "✅ Update complete!"
         ;;
     3)
         echo "🚀 Starting application..."
         pm2 start ecosystem.config.js
+        ensure_pm2_startup
         echo "✅ Application started!"
         ;;
     4)
@@ -108,7 +192,8 @@ case $choice in
         ;;
     5)
         echo "🔄 Restarting application..."
-        pm2 restart lost-and-found
+        pm2 restart "$APP_NAME"
+        pm2 save
         echo "✅ Application restarted!"
         ;;
     6)
@@ -124,11 +209,15 @@ case $choice in
         read -p "Are you sure? (yes/no): " confirm
         if [ "$confirm" = "yes" ]; then
             echo "🗑️  Removing application..."
-            pm2 delete lost-and-found
+            pm2 delete "$APP_NAME"
             echo "✅ Application removed!"
         else
             echo "❌ Cancelled"
         fi
+        ;;
+    9)
+        ensure_pm2_startup
+        echo "✅ Auto-start repair complete!"
         ;;
     *)
         echo "❌ Invalid choice"

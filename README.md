@@ -172,13 +172,15 @@ The project includes `deploy-pm2.sh` for easy deployment:
 ```
 
 Options:
-1. **Deploy (First Time)** - Initial setup and deployment
-2. **Update & Restart** - Pull changes, rebuild, and restart
-3. **Start** - Start the application
-4. **Stop** - Stop the application
-5. **View Logs** - View application logs
-6. **Monitor** - Real-time monitoring
-7. **Remove** - Remove from PM2
+1. **First time deployment** - Install, build, start, and configure reboot startup
+2. **Update and redeploy** - Pull changes, rebuild, and reload safely
+3. **Start application**
+4. **Stop application**
+5. **Restart application**
+6. **View logs**
+7. **Monitor application**
+8. **Remove application from PM2**
+9. **Repair auto-start after reboot** - Reconfigure startup + reboot fallback
 
 ### Environment Configuration
 
@@ -194,6 +196,7 @@ For detailed setup instructions, see **[AUTO_DEPLOY_SETUP.md](AUTO_DEPLOY_SETUP.
 
 Quick setup:
 - ✅ PM2 auto-startup configured during first deployment
+- ✅ Auto-start repair option available in `deploy-pm2.sh` (option 9)
 - ✅ GitHub webhook at `/api/deploy` for auto-deployment
 - ✅ Push to main branch → automatic deployment (like Vercel!)
 
