@@ -23,7 +23,6 @@ install_dependencies() {
 
 		echo "⚠️  npm ci failed (likely lockfile mismatch). Falling back to npm install..." | tee -a "$LOG_DIR/deploy.log"
 	fi
-
 	npm install --no-audit --no-fund 2>&1 | tee -a "$LOG_DIR/deploy.log"
 }
 
