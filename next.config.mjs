@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
+  optimizeFonts: false,
   staticPageGenerationTimeout: 180,
   images: {
     remotePatterns: [
