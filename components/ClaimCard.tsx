@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardFooter, CardHeader } from './ui/card'
 import { Button } from './ui/button'
 import { Badge } from './ui/badge'
@@ -21,6 +22,7 @@ interface ClaimCardProps {
 
 export function ClaimCard({ claim, onUpdate, showItemDetails = false, canApprove = false }: ClaimCardProps) {
   const [isUpdating, setIsUpdating] = useState(false)
+  const router = useRouter()
 
   const handleUpdateClaim = async (newStatus: 'approved' | 'rejected') => {
     setIsUpdating(true)
@@ -38,7 +40,11 @@ export function ClaimCard({ claim, onUpdate, showItemDetails = false, canApprove
         description: `Claim ${newStatus}`,
       })
 
-      if (onUpdate) onUpdate()
+      if (onUpdate) {
+        onUpdate()
+      } else {
+        router.refresh()
+      }
     } catch (error) {
       toast({
         title: 'Error',

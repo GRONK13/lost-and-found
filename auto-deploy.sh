@@ -51,6 +51,14 @@ install_dependencies
 echo "🔨 Building application..." | tee -a "$LOG_DIR/deploy.log"
 npm run build 2>&1 | tee -a "$LOG_DIR/deploy.log"
 
+echo "📂 Copying static assets for standalone server..." | tee -a "$LOG_DIR/deploy.log"
+mkdir -p .next/standalone/.next/static
+cp -r .next/static/. .next/standalone/.next/static/ 2>&1 | tee -a "$LOG_DIR/deploy.log"
+if [ -d public ]; then
+	mkdir -p .next/standalone/public
+	cp -r public/. .next/standalone/public/ 2>&1 | tee -a "$LOG_DIR/deploy.log"
+fi
+
 # Reload PM2 with zero downtime, or start fresh if process is missing.
 if pm2 describe "$APP_NAME" > /dev/null 2>&1; then
 	echo "🔄 Reloading PM2 (zero downtime)..." | tee -a "$LOG_DIR/deploy.log"
