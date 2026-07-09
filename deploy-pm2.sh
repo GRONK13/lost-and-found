@@ -144,6 +144,14 @@ case $choice in
         
         echo "🔨 Building application..."
         npm run build
+
+        echo "📂 Copying static assets for standalone server..."
+        mkdir -p .next/standalone/.next/static
+        cp -r .next/static/. .next/standalone/.next/static/
+        if [ -d public ]; then
+            mkdir -p .next/standalone/public
+            cp -r public/. .next/standalone/public/
+        fi
         
         echo "🚀 Starting with PM2..."
         pm2 start ecosystem.config.js
@@ -173,6 +181,14 @@ case $choice in
         
         echo "🔨 Building application..."
         npm run build
+
+        echo "📂 Copying static assets for standalone server..."
+        mkdir -p .next/standalone/.next/static
+        cp -r .next/static/. .next/standalone/.next/static/
+        if [ -d public ]; then
+            mkdir -p .next/standalone/public
+            cp -r public/. .next/standalone/public/
+        fi
         
         ensure_process_running
         ensure_pm2_startup

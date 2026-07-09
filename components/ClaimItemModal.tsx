@@ -40,13 +40,15 @@ export function ClaimItemModal({ itemId, itemTitle, isOpen, onClose }: ClaimItem
         return
       }
 
-      // Create a claim-type claim (not chat-type)
-      const { error } = await supabase.from('claims').insert({
+      // Upsert a claim-type claim (overwrites/updates existing chat if they started one)
+      const { error } = await supabase.from('claims').upsert({
         item_id: itemId,
         claimant_id: user.id,
         message,
         chat_type: 'claim',
         status: 'pending'
+      }, {
+        onConflict: 'item_id,claimant_id'
       })
 
       if (error) {

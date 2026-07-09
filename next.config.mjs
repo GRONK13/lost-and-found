@@ -11,6 +11,10 @@ const nextConfig = {
       },
     ],
   },
+  experimental: {
+    // Optimizes imports for UI and utility libraries
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
+  },
 };
 
 export default nextConfig;
