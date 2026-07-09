@@ -24,6 +24,15 @@ export default function RegisterPage() {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault()
 
+    if (!email.toLowerCase().endsWith('@usc.edu.ph')) {
+      toast({
+        title: 'Registration Restricted',
+        description: 'Registration is restricted to official USC student and faculty email addresses (ending in @usc.edu.ph).',
+        variant: 'destructive',
+      })
+      return
+    }
+
     if (password !== confirmPassword) {
       toast({
         title: 'Error',
@@ -87,16 +96,19 @@ export default function RegisterPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email" className="font-bold text-xs uppercase tracking-wider text-muted-foreground">Email Address</Label>
+              <Label htmlFor="email" className="font-bold text-xs uppercase tracking-wider text-muted-foreground">USC Email Address</Label>
               <Input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                placeholder="you@example.com"
+                placeholder="username@usc.edu.ph"
                 className="bg-background/50 border-primary/10 focus-visible:ring-primary h-11"
               />
+              <p className="text-[10px] text-muted-foreground mt-1 px-1">
+                Must end with <span className="font-bold text-primary">@usc.edu.ph</span> to verify university enrollment.
+              </p>
             </div>
 
             <div className="space-y-2">

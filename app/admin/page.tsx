@@ -53,16 +53,19 @@ export default async function AdminPage() {
 
   const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
 
-  const [{ count: totalUsers }, { count: newUsersLastWeek }] = await Promise.all([
-    supabase.from('users').select('*', { count: 'exact', head: true }),
-    supabase.from('users').select('*', { count: 'exact', head: true }).gte('created_at', sevenDaysAgo),
-  ])
+  const { data: usersList } = await supabase
+    .from('users')
+    .select('*')
+    .order('created_at', { ascending: false })
+
+  const totalUsers = usersList?.length || 0
+  const newUsersLastWeek = usersList?.filter((u) => u.created_at >= sevenDaysAgo).length || 0
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-wrap items-center justify-between gap-3 mb-8">
         <div className="flex items-center gap-2">
-          <Shield className="h-8 w-8" />
+          <Shield className="h-8 w-8 text-primary" />
           <h1 className="text-4xl font-bold">Admin Panel</h1>
         </div>
 
@@ -74,6 +77,7 @@ export default async function AdminPage() {
       <AdminDashboardClient
         allItems={allItems || []}
         flaggedItems={flaggedItems || []}
+        allUsers={usersList || []}
         stats={{
           totalItems,
           totalFlags,
@@ -81,8 +85,8 @@ export default async function AdminPage() {
           lostItems,
           foundItems,
           claimedItems,
-          totalUsers: totalUsers || 0,
-          newUsersLastWeek: newUsersLastWeek || 0,
+          totalUsers,
+          newUsersLastWeek,
         }}
       />
     </div>
