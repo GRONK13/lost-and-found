@@ -5,10 +5,12 @@ import { createClient } from '@/lib/supabase/client'
 import { ItemCard } from '@/components/ItemCard'
 import { FiltersBar } from '@/components/FiltersBar'
 import { Loader2 } from 'lucide-react'
+import { useSearchParams } from 'next/navigation'
 
 export const dynamic = 'force-dynamic'
 
 export default function ItemsPage() {
+  const searchParams = useSearchParams()
   const [items, setItems] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [filters, setFilters] = useState<{
@@ -17,7 +19,15 @@ export default function ItemsPage() {
     status?: string
     location?: string
     campus?: string
-  }>({})
+  }>({
+    category: searchParams.get('category') || undefined
+  })
+
+  // Sync category filter if search parameters change
+  useEffect(() => {
+    const cat = searchParams.get('category') || undefined
+    setFilters(prev => ({ ...prev, category: cat }))
+  }, [searchParams])
 
   const supabase = createClient()
 

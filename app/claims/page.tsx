@@ -52,14 +52,20 @@ export default async function ClaimsPage() {
   ) : []
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-10 max-w-5xl space-y-6">
+      <div className="border-b border-border/60 pb-6">
+        <h1 className="text-3xl font-extrabold tracking-tight">Claims Management</h1>
+        <p className="text-sm text-muted-foreground mt-1">
+          Approve or reject ownership claims on items you reported, and track claims you submitted
+        </p>
+      </div>
       
       <Tabs defaultValue="received" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="received">
+        <TabsList className="grid w-full grid-cols-2 bg-muted/60 p-1.5 rounded-xl border border-primary/5">
+          <TabsTrigger value="received" className="rounded-lg py-2.5 font-bold data-[state=active]:bg-background data-[state=active]:shadow-sm data-[state=active]:text-primary transition-all">
             Claims on My Items ({receivedClaims?.length || 0})
           </TabsTrigger>
-          <TabsTrigger value="made">
+          <TabsTrigger value="made" className="rounded-lg py-2.5 font-bold data-[state=active]:bg-background data-[state=active]:shadow-sm data-[state=active]:text-primary transition-all">
             Claims I Made ({madeClaimsWithReporter?.length || 0})
           </TabsTrigger>
         </TabsList>
@@ -77,10 +83,10 @@ export default async function ClaimsPage() {
               ))}
             </div>
           ) : (
-            <Card>
+            <Card className="glass-card">
               <CardContent className="pt-6">
-                <p className="text-center text-muted-foreground py-12">
-                  No one has claimed your items yet
+                <p className="text-center text-muted-foreground py-16">
+                  No claims have been submitted for your reported items yet
                 </p>
               </CardContent>
             </Card>
@@ -103,10 +109,10 @@ export default async function ClaimsPage() {
               ))}
             </div>
           ) : (
-            <Card>
+            <Card className="glass-card">
               <CardContent className="pt-6">
-                <p className="text-center text-muted-foreground py-12">
-                  You haven&apos;t made any claims yet
+                <p className="text-center text-muted-foreground py-16">
+                  You haven&apos;t submitted any claims for found items yet
                 </p>
               </CardContent>
             </Card>

@@ -48,15 +48,17 @@ export default function LoginPage() {
 
   return (
     <div className="container mx-auto px-4 py-16 max-w-md">
-      <Card>
-        <CardHeader>
-          <CardTitle>Login</CardTitle>
-          <CardDescription>Sign in to your account</CardDescription>
-        </CardHeader>
-        <CardContent>
+      <Card className="glass-card rounded-2xl border-primary/10 overflow-hidden shadow-xl">
+        <div className="bg-gradient-to-r from-primary/10 via-emerald-600/5 to-secondary/10 p-6 border-b border-border/50 text-center">
+          <CardTitle className="text-2xl font-extrabold text-foreground">Welcome Back</CardTitle>
+          <CardDescription className="mt-1.5 text-xs text-muted-foreground uppercase tracking-wider font-semibold">
+            USC DCISM Carolinian L&F
+          </CardDescription>
+        </div>
+        <CardContent className="p-6 space-y-6">
           <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <Label htmlFor="email">Email</Label>
+            <div className="space-y-2">
+              <Label htmlFor="email" className="font-bold text-xs uppercase tracking-wider text-muted-foreground">Email Address</Label>
               <Input
                 id="email"
                 type="email"
@@ -64,11 +66,12 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="you@example.com"
+                className="bg-background/50 border-primary/10 focus-visible:ring-primary h-11"
               />
             </div>
 
-            <div>
-              <Label htmlFor="password">Password</Label>
+            <div className="space-y-2">
+              <Label htmlFor="password" className="font-bold text-xs uppercase tracking-wider text-muted-foreground">Password</Label>
               <Input
                 id="password"
                 type="password"
@@ -76,17 +79,18 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 placeholder="••••••••"
+                className="bg-background/50 border-primary/10 focus-visible:ring-primary h-11"
               />
             </div>
 
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button type="submit" className="w-full h-11 brand-button-hover bg-primary text-primary-foreground font-bold shadow-md shadow-primary/25 rounded-xl pt-0" disabled={loading}>
               {loading ? 'Signing in...' : 'Sign In'}
             </Button>
           </form>
 
-          <div className="mt-4 text-center text-sm">
+          <div className="text-center text-xs text-muted-foreground pt-2 border-t border-border/40">
             Don't have an account?{' '}
-            <Link href="/auth/register" className="text-primary hover:underline">
+            <Link href="/auth/register" className="text-primary hover:underline font-bold">
               Sign up
             </Link>
           </div>

@@ -73,20 +73,20 @@ export function ChangePasswordForm() {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Lock className="h-5 w-5" />
+    <Card className="glass-card border-primary/10 shadow-md">
+      <CardHeader className="pb-3 border-b border-border/40">
+        <CardTitle className="flex items-center gap-2 text-lg font-bold text-foreground">
+          <Lock className="h-5 w-5 text-primary" />
           Change Password
         </CardTitle>
-        <CardDescription>
+        <CardDescription className="text-xs">
           Update your password to keep your account secure
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pt-5">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="current-password">Current Password</Label>
+            <Label htmlFor="current-password" className="font-bold text-xs uppercase tracking-wider text-muted-foreground">Current Password</Label>
             <div className="relative">
               <Input
                 id="current-password"
@@ -95,6 +95,7 @@ export function ChangePasswordForm() {
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 required
                 disabled={isLoading}
+                className="bg-background/50 border-primary/10 focus-visible:ring-primary h-11 pr-10"
               />
               <button
                 type="button"
@@ -107,7 +108,7 @@ export function ChangePasswordForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="new-password">New Password</Label>
+            <Label htmlFor="new-password" className="font-bold text-xs uppercase tracking-wider text-muted-foreground">New Password</Label>
             <div className="relative">
               <Input
                 id="new-password"
@@ -117,6 +118,7 @@ export function ChangePasswordForm() {
                 required
                 disabled={isLoading}
                 minLength={6}
+                className="bg-background/50 border-primary/10 focus-visible:ring-primary h-11 pr-10"
               />
               <button
                 type="button"
@@ -129,7 +131,7 @@ export function ChangePasswordForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="confirm-password">Confirm New Password</Label>
+            <Label htmlFor="confirm-password" className="font-bold text-xs uppercase tracking-wider text-muted-foreground">Confirm New Password</Label>
             <div className="relative">
               <Input
                 id="confirm-password"
@@ -139,6 +141,7 @@ export function ChangePasswordForm() {
                 required
                 disabled={isLoading}
                 minLength={6}
+                className="bg-background/50 border-primary/10 focus-visible:ring-primary h-11 pr-10"
               />
               <button
                 type="button"
@@ -150,7 +153,7 @@ export function ChangePasswordForm() {
             </div>
           </div>
 
-          <Button type="submit" disabled={isLoading}>
+          <Button type="submit" disabled={isLoading} className="w-full h-11 brand-button-hover bg-primary text-primary-foreground font-bold shadow-md shadow-primary/25 rounded-xl pt-0">
             {isLoading ? 'Updating...' : 'Update Password'}
           </Button>
         </form>

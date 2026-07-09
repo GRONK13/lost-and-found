@@ -69,44 +69,48 @@ export function ClaimCard({ claim, onUpdate, showItemDetails = false, canApprove
   })
 
   return (
-    <Card>
-      <CardHeader className="pb-3">
-        <div className="flex items-start justify-between">
+    <Card className="glass-card border-primary/10 rounded-2xl shadow-sm">
+      <CardHeader className="pb-3 border-b border-border/40">
+        <div className="flex items-start justify-between gap-4">
           <div>
             {showItemDetails && claim.items && (
-              <h3 className="font-semibold">{claim.items.title}</h3>
+              <h3 className="font-extrabold text-base text-foreground">{claim.items.title}</h3>
             )}
             {claim.users && (
-              <p className="text-sm text-muted-foreground">
-                {claim.users.name || claim.users.email}
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Submitted by: <span className="font-semibold text-foreground">{claim.users.name || claim.users.email}</span>
               </p>
             )}
           </div>
-          <Badge variant={statusColor[claim.status]}>
+          <Badge variant={statusColor[claim.status] === 'default' ? (claim.status === 'approved' ? 'default' : 'secondary') : 'destructive'} className="text-[10px] font-bold tracking-wide uppercase px-2 py-0.5">
             {claim.status}
           </Badge>
         </div>
       </CardHeader>
 
-      <CardContent>
-        <p className="text-sm">{claim.message}</p>
-        <p className="text-xs text-muted-foreground mt-2">{formattedDate}</p>
+      <CardContent className="pt-4 space-y-2">
+        <p className="text-sm leading-relaxed text-foreground bg-muted/40 p-3.5 rounded-xl border border-border/30">{claim.message}</p>
+        <div className="text-[11px] text-muted-foreground flex items-center justify-end">
+          <span>{formattedDate}</span>
+        </div>
       </CardContent>
 
       {canApprove && claim.status === 'pending' && (
-        <CardFooter className="gap-2">
+        <CardFooter className="gap-2 pt-0 pb-4 px-6">
           <Button
             size="sm"
             onClick={() => handleUpdateClaim('approved')}
             disabled={isUpdating}
+            className="brand-button-hover bg-primary text-primary-foreground font-bold shadow-sm h-9 px-4 rounded-lg"
           >
-            Approve
+            Approve Claim
           </Button>
           <Button
             size="sm"
             variant="destructive"
             onClick={() => handleUpdateClaim('rejected')}
             disabled={isUpdating}
+            className="font-bold h-9 px-4 rounded-lg"
           >
             Reject
           </Button>

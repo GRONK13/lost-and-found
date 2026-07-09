@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { toast } from '@/components/ui/use-toast'
-import { Loader2 } from 'lucide-react'
+import { Loader2, PlusCircle } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -119,30 +119,60 @@ export default function ReportItemPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-2xl">
-      <Card>
-        <CardHeader>
-          <CardTitle>Report an Item</CardTitle>
-          <CardDescription>
-            Help reunite lost items with their owners or find your lost belongings
+    <div className="container mx-auto px-4 py-10 max-w-3xl">
+      <Card className="glass-card rounded-2xl border-primary/10 overflow-hidden shadow-xl">
+        <div className="bg-gradient-to-r from-primary/10 via-emerald-600/5 to-secondary/10 p-6 sm:p-8 border-b border-border/50">
+          <CardTitle className="text-2xl sm:text-3xl font-extrabold text-foreground flex items-center gap-2">
+            <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary text-secondary">
+              <PlusCircle className="w-5 h-5 fill-current" />
+            </span>
+            Report an Item
+          </CardTitle>
+          <CardDescription className="mt-2 text-sm sm:text-base text-muted-foreground">
+            Reunite lost items with their owners or find your missing belongings within the USC DCISM community
           </CardDescription>
-        </CardHeader>
-        <CardContent>
+        </div>
+        <CardContent className="p-6 sm:p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <Label htmlFor="title">Title *</Label>
-              <Input
-                id="title"
-                name="title"
-                required
-                minLength={3}
-                maxLength={100}
-                placeholder="e.g., Blue backpack with laptop"
-              />
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="title" className="font-bold text-xs uppercase tracking-wider text-muted-foreground">
+                  Title / Name of Item <span className="text-destructive">*</span>
+                </Label>
+                <Input
+                  id="title"
+                  name="title"
+                  required
+                  minLength={3}
+                  maxLength={100}
+                  placeholder="e.g. Blue backpack with laptop"
+                  className="bg-background/50 border-primary/10 focus-visible:ring-primary h-11"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="category" className="font-bold text-xs uppercase tracking-wider text-muted-foreground">
+                  Category <span className="text-destructive">*</span>
+                </Label>
+                <Select value={category} onValueChange={setCategory} required>
+                  <SelectTrigger className="bg-background/50 border-primary/10 focus:ring-primary h-11">
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
+                  <SelectContent className="glass-card">
+                    <SelectItem value="ID">ID / Documents</SelectItem>
+                    <SelectItem value="Gadget">Gadgets / Tech</SelectItem>
+                    <SelectItem value="Book">Books & School</SelectItem>
+                    <SelectItem value="Clothing">Clothing & Wearables</SelectItem>
+                    <SelectItem value="Other">Others</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
 
-            <div>
-              <Label htmlFor="description">Description *</Label>
+            <div className="space-y-2">
+              <Label htmlFor="description" className="font-bold text-xs uppercase tracking-wider text-muted-foreground">
+                Item Description <span className="text-destructive">*</span>
+              </Label>
               <Textarea
                 id="description"
                 name="description"
@@ -150,93 +180,81 @@ export default function ReportItemPage() {
                 minLength={10}
                 maxLength={1000}
                 rows={4}
-                placeholder="Provide details that will help identify the item..."
+                placeholder="Describe key identifying features (e.g. brand, color, stickers, labels, serial codes)..."
+                className="bg-background/50 border-primary/10 focus-visible:ring-primary resize-none"
               />
             </div>
 
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="category">Category *</Label>
-                <Select value={category} onValueChange={setCategory} required>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="ID">ID</SelectItem>
-                    <SelectItem value="Gadget">Gadget</SelectItem>
-                    <SelectItem value="Book">Book</SelectItem>
-                    <SelectItem value="Clothing">Clothing</SelectItem>
-                    <SelectItem value="Other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <Label htmlFor="status">Status *</Label>
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="space-y-2 md:col-span-1">
+                <Label htmlFor="status" className="font-bold text-xs uppercase tracking-wider text-muted-foreground">
+                  Report Type <span className="text-destructive">*</span>
+                </Label>
                 <Select value={status} onValueChange={setStatus} required>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select status" />
+                  <SelectTrigger className="bg-background/50 border-primary/10 focus:ring-primary h-11">
+                    <SelectValue placeholder="Select report type" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="lost">Lost</SelectItem>
-                    <SelectItem value="found">Found</SelectItem>
+                  <SelectContent className="glass-card">
+                    <SelectItem value="lost">I Lost This</SelectItem>
+                    <SelectItem value="found">I Found This</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
-            </div>
 
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="location">Location *</Label>
+              <div className="space-y-2 md:col-span-1">
+                <Label htmlFor="campus" className="font-bold text-xs uppercase tracking-wider text-muted-foreground">
+                  Campus <span className="text-destructive">*</span>
+                </Label>
+                <Select value={campus} onValueChange={setCampus} required>
+                  <SelectTrigger className="bg-background/50 border-primary/10 focus:ring-primary h-11">
+                    <SelectValue placeholder="Select campus" />
+                  </SelectTrigger>
+                  <SelectContent className="glass-card">
+                    <SelectItem value="TC">Talamban Campus (TC)</SelectItem>
+                    <SelectItem value="MC">Downtown Campus (DC)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2 md:col-span-1">
+                <Label htmlFor="location" className="font-bold text-xs uppercase tracking-wider text-muted-foreground">
+                  Specific Location <span className="text-destructive">*</span>
+                </Label>
                 <Input
                   id="location"
                   name="location"
                   required
-                  placeholder="e.g., Library 3rd floor"
+                  placeholder="e.g. Bunzel Bldg 3rd Flr Lobby"
+                  className="bg-background/50 border-primary/10 focus-visible:ring-primary h-11"
                 />
-              </div>
-
-              <div>
-                <Label htmlFor="campus">Campus *</Label>
-                <Select value={campus} onValueChange={setCampus} required>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select campus" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="TC">Talamban Campus</SelectItem>
-                    <SelectItem value="MC">Main Campus</SelectItem>
-                  </SelectContent>
-                </Select>
               </div>
             </div>
 
-            <div>
-              <Label htmlFor="photo">Photo *</Label>
+            <div className="space-y-3 p-5 rounded-2xl border border-primary/15 bg-primary/5">
+              <Label htmlFor="photo" className="font-bold text-xs uppercase tracking-wider text-primary flex items-center gap-1">
+                Upload Photo <span className="text-destructive">*</span>
+              </Label>
               <Input
                 id="photo"
                 type="file"
                 accept="image/*"
                 required
                 onChange={(e) => setPhotoFile(e.target.files?.[0] || null)}
+                className="bg-background cursor-pointer file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-primary file:text-primary-foreground file:hover:bg-primary/90 h-11 flex items-center"
               />
-              <p className="text-sm text-muted-foreground mt-1">
-                Required for new reports. Max file size: 5MB. Accepted formats: JPG, PNG, WebP
+              <p className="text-[11px] text-muted-foreground">
+                To prevent spam and false reports, we require an image of the item. Max file size: 5MB. Accepted formats: JPG, PNG, WebP.
               </p>
             </div>
 
-            <div className="flex items-center justify-between gap-3">
-              <Badge variant="secondary">Photo Required</Badge>
-              <p className="text-xs text-muted-foreground">New reports must include an image.</p>
-            </div>
-
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button type="submit" className="w-full h-11 brand-button-hover bg-primary text-primary-foreground font-bold shadow-md shadow-primary/25 rounded-xl" disabled={loading}>
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Submitting...
+                  Submitting Report...
                 </>
               ) : (
-                'Report Item'
+                'Submit Lost & Found Report'
               )}
             </Button>
           </form>
