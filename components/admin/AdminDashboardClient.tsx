@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { ItemCard } from '@/components/ItemCard'
 import { AdminItemActions } from '@/components/admin/AdminItemActions'
 import { FlagReviewActions } from '@/components/admin/FlagReviewActions'
@@ -10,9 +11,13 @@ import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { EyeOff, Flag } from 'lucide-react'
+import { EyeOff, Flag, Trash2, ShieldAlert, User2, AlertTriangle } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { toast } from '@/components/ui/use-toast'
+import { cn } from '@/lib/utils'
 
 type Item = Database['public']['Tables']['items']['Row']
+type UserProfile = Database['public']['Tables']['users']['Row']
 
 type Flag = Database['public']['Tables']['flags']['Row'] & {
   items: Item | null
@@ -36,13 +41,49 @@ interface AdminStats {
 interface AdminDashboardClientProps {
   allItems: Item[]
   flaggedItems: Flag[]
+  allUsers: UserProfile[]
   stats: AdminStats
 }
 
-export function AdminDashboardClient({ allItems, flaggedItems, stats }: AdminDashboardClientProps) {
+export function AdminDashboardClient({ allItems, flaggedItems, allUsers, stats }: AdminDashboardClientProps) {
   const [query, setQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState<'all' | Item['status']>('all')
   const [campusFilter, setCampusFilter] = useState<'all' | 'TC' | 'MC'>('all')
+  const [userEmailTypeFilter, setUserEmailTypeFilter] = useState<'all' | 'non-usc'>('all')
+  const [isDeleting, setIsDeleting] = useState<string | null>(null)
+  const router = useRouter()
+
+  const handleDeleteUser = async (userId: string, userEmail: string) => {
+    if (!window.confirm(`Are you absolutely sure you want to delete user ${userEmail}? This will permanently delete their account and all their reported items, claims, and messages.`)) {
+      return
+    }
+
+    setIsDeleting(userId)
+    try {
+      const response = await fetch(`/api/admin/users/${userId}`, {
+        method: 'DELETE',
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to delete user')
+      }
+
+      toast({
+        title: 'Success',
+        description: `Successfully deleted account for ${userEmail}`,
+      })
+      router.refresh()
+    } catch (err: any) {
+      toast({
+        title: 'Error',
+        description: err.message || 'Failed to delete user',
+        variant: 'destructive',
+      })
+    } finally {
+      setIsDeleting(null)
+    }
+  }
 
   const normalizedQuery = query.trim().toLowerCase()
 
@@ -83,6 +124,20 @@ export function AdminDashboardClient({ allItems, flaggedItems, stats }: AdminDas
       )
     })
   }, [flaggedItems, normalizedQuery])
+
+  const filteredUsers = useMemo(() => {
+    return allUsers.filter((user) => {
+      const matchesQuery =
+        !normalizedQuery ||
+        (user.name || '').toLowerCase().includes(normalizedQuery) ||
+        user.email.toLowerCase().includes(normalizedQuery)
+
+      const isNonUsc = !user.email.toLowerCase().endsWith('@usc.edu.ph')
+      const matchesEmailType = userEmailTypeFilter === 'all' || (userEmailTypeFilter === 'non-usc' && isNonUsc)
+
+      return matchesQuery && matchesEmailType
+    })
+  }, [allUsers, normalizedQuery, userEmailTypeFilter])
 
   return (
     <>
@@ -125,15 +180,16 @@ export function AdminDashboardClient({ allItems, flaggedItems, stats }: AdminDas
           <CardDescription>Filter admin results by keyword, status, or campus.</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <Input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search title, reason, user, location..."
+              placeholder="Search title, user, email, location..."
+              className="bg-background/50 border-primary/10 h-10"
             />
 
             <Select value={statusFilter} onValueChange={(value) => setStatusFilter(value as 'all' | Item['status'])}>
-              <SelectTrigger>
+              <SelectTrigger className="bg-background/50 border-primary/10 h-10">
                 <SelectValue placeholder="Filter by status" />
               </SelectTrigger>
               <SelectContent>
@@ -146,7 +202,7 @@ export function AdminDashboardClient({ allItems, flaggedItems, stats }: AdminDas
             </Select>
 
             <Select value={campusFilter} onValueChange={(value) => setCampusFilter(value as 'all' | 'TC' | 'MC')}>
-              <SelectTrigger>
+              <SelectTrigger className="bg-background/50 border-primary/10 h-10">
                 <SelectValue placeholder="Filter by campus" />
               </SelectTrigger>
               <SelectContent>
@@ -155,28 +211,53 @@ export function AdminDashboardClient({ allItems, flaggedItems, stats }: AdminDas
                 <SelectItem value="MC">Main (MC)</SelectItem>
               </SelectContent>
             </Select>
+
+            <Select value={userEmailTypeFilter} onValueChange={(value) => setUserEmailTypeFilter(value as 'all' | 'non-usc')}>
+              <SelectTrigger className="bg-background/50 border-primary/10 h-10">
+                <SelectValue placeholder="Filter by email domain" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All User Accounts</SelectItem>
+                <SelectItem value="non-usc">Non-USC Emails Only</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="mt-3 flex flex-wrap gap-2">
-            <Badge variant="outline">Lost: {stats.lostItems}</Badge>
-            <Badge variant="outline">Found: {stats.foundItems}</Badge>
-            <Badge variant="outline">Claimed: {stats.claimedItems}</Badge>
+            <Badge variant="outline" className="border-primary/20 text-primary">Lost: {stats.lostItems}</Badge>
+            <Badge variant="outline" className="border-primary/20 text-primary">Found: {stats.foundItems}</Badge>
+            <Badge variant="outline" className="border-primary/20 text-primary">Claimed: {stats.claimedItems}</Badge>
+            <Badge variant="outline" className="border-amber-500/20 text-amber-600 dark:text-amber-400 font-bold bg-amber-500/5">
+              Non-USC Accounts: {allUsers.filter((u) => !u.email.toLowerCase().endsWith('@usc.edu.ph')).length}
+            </Badge>
           </div>
         </CardContent>
       </Card>
 
       <Tabs defaultValue="all" className="w-full">
-        <TabsList>
-          <TabsTrigger value="all">All Items</TabsTrigger>
-          <TabsTrigger value="flagged">
+        <TabsList className="flex flex-wrap h-auto gap-1 bg-muted/60 p-1 rounded-xl border border-primary/5">
+          <TabsTrigger value="all" className="rounded-lg font-bold data-[state=active]:bg-background data-[state=active]:shadow-sm data-[state=active]:text-primary transition-all">
+            All Items
+          </TabsTrigger>
+          <TabsTrigger value="flagged" className="rounded-lg font-bold data-[state=active]:bg-background data-[state=active]:shadow-sm data-[state=active]:text-primary transition-all">
             Flagged Items
             {stats.totalFlags > 0 && (
-              <Badge variant="destructive" className="ml-2">
+              <Badge variant="destructive" className="ml-2 text-[10px] font-extrabold h-5 px-1.5 min-w-5 flex items-center justify-center rounded-full">
                 {stats.totalFlags}
               </Badge>
             )}
           </TabsTrigger>
-          <TabsTrigger value="hidden">Hidden Items</TabsTrigger>
+          <TabsTrigger value="hidden" className="rounded-lg font-bold data-[state=active]:bg-background data-[state=active]:shadow-sm data-[state=active]:text-primary transition-all">
+            Hidden Items
+          </TabsTrigger>
+          <TabsTrigger value="users" className="rounded-lg font-bold data-[state=active]:bg-background data-[state=active]:shadow-sm data-[state=active]:text-primary transition-all">
+            Users Management
+            {allUsers.filter((u) => !u.email.toLowerCase().endsWith('@usc.edu.ph')).length > 0 && (
+              <Badge className="ml-2 text-[10px] font-extrabold h-5 px-1.5 min-w-5 flex items-center justify-center rounded-full bg-amber-600 text-white animate-pulse border-none">
+                {allUsers.filter((u) => !u.email.toLowerCase().endsWith('@usc.edu.ph')).length}
+              </Badge>
+            )}
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="all" className="mt-6">
@@ -284,6 +365,77 @@ export function AdminDashboardClient({ allItems, flaggedItems, stats }: AdminDas
             <Card>
               <CardContent className="pt-6">
                 <p className="text-center text-muted-foreground py-12">No hidden items match the current filters</p>
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+
+        <TabsContent value="users" className="mt-6 space-y-4">
+          {filteredUsers.length > 0 ? (
+            <div className="grid gap-4">
+              {filteredUsers.map((user) => {
+                const isNonUsc = !user.email.toLowerCase().endsWith('@usc.edu.ph')
+                return (
+                  <Card key={user.id} className={cn("glass-card border-primary/10 overflow-hidden shadow-sm hover:shadow-md transition-all", isNonUsc && "border-amber-500/20 bg-amber-500/5")}>
+                    <CardContent className="p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                      <div className="flex items-start gap-3 min-w-0">
+                        <div className={cn("h-10 w-10 rounded-full flex items-center justify-center shrink-0 border", isNonUsc ? "bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-400" : "bg-primary/10 border-primary/10 text-primary")}>
+                          <User2 className="h-5 w-5" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="flex items-center flex-wrap gap-2">
+                            <p className="font-bold text-sm text-foreground">{user.name || 'No Name Set'}</p>
+                            {user.role === 'admin' && (
+                              <Badge className="bg-primary/20 text-primary border-none font-bold text-[9px] uppercase px-1.5 py-0.5">
+                                Admin
+                              </Badge>
+                            )}
+                            {isNonUsc && (
+                              <Badge className="bg-amber-600 text-white border-none font-bold text-[9px] uppercase px-1.5 py-0.5 animate-pulse flex items-center gap-1">
+                                <AlertTriangle className="h-3 w-3" />
+                                Non-USC Email
+                              </Badge>
+                            )}
+                          </div>
+                          <p className="text-xs text-muted-foreground mt-0.5 break-all">{user.email}</p>
+                          <p className="text-[10px] text-muted-foreground/80 mt-1">
+                            Joined {new Date(user.created_at || '').toLocaleDateString([], {
+                              month: 'short',
+                              day: 'numeric',
+                              year: 'numeric',
+                            })}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          className="h-9 px-4 font-bold rounded-lg flex items-center gap-1.5"
+                          disabled={isDeleting === user.id || user.role === 'admin'}
+                          onClick={() => handleDeleteUser(user.id, user.email)}
+                        >
+                          {isDeleting === user.id ? (
+                            'Deleting...'
+                          ) : (
+                            <>
+                              <Trash2 className="h-4 w-4" />
+                              Delete User
+                            </>
+                          )}
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )
+              })}
+            </div>
+          ) : (
+            <Card className="glass-card">
+              <CardContent className="flex flex-col items-center justify-center py-16 text-center">
+                <User2 className="h-10 w-10 text-muted-foreground/30 mb-2" />
+                <p className="text-sm font-semibold text-muted-foreground">No users match your criteria</p>
               </CardContent>
             </Card>
           )}

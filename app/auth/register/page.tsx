@@ -24,6 +24,15 @@ export default function RegisterPage() {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault()
 
+    if (!email.toLowerCase().endsWith('@usc.edu.ph')) {
+      toast({
+        title: 'Registration Restricted',
+        description: 'Registration is restricted to official USC student and faculty email addresses (ending in @usc.edu.ph).',
+        variant: 'destructive',
+      })
+      return
+    }
+
     if (password !== confirmPassword) {
       toast({
         title: 'Error',
@@ -63,16 +72,18 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-16 max-w-md">
-      <Card>
-        <CardHeader>
-          <CardTitle>Sign Up</CardTitle>
-          <CardDescription>Create a new account</CardDescription>
-        </CardHeader>
-        <CardContent>
+    <div className="container mx-auto px-4 py-12 max-w-md">
+      <Card className="glass-card rounded-2xl border-primary/10 overflow-hidden shadow-xl">
+        <div className="bg-gradient-to-r from-primary/10 via-emerald-600/5 to-secondary/10 p-6 border-b border-border/50 text-center">
+          <CardTitle className="text-2xl font-extrabold text-foreground">Create Account</CardTitle>
+          <CardDescription className="mt-1.5 text-xs text-muted-foreground uppercase tracking-wider font-semibold">
+            Join USC DCISM Carolinian L&F
+          </CardDescription>
+        </div>
+        <CardContent className="p-6 space-y-6">
           <form onSubmit={handleRegister} className="space-y-4">
-            <div>
-              <Label htmlFor="name">Full Name</Label>
+            <div className="space-y-2">
+              <Label htmlFor="name" className="font-bold text-xs uppercase tracking-wider text-muted-foreground">Full Name</Label>
               <Input
                 id="name"
                 type="text"
@@ -80,23 +91,28 @@ export default function RegisterPage() {
                 onChange={(e) => setName(e.target.value)}
                 required
                 placeholder="John Doe"
+                className="bg-background/50 border-primary/10 focus-visible:ring-primary h-11"
               />
             </div>
 
-            <div>
-              <Label htmlFor="email">Email</Label>
+            <div className="space-y-2">
+              <Label htmlFor="email" className="font-bold text-xs uppercase tracking-wider text-muted-foreground">USC Email Address</Label>
               <Input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                placeholder="you@example.com"
+                placeholder="username@usc.edu.ph"
+                className="bg-background/50 border-primary/10 focus-visible:ring-primary h-11"
               />
+              <p className="text-[10px] text-muted-foreground mt-1 px-1">
+                Must end with <span className="font-bold text-primary">@usc.edu.ph</span> to verify university enrollment.
+              </p>
             </div>
 
-            <div>
-              <Label htmlFor="password">Password</Label>
+            <div className="space-y-2">
+              <Label htmlFor="password" className="font-bold text-xs uppercase tracking-wider text-muted-foreground">Password</Label>
               <Input
                 id="password"
                 type="password"
@@ -105,11 +121,12 @@ export default function RegisterPage() {
                 required
                 placeholder="••••••••"
                 minLength={6}
+                className="bg-background/50 border-primary/10 focus-visible:ring-primary h-11"
               />
             </div>
 
-            <div>
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword" className="font-bold text-xs uppercase tracking-wider text-muted-foreground">Confirm Password</Label>
               <Input
                 id="confirmPassword"
                 type="password"
@@ -117,17 +134,18 @@ export default function RegisterPage() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 placeholder="••••••••"
+                className="bg-background/50 border-primary/10 focus-visible:ring-primary h-11"
               />
             </div>
 
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button type="submit" className="w-full h-11 brand-button-hover bg-primary text-primary-foreground font-bold shadow-md shadow-primary/25 rounded-xl pt-0" disabled={loading}>
               {loading ? 'Creating account...' : 'Sign Up'}
             </Button>
           </form>
 
-          <div className="mt-4 text-center text-sm">
+          <div className="text-center text-xs text-muted-foreground pt-2 border-t border-border/40">
             Already have an account?{' '}
-            <Link href="/auth/login" className="text-primary hover:underline">
+            <Link href="/auth/login" className="text-primary hover:underline font-bold">
               Sign in
             </Link>
           </div>

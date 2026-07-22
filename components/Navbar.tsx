@@ -12,8 +12,9 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu'
 import { Avatar, AvatarFallback } from './ui/avatar'
-import { Menu, Search, PlusCircle, User, LogOut, Shield, MessageCircle, FileText, EyeOff } from 'lucide-react'
+import { Menu, Search, PlusCircle, User, LogOut, Shield, MessageCircle, FileText, EyeOff, GraduationCap } from 'lucide-react'
 import { ThemeToggle } from './theme-toggle'
+import { ColorThemeToggle } from './color-theme-toggle'
 
 export function Navbar() {
   const pathname = usePathname()
@@ -173,22 +174,30 @@ export function Navbar() {
     : user?.email?.[0].toUpperCase() || 'U'
 
   return (
-    <nav className="sticky top-0 z-50 border-b bg-background">
+    <nav className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-md shadow-sm border-primary/10">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-6">
-            <Link href="/" className="text-xl font-bold">
-              Lost & Found
+            <Link href="/" className="flex items-center gap-2 group transition-transform duration-300 hover:scale-105">
+              <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-primary text-secondary shadow-md shadow-primary/20">
+                <GraduationCap className="w-5 h-5 fill-current" />
+              </div>
+              <span className="text-lg font-bold tracking-tight flex flex-col leading-none">
+                <span className="text-[10px] uppercase tracking-wider text-muted-foreground">USC DCISM</span>
+                <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                  Carolinian <span className="text-foreground">L&F</span>
+                </span>
+              </span>
             </Link>
             
             <div className="hidden md:flex items-center gap-4">
               <Link
                 href="/items"
-                className={`text-sm font-medium transition-colors hover:text-primary ${
-                  pathname === '/items' ? 'text-primary' : 'text-muted-foreground'
+                className={`text-sm font-medium transition-colors hover:text-primary flex items-center gap-1 py-1.5 px-3 rounded-lg hover:bg-muted ${
+                  pathname === '/items' ? 'text-primary bg-muted/60' : 'text-muted-foreground'
                 }`}
               >
-                <Search className="inline-block w-4 h-4 mr-1" />
+                <Search className="w-4 h-4" />
                 Browse Items
               </Link>
               
@@ -196,34 +205,34 @@ export function Navbar() {
                 <>
                   <Link
                     href="/report"
-                    className={`text-sm font-medium transition-colors hover:text-primary ${
-                      pathname === '/report' ? 'text-primary' : 'text-muted-foreground'
+                    className={`text-sm font-medium transition-colors hover:text-primary flex items-center gap-1 py-1.5 px-3 rounded-lg hover:bg-muted ${
+                      pathname === '/report' ? 'text-primary bg-muted/60' : 'text-muted-foreground'
                     }`}
                   >
-                    <PlusCircle className="inline-block w-4 h-4 mr-1" />
+                    <PlusCircle className="w-4 h-4" />
                     Report Item
                   </Link>
                   
                   <Link
                     href="/my-reports"
-                    className={`text-sm font-medium transition-colors hover:text-primary ${
-                      pathname === '/my-reports' ? 'text-primary' : 'text-muted-foreground'
+                    className={`text-sm font-medium transition-colors hover:text-primary flex items-center gap-1 py-1.5 px-3 rounded-lg hover:bg-muted ${
+                      pathname === '/my-reports' ? 'text-primary bg-muted/60' : 'text-muted-foreground'
                     }`}
                   >
-                    <FileText className="inline-block w-4 h-4 mr-1" />
+                    <FileText className="w-4 h-4" />
                     My Reports
                   </Link>
                   
                   <Link
                     href="/chats"
-                    className={`text-sm font-medium transition-colors hover:text-primary relative ${
-                      pathname === '/chats' ? 'text-primary' : 'text-muted-foreground'
+                    className={`text-sm font-medium transition-colors hover:text-primary flex items-center gap-1 py-1.5 px-3 rounded-lg hover:bg-muted relative ${
+                      pathname === '/chats' ? 'text-primary bg-muted/60' : 'text-muted-foreground'
                     }`}
                   >
-                    <MessageCircle className="inline-block w-4 h-4 mr-1" />
+                    <MessageCircle className="w-4 h-4" />
                     Chats
                     {unreadMessagesCount > 0 && (
-                      <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold">
+                      <span className="absolute -top-1 -right-1 bg-secondary text-secondary-foreground text-[10px] rounded-full h-5 w-5 flex items-center justify-center font-bold shadow-md animate-pulse">
                         {unreadMessagesCount}
                       </span>
                     )}
@@ -231,59 +240,59 @@ export function Navbar() {
                   
                   <Link
                     href="/claims"
-                    className={`text-sm font-medium transition-colors hover:text-primary ${
-                      pathname === '/claims' ? 'text-primary' : 'text-muted-foreground'
+                    className={`text-sm font-medium transition-colors hover:text-primary flex items-center gap-1 py-1.5 px-3 rounded-lg hover:bg-muted relative ${
+                      pathname === '/claims' ? 'text-primary bg-muted/60' : 'text-muted-foreground'
                     }`}
                   >
-                    <div className="relative inline-block">
-                      My Claims
-                      {pendingClaimsCount > 0 && (
-                        <span className="absolute -top-2 -right-4 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                          {pendingClaimsCount}
-                        </span>
-                      )}
-                    </div>
+                    <FileText className="w-4 h-4" />
+                    My Claims
+                    {pendingClaimsCount > 0 && (
+                      <span className="absolute -top-1 -right-1 bg-secondary text-secondary-foreground text-[10px] rounded-full h-5 w-5 flex items-center justify-center font-bold shadow-md animate-pulse">
+                        {pendingClaimsCount}
+                      </span>
+                    )}
                   </Link>
                 </>
               )}
             </div>
           </div>
-
-          <div className="flex items-center gap-4">
+ 
+          <div className="flex items-center gap-2">
+            <ColorThemeToggle />
             <ThemeToggle />
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                  <Button variant="ghost" className="relative h-10 w-10 rounded-full border border-primary/10 hover:border-primary/20">
                     <Avatar>
-                      <AvatarFallback>{initials}</AvatarFallback>
+                      <AvatarFallback className="bg-primary/10 text-primary font-semibold">{initials}</AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
+                <DropdownMenuContent align="end" className="w-56 glass-card">
                   <DropdownMenuItem asChild>
-                    <Link href="/profile">
-                      <User className="mr-2 h-4 w-4" />
+                    <Link href="/profile" className="cursor-pointer">
+                      <User className="mr-2 h-4 w-4 text-primary" />
                       Profile
                     </Link>
                   </DropdownMenuItem>
                   {userRole === 'admin' && (
                     <>
                       <DropdownMenuItem asChild>
-                        <Link href="/admin">
-                          <Shield className="mr-2 h-4 w-4" />
+                        <Link href="/admin" className="cursor-pointer">
+                          <Shield className="mr-2 h-4 w-4 text-secondary" />
                           Admin Panel
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild>
-                        <Link href="/admin/hidden">
-                          <EyeOff className="mr-2 h-4 w-4" />
+                        <Link href="/admin/hidden" className="cursor-pointer">
+                          <EyeOff className="mr-2 h-4 w-4 text-muted-foreground" />
                           Hidden Posts Review
                         </Link>
                       </DropdownMenuItem>
                     </>
                   )}
-                  <DropdownMenuItem onClick={handleSignOut}>
+                  <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-destructive focus:text-destructive">
                     <LogOut className="mr-2 h-4 w-4" />
                     Sign Out
                   </DropdownMenuItem>
@@ -292,41 +301,41 @@ export function Navbar() {
             ) : (
               <div className="flex gap-2">
                 <Link href="/auth/login">
-                  <Button variant="ghost">Login</Button>
+                  <Button variant="ghost" className="hover:bg-muted text-muted-foreground hover:text-foreground">Login</Button>
                 </Link>
                 <Link href="/auth/register">
-                  <Button>Sign Up</Button>
+                  <Button className="brand-button-hover bg-primary text-primary-foreground">Sign Up</Button>
                 </Link>
               </div>
             )}
-
+ 
             <DropdownMenu>
               <DropdownMenuTrigger asChild className="md:hidden">
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" className="hover:bg-muted">
                   <Menu />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+              <DropdownMenuContent align="end" className="w-56 glass-card">
                 <DropdownMenuItem asChild>
-                  <Link href="/items">Browse Items</Link>
+                  <Link href="/items" className="cursor-pointer">Browse Items</Link>
                 </DropdownMenuItem>
                 {user && (
                   <>
                     <DropdownMenuItem asChild>
-                      <Link href="/report">Report Item</Link>
+                      <Link href="/report" className="cursor-pointer">Report Item</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link href="/my-reports">My Reports</Link>
+                      <Link href="/my-reports" className="cursor-pointer">My Reports</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link href="/chats">Chats</Link>
+                      <Link href="/chats" className="cursor-pointer">Chats</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link href="/claims">My Claims</Link>
+                      <Link href="/claims" className="cursor-pointer">My Claims</Link>
                     </DropdownMenuItem>
                     {userRole === 'admin' && (
                       <DropdownMenuItem asChild>
-                        <Link href="/admin/hidden">Hidden Posts Review</Link>
+                        <Link href="/admin/hidden" className="cursor-pointer">Hidden Posts Review</Link>
                       </DropdownMenuItem>
                     )}
                   </>

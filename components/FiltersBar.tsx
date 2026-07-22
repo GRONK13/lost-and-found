@@ -34,7 +34,7 @@ export function FiltersBar({ onSearch, filters }: FiltersBarProps) {
   const hasActiveFilters = Object.values(filters).some(v => v)
 
   return (
-    <div className="bg-card p-4 rounded-lg border space-y-4">
+    <div className="bg-card/60 backdrop-blur-sm p-5 rounded-2xl border border-primary/10 shadow-sm space-y-4">
       <div className="flex flex-col md:flex-row gap-4">
         <div className="flex-1">
           <div className="relative">
@@ -43,7 +43,7 @@ export function FiltersBar({ onSearch, filters }: FiltersBarProps) {
               placeholder="Search items..."
               value={filters.query || ''}
               onChange={(e) => handleInputChange('query', e.target.value)}
-              className="pl-9"
+              className="pl-9 bg-background/50 border-primary/10 focus-visible:ring-primary"
             />
           </div>
         </div>
@@ -52,16 +52,16 @@ export function FiltersBar({ onSearch, filters }: FiltersBarProps) {
           value={filters.category || 'all'}
           onValueChange={(value) => handleInputChange('category', value === 'all' ? '' : value)}
         >
-          <SelectTrigger className="w-full md:w-40">
+          <SelectTrigger className="w-full md:w-44 bg-background/50 border-primary/10 focus:ring-primary">
             <SelectValue placeholder="Category" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="glass-card">
             <SelectItem value="all">All Categories</SelectItem>
-            <SelectItem value="ID">ID</SelectItem>
-            <SelectItem value="Gadget">Gadget</SelectItem>
-            <SelectItem value="Book">Book</SelectItem>
-            <SelectItem value="Clothing">Clothing</SelectItem>
-            <SelectItem value="Other">Other</SelectItem>
+            <SelectItem value="ID">ID / Documents</SelectItem>
+            <SelectItem value="Gadget">Gadgets / Tech</SelectItem>
+            <SelectItem value="Book">Books & School</SelectItem>
+            <SelectItem value="Clothing">Clothing & Wearables</SelectItem>
+            <SelectItem value="Other">Others</SelectItem>
           </SelectContent>
         </Select>
 
@@ -69,10 +69,10 @@ export function FiltersBar({ onSearch, filters }: FiltersBarProps) {
           value={filters.status || 'all'}
           onValueChange={(value) => handleInputChange('status', value === 'all' ? '' : value)}
         >
-          <SelectTrigger className="w-full md:w-40">
+          <SelectTrigger className="w-full md:w-44 bg-background/50 border-primary/10 focus:ring-primary">
             <SelectValue placeholder="Status" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="glass-card">
             <SelectItem value="all">All Statuses</SelectItem>
             <SelectItem value="lost">Lost</SelectItem>
             <SelectItem value="found">Found</SelectItem>
@@ -85,18 +85,18 @@ export function FiltersBar({ onSearch, filters }: FiltersBarProps) {
           value={filters.campus || 'all'}
           onValueChange={(value) => handleInputChange('campus', value === 'all' ? '' : value)}
         >
-          <SelectTrigger className="w-full md:w-40">
+          <SelectTrigger className="w-full md:w-48 bg-background/50 border-primary/10 focus:ring-primary">
             <SelectValue placeholder="Campus" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="glass-card">
             <SelectItem value="all">All Campuses</SelectItem>
-            <SelectItem value="TC">Talamban Campus</SelectItem>
-            <SelectItem value="MC">Main Campus</SelectItem>
+            <SelectItem value="TC">Talamban Campus (TC)</SelectItem>
+            <SelectItem value="MC">Downtown Campus (DC)</SelectItem>
           </SelectContent>
         </Select>
 
         {hasActiveFilters && (
-          <Button variant="ghost" size="icon" onClick={clearFilters}>
+          <Button variant="ghost" size="icon" onClick={clearFilters} className="hover:bg-muted shrink-0 text-muted-foreground hover:text-foreground">
             <X className="h-4 w-4" />
           </Button>
         )}
@@ -104,9 +104,10 @@ export function FiltersBar({ onSearch, filters }: FiltersBarProps) {
 
       <div className="flex-1">
         <Input
-          placeholder="Filter by location..."
+          placeholder="Filter by location (e.g. Bunzel Bldg, STB, LRC...)"
           value={filters.location || ''}
           onChange={(e) => handleInputChange('location', e.target.value)}
+          className="bg-background/50 border-primary/10 focus-visible:ring-primary"
         />
       </div>
     </div>

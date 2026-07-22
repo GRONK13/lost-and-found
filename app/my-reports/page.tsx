@@ -53,20 +53,30 @@ export default function MyReportsPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-10 max-w-6xl space-y-6">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border/60 pb-6">
+        <div>
+          <h1 className="text-3xl font-extrabold tracking-tight">My Reported Items</h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            Manage all lost and found reports you have submitted to the platform
+          </p>
+        </div>
+      </div>
 
       {items.length === 0 ? (
-        <Card>
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <FileQuestion className="h-12 w-12 text-muted-foreground mb-4" />
-            <p className="text-lg font-medium mb-2">No reports yet</p>
-            <p className="text-muted-foreground text-center">
-              When you report lost or found items, they'll appear here
+        <Card className="glass-card border-dashed p-10">
+          <CardContent className="flex flex-col items-center justify-center py-6 text-center">
+            <div className="p-4 rounded-full bg-primary/10 text-primary mb-4">
+              <FileQuestion className="h-8 w-8" />
+            </div>
+            <p className="text-lg font-bold">No reports submitted yet</p>
+            <p className="text-sm text-muted-foreground mt-2 max-w-sm">
+              If you found something or lost a personal item on campus, report it and it will appear here.
             </p>
           </CardContent>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
           {items.map((item) => (
             <ItemCard key={item.id} item={item} showActions={true} userId={userId || undefined} />
           ))}

@@ -4,48 +4,130 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 156 20% 99%;
+    --foreground: 156 60% 8%;
+    --card: 0 0% 100%;
+    --card-foreground: 156 60% 8%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 156 60% 8%;
+    --primary: 156 80% 18%;
+    --primary-foreground: 45 100% 96%;
+    --secondary: 44 95% 48%;
+    --secondary-foreground: 156 60% 8%;
+    --muted: 156 15% 94%;
+    --muted-foreground: 156 12% 38%;
+    --accent: 44 95% 92%;
+    --accent-foreground: 156 80% 15%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 156 20% 89%;
+    --input: 156 20% 89%;
+    --ring: 156 80% 18%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 156 45% 5%;
+    --foreground: 45 35% 98%;
+    --card: 156 35% 7%;
+    --card-foreground: 45 35% 98%;
+    --popover: 156 35% 7%;
+    --popover-foreground: 45 35% 98%;
+    --primary: 156 65% 40%;
+    --primary-foreground: 156 45% 4%;
+    --secondary: 44 90% 50%;
+    --secondary-foreground: 156 45% 4%;
+    --muted: 156 20% 13%;
+    --muted-foreground: 156 12% 68%;
+    --accent: 44 90% 13%;
+    --accent-foreground: 44 90% 82%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 156 25% 14%;
+    --input: 156 25% 14%;
+    --ring: 156 65% 40%;
+  }
+
+  /* Explicit USC color class overrides */
+  html.color-theme-usc {
+    --background: 156 20% 99%;
+    --foreground: 156 60% 8%;
+    --card: 0 0% 100%;
+    --card-foreground: 156 60% 8%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 156 60% 8%;
+    --primary: 156 80% 18%;
+    --primary-foreground: 45 100% 96%;
+    --secondary: 44 95% 48%;
+    --secondary-foreground: 156 60% 8%;
+    --muted: 156 15% 94%;
+    --muted-foreground: 156 12% 38%;
+    --accent: 44 95% 92%;
+    --accent-foreground: 156 80% 15%;
+    --border: 156 20% 89%;
+    --input: 156 20% 89%;
+    --ring: 156 80% 18%;
+  }
+
+  html.dark.color-theme-usc {
+    --background: 156 45% 5%;
+    --foreground: 45 35% 98%;
+    --card: 156 35% 7%;
+    --card-foreground: 45 35% 98%;
+    --popover: 156 35% 7%;
+    --popover-foreground: 45 35% 98%;
+    --primary: 156 65% 40%;
+    --primary-foreground: 156 45% 4%;
+    --secondary: 44 90% 50%;
+    --secondary-foreground: 156 45% 4%;
+    --muted: 156 20% 13%;
+    --muted-foreground: 156 12% 68%;
+    --accent: 44 90% 13%;
+    --accent-foreground: 44 90% 82%;
+    --border: 156 25% 14%;
+    --input: 156 25% 14%;
+    --ring: 156 65% 40%;
+  }
+
+  /* DCISM White & Blue color class overrides */
+  html.color-theme-dcism {
+    --background: 210 25% 99%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
+    --primary: 221.2 83.2% 43%; /* Academic Blue */
     --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
+    --secondary: 200 95% 46%; /* Bright Accent Blue */
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
-    --radius: 0.5rem;
+    --accent: 210 40% 93%;
+    --accent-foreground: 221.2 83.2% 25%;
+    --border: 214.3 31.8% 90%;
+    --input: 214.3 31.8% 90%;
+    --ring: 221.2 83.2% 43%;
   }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
+  html.dark.color-theme-dcism {
+    --background: 222.2 47% 4%; /* Sleek Navy Dark Background */
     --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
+    --card: 222.2 47% 6%;
     --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
+    --popover: 222.2 47% 6%;
     --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
+    --primary: 217.2 91.2% 58%; /* Light Blue for dark contrast */
     --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
+    --secondary: 200 95% 58%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 222.2 25% 15%;
     --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
+    --accent: 222.2 25% 15%;
     --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+    --border: 222.2 25% 15%;
+    --input: 222.2 25% 15%;
+    --ring: 217.2 91.2% 58%;
   }
 }
 
@@ -57,3 +139,34 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom premium UI utilities */
+.glass-card {
+  @apply bg-white/70 dark:bg-card/75 backdrop-blur-md border border-white/20 dark:border-white/5 shadow-lg;
+}
+
+.gold-gradient-border {
+  position: relative;
+}
+
+.gold-gradient-border::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, hsl(44 95% 50%), transparent 70%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.brand-gradient-text {
+  @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent;
+}
+
+.brand-button-hover {
+  @apply transition-all duration-300 hover:shadow-[0_0_15px_rgba(29,168,104,0.3)] hover:-translate-y-0.5;
+}
+

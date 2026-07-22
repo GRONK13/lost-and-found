@@ -10,7 +10,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { toast } from '@/components/ui/use-toast'
-import { ArrowLeft, Trash2 } from 'lucide-react'
+import { ArrowLeft, Trash2, Edit } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import {
@@ -221,50 +221,55 @@ export default function EditItemPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-10 max-w-3xl">
       <Link href="/my-reports">
-        <Button variant="ghost" size="sm" className="mb-4">
-          <ArrowLeft className="h-4 w-4 mr-2" />
+        <Button variant="ghost" size="sm" className="mb-6 hover:bg-muted text-muted-foreground hover:text-foreground">
+          <ArrowLeft className="h-4 w-4 mr-2 text-primary" />
           Back to My Reports
         </Button>
       </Link>
 
-      <Card className="max-w-2xl mx-auto">
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>Edit Report</CardTitle>
-              <CardDescription>Update the details of your report</CardDescription>
-            </div>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="destructive" size="sm" disabled={deleting}>
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  Delete
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete your report
-                    and remove the data from our servers.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground">
-                    {deleting ? 'Deleting...' : 'Delete'}
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+      <Card className="glass-card rounded-2xl border-primary/10 overflow-hidden shadow-xl">
+        <div className="bg-gradient-to-r from-primary/10 via-emerald-600/5 to-secondary/10 p-6 sm:p-8 border-b border-border/50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <CardTitle className="text-2xl sm:text-3xl font-extrabold text-foreground flex items-center gap-2">
+              <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary text-secondary">
+                <Edit className="w-4 h-4 fill-current" />
+              </span>
+              Edit Report
+            </CardTitle>
+            <CardDescription className="mt-2 text-sm text-muted-foreground">
+              Update the details of your reported item
+            </CardDescription>
           </div>
-        </CardHeader>
-        <CardContent>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive" size="sm" className="h-9 font-semibold text-xs shrink-0 shadow-sm" disabled={deleting}>
+                <Trash2 className="h-3.5 w-3.5 mr-1.5" />
+                Delete Report
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent className="glass-card">
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete your report
+                  and remove the data from our servers.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel className="hover:bg-muted">Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground font-semibold hover:bg-destructive/90">
+                  {deleting ? 'Deleting...' : 'Delete'}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
+        <CardContent className="p-6 sm:p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="title">Item Title *</Label>
+              <Label htmlFor="title" className="font-bold text-xs uppercase tracking-wider text-muted-foreground">Item Title *</Label>
               <Input
                 id="title"
                 value={formData.title}
@@ -272,11 +277,12 @@ export default function EditItemPage() {
                 placeholder="e.g., Blue Backpack"
                 required
                 maxLength={100}
+                className="bg-background/50 border-primary/10 focus-visible:ring-primary h-11"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description *</Label>
+              <Label htmlFor="description" className="font-bold text-xs uppercase tracking-wider text-muted-foreground">Description *</Label>
               <Textarea
                 id="description"
                 value={formData.description}
@@ -285,86 +291,90 @@ export default function EditItemPage() {
                 rows={4}
                 required
                 maxLength={500}
+                className="bg-background/50 border-primary/10 focus-visible:ring-primary resize-none"
               />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="category">Category *</Label>
+                <Label htmlFor="category" className="font-bold text-xs uppercase tracking-wider text-muted-foreground">Category *</Label>
                 <Select
                   value={formData.category}
                   onValueChange={(value) => setFormData({ ...formData, category: value })}
                   required
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="bg-background/50 border-primary/10 focus:ring-primary h-11">
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="ID">ID</SelectItem>
-                    <SelectItem value="Gadget">Gadget</SelectItem>
-                    <SelectItem value="Book">Book</SelectItem>
-                    <SelectItem value="Clothing">Clothing</SelectItem>
-                    <SelectItem value="Other">Other</SelectItem>
+                  <SelectContent className="glass-card">
+                    <SelectItem value="ID">ID / Documents</SelectItem>
+                    <SelectItem value="Gadget">Gadgets / Tech</SelectItem>
+                    <SelectItem value="Book">Books & School</SelectItem>
+                    <SelectItem value="Clothing">Clothing & Wearables</SelectItem>
+                    <SelectItem value="Other">Others</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="status">Status *</Label>
+                <Label htmlFor="status" className="font-bold text-xs uppercase tracking-wider text-muted-foreground">Status *</Label>
                 <Select
                   value={formData.status}
                   onValueChange={(value) => setFormData({ ...formData, status: value })}
                   required
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="bg-background/50 border-primary/10 focus:ring-primary h-11">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="glass-card">
                     <SelectItem value="lost">Lost</SelectItem>
                     <SelectItem value="found">Found</SelectItem>
+                    <SelectItem value="claimed">Claimed</SelectItem>
+                    <SelectItem value="returned">Returned</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="location">Location</Label>
+                <Label htmlFor="location" className="font-bold text-xs uppercase tracking-wider text-muted-foreground">Location</Label>
                 <Input
                   id="location"
                   value={formData.location}
                   onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                   placeholder="e.g., Library 2nd floor"
                   maxLength={100}
+                  className="bg-background/50 border-primary/10 focus-visible:ring-primary h-11"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="campus">Campus</Label>
+                <Label htmlFor="campus" className="font-bold text-xs uppercase tracking-wider text-muted-foreground">Campus</Label>
                 <Select
                   value={formData.campus}
                   onValueChange={(value) => setFormData({ ...formData, campus: value })}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="bg-background/50 border-primary/10 focus:ring-primary h-11">
                     <SelectValue placeholder="Select campus" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="TC">Talamban Campus</SelectItem>
-                    <SelectItem value="MC">Main Campus</SelectItem>
+                  <SelectContent className="glass-card">
+                    <SelectItem value="TC">Talamban Campus (TC)</SelectItem>
+                    <SelectItem value="MC">Downtown Campus (DC)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="photo">Photo</Label>
+            <div className="space-y-3 p-5 rounded-2xl border border-primary/15 bg-primary/5">
+              <Label htmlFor="photo" className="font-bold text-xs uppercase tracking-wider text-primary">Photo</Label>
               {photoPreview && (
-                <div className="relative w-full h-64 mb-2">
+                <div className="relative w-full h-48 sm:h-64 mb-3 rounded-xl overflow-hidden border border-border">
                   <Image
                     src={photoPreview}
                     alt="Preview"
                     fill
-                    className="object-cover rounded-lg"
+                    className="object-cover"
                   />
                 </div>
               )}
@@ -373,17 +383,18 @@ export default function EditItemPage() {
                 type="file"
                 accept="image/*"
                 onChange={handlePhotoChange}
+                className="bg-background cursor-pointer file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-primary file:text-primary-foreground file:hover:bg-primary/90 h-11 flex items-center"
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-[11px] text-muted-foreground">
                 Upload a new photo to replace the current one (optional)
               </p>
             </div>
 
-            <div className="flex gap-4">
-              <Button type="submit" disabled={submitting} className="flex-1">
+            <div className="flex gap-4 pt-2">
+              <Button type="submit" disabled={submitting} className="flex-1 h-11 brand-button-hover bg-primary text-primary-foreground font-bold shadow-md shadow-primary/25 rounded-xl">
                 {submitting ? 'Updating...' : 'Update Report'}
               </Button>
-              <Button type="button" variant="outline" onClick={() => router.push('/my-reports')}>
+              <Button type="button" variant="outline" onClick={() => router.push('/my-reports')} className="h-11 hover:bg-muted text-foreground border-primary/10 font-bold rounded-xl px-6">
                 Cancel
               </Button>
             </div>
@@ -393,3 +404,4 @@ export default function EditItemPage() {
     </div>
   )
 }
+

@@ -76,32 +76,39 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-8 grid gap-6 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <User className="h-5 w-5" />
-              My Profile
+    <div className="container mx-auto px-4 py-10 max-w-5xl space-y-8">
+      <div className="border-b border-border/60 pb-6">
+        <h1 className="text-3xl font-extrabold tracking-tight">User Account Profile</h1>
+        <p className="text-sm text-muted-foreground mt-1">
+          View your profile status, update security settings, and audit your submissions
+        </p>
+      </div>
+
+      <div className="grid gap-6 md:grid-cols-2">
+        <Card className="glass-card border-primary/10 shadow-md">
+          <CardHeader className="pb-3 border-b border-border/40">
+            <CardTitle className="flex items-center gap-2 text-lg font-bold text-foreground">
+              <User className="h-5 w-5 text-primary" />
+              Personal Info
             </CardTitle>
-            <CardDescription>
-              Your account information
+            <CardDescription className="text-xs">
+              Your registered portal credentials and system role
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <div>
-                <span className="font-semibold">Name:</span>{' '}
-                <span className="text-muted-foreground">{userData?.name || 'Not set'}</span>
-              </div>
-              <div>
-                <span className="font-semibold">Email:</span>{' '}
-                <span className="text-muted-foreground">{user?.email}</span>
-              </div>
-              <div>
-                <span className="font-semibold">Role:</span>{' '}
-                <span className="text-muted-foreground capitalize">{userData?.role || 'user'}</span>
-              </div>
+          <CardContent className="pt-5 space-y-4 text-sm">
+            <div className="flex justify-between items-center py-2 border-b border-border/40">
+              <span className="font-semibold text-muted-foreground">Full Name:</span>
+              <span className="font-bold text-foreground">{userData?.name || 'Not set'}</span>
+            </div>
+            <div className="flex justify-between items-center py-2 border-b border-border/40">
+              <span className="font-semibold text-muted-foreground">Email Address:</span>
+              <span className="font-semibold text-foreground">{user?.email}</span>
+            </div>
+            <div className="flex justify-between items-center py-2">
+              <span className="font-semibold text-muted-foreground">Portal Role:</span>
+              <span className="px-2 py-0.5 rounded-md bg-primary/10 text-primary font-bold text-xs uppercase tracking-wide">
+                {userData?.role || 'user'}
+              </span>
             </div>
           </CardContent>
         </Card>
@@ -110,11 +117,11 @@ export default function ProfilePage() {
       </div>
 
       <Tabs defaultValue="reported" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="reported">
+        <TabsList className="grid w-full grid-cols-2 bg-muted/60 p-1.5 rounded-xl border border-primary/5">
+          <TabsTrigger value="reported" className="rounded-lg py-2.5 font-bold data-[state=active]:bg-background data-[state=active]:shadow-sm data-[state=active]:text-primary transition-all">
             My Reported Items ({reportedItems?.length || 0})
           </TabsTrigger>
-          <TabsTrigger value="claims">
+          <TabsTrigger value="claims" className="rounded-lg py-2.5 font-bold data-[state=active]:bg-background data-[state=active]:shadow-sm data-[state=active]:text-primary transition-all">
             My Claims ({claims?.length || 0})
           </TabsTrigger>
         </TabsList>
@@ -127,9 +134,9 @@ export default function ProfilePage() {
               ))}
             </div>
           ) : (
-            <Card>
+            <Card className="glass-card">
               <CardContent className="pt-6">
-                <p className="text-center text-muted-foreground py-12">
+                <p className="text-center text-muted-foreground py-16">
                   You haven&apos;t reported any items yet
                 </p>
               </CardContent>
@@ -150,9 +157,9 @@ export default function ProfilePage() {
               ))}
             </div>
           ) : (
-            <Card>
+            <Card className="glass-card">
               <CardContent className="pt-6">
-                <p className="text-center text-muted-foreground py-12">
+                <p className="text-center text-muted-foreground py-16">
                   You haven&apos;t made any claims yet
                 </p>
               </CardContent>
