@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { Button } from './ui/button'
 import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
 import { toast } from './ui/use-toast'
 import { CheckCircle, Loader2 } from 'lucide-react'
 
@@ -15,18 +14,19 @@ interface UpdateItemStatusButtonProps {
 export function UpdateItemStatusButton({ itemId, currentStatus }: UpdateItemStatusButtonProps) {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
-  const supabase = createClient()
 
   const handleUpdateStatus = async () => {
     setLoading(true)
     try {
-      // Always change to 'returned' status
-      const { error } = await supabase
-        .from('items')
-        .update({ status: 'returned' })
-        .eq('id', itemId)
+      const res = await fetch(`/api/items/${itemId}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'RETURNED' }),
+      })
 
-      if (error) throw error
+      if (!res.ok) {
+        throw new Error('Failed to update status')
+      }
 
       toast({
         title: 'Success',
@@ -46,8 +46,9 @@ export function UpdateItemStatusButton({ itemId, currentStatus }: UpdateItemStat
     }
   }
 
-  // Only show for lost or found items (not already returned or claimed)
-  if (currentStatus !== 'lost' && currentStatus !== 'found') {
+  const normStatus = currentStatus ? currentStatus.toLowerCase() : ''
+
+  if (normStatus !== 'lost' && normStatus !== 'found') {
     return null
   }
 

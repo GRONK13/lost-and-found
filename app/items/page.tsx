@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import { ItemCard } from '@/components/ItemCard'
 import { FiltersBar } from '@/components/FiltersBar'
 import { Loader2 } from 'lucide-react'
@@ -23,13 +22,10 @@ export default function ItemsPage() {
     category: searchParams.get('category') || undefined
   })
 
-  // Sync category filter if search parameters change
   useEffect(() => {
     const cat = searchParams.get('category') || undefined
     setFilters(prev => ({ ...prev, category: cat }))
   }, [searchParams])
-
-  const supabase = createClient()
 
   useEffect(() => {
     fetchItems()
@@ -38,36 +34,25 @@ export default function ItemsPage() {
   async function fetchItems() {
     setLoading(true)
     
-    let query = supabase
-      .from('items')
-      .select('*')
-      .eq('hidden', false)
-      .order('created_at', { ascending: false })
+    try {
+      const params = new URLSearchParams()
+      if (filters.category) params.append('category', filters.category)
+      if (filters.status) params.append('status', filters.status)
+      if (filters.campus) params.append('campus', filters.campus)
+      if (filters.location) params.append('location', filters.location)
+      if (filters.query) params.append('query', filters.query)
 
-    // Apply filters
-    if (filters.category) {
-      query = query.eq('category', filters.category)
-    }
-    if (filters.status) {
-      query = query.eq('status', filters.status)
-    }
-    if (filters.campus) {
-      query = query.eq('campus', filters.campus)
-    }
-    if (filters.location) {
-      query = query.ilike('location', `%${filters.location}%`)
-    }
-    if (filters.query) {
-      query = query.or(`title.ilike.%${filters.query}%,description.ilike.%${filters.query}%`)
-    }
+      const res = await fetch(`/api/items?${params.toString()}`)
+      const data = await res.json()
 
-    const { data, error } = await query
-
-    if (!error && data) {
-      setItems(data)
+      if (res.ok && data.items) {
+        setItems(data.items)
+      }
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setLoading(false)
     }
-    
-    setLoading(false)
   }
 
   return (

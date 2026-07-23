@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import { notFound, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { StatusBadge } from '@/components/StatusBadge'
@@ -37,27 +36,18 @@ export default function ItemDetailPage({ params }: { params: { id: string } }) {
   const [claimModalOpen, setClaimModalOpen] = useState(false)
   const [deleting, setDeleting] = useState(false)
   const router = useRouter()
-  const supabase = createClient()
 
   const handleDelete = async () => {
     setDeleting(true)
 
     try {
-      // Delete photo from storage if exists
-      if (item.photo_url) {
-        const fileName = item.photo_url.split('/').pop()
-        if (fileName) {
-          await supabase.storage.from('item-photos').remove([fileName])
-        }
+      const res = await fetch(`/api/items/${params.id}`, {
+        method: 'DELETE',
+      })
+
+      if (!res.ok) {
+        throw new Error('Failed to delete item')
       }
-
-      // Delete item
-      const { error } = await supabase
-        .from('items')
-        .delete()
-        .eq('id', item.id)
-
-      if (error) throw error
 
       toast({
         title: 'Success',
@@ -78,44 +68,22 @@ export default function ItemDetailPage({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      // Get item
-      const { data: itemData } = await supabase
-        .from('items')
-        .select(`
-          *,
-          users!reporter_id(id, name, email)
-        `)
-        .eq('id', params.id)
-        .single()
+      try {
+        const res = await fetch(`/api/items/${params.id}`)
+        if (!res.ok) {
+          router.push('/404')
+          return
+        }
 
-      if (!itemData) {
-        router.push('/404')
-        return
+        const data = await res.json()
+        setItem(data.item)
+        setUser(data.user)
+        setUserClaim(data.userClaim)
+      } catch (e) {
+        console.error(e)
+      } finally {
+        setLoading(false)
       }
-
-      setItem(itemData)
-
-      // Get current user
-      const { data: { user: currentUser } } = await supabase.auth.getUser()
-      setUser(currentUser)
-
-      if (currentUser) {
-        // Check if current user has a CLAIM-TYPE claim on this item (not chat-type)
-        const { data } = await supabase
-          .from('claims')
-          .select(`
-            *,
-            items!inner(*, users!reporter_id(name, email))
-          `)
-          .eq('item_id', itemData.id)
-          .eq('claimant_id', currentUser.id)
-          .eq('chat_type', 'claim')
-          .single()
-
-        setUserClaim(data)
-      }
-
-      setLoading(false)
     }
 
     fetchData()
@@ -135,22 +103,22 @@ export default function ItemDetailPage({ params }: { params: { id: string } }) {
     return notFound()
   }
 
-  const isReporter = user && item.reporter_id === user.id
-  const isLostItem = item.status === 'lost'
+  const isReporter = user && (item.reporterId === user.id || item.reporter_id === user.id)
+  const isLostItem = item.status === 'lost' || item.status === 'LOST'
 
   return (
     <div className="container mx-auto px-4 py-10 max-w-6xl">
       <div className="grid md:grid-cols-2 gap-10 items-start">
         {/* Image Section */}
         <div className="space-y-4">
-          {item.photo_url ? (
+          {item.photoUrl || item.photo_url ? (
             <div className="bg-card border border-primary/10 rounded-2xl p-2.5 shadow-md">
               <div 
                 className="relative h-[400px] w-full cursor-pointer rounded-xl overflow-hidden group"
                 onClick={() => setImageModalOpen(true)}
               >
                 <Image 
-                  src={item.photo_url} 
+                  src={item.photoUrl || item.photo_url} 
                   alt={item.title}
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -162,7 +130,7 @@ export default function ItemDetailPage({ params }: { params: { id: string } }) {
                 </div>
               </div>
               <ImageModal
-                src={item.photo_url}
+                src={item.photoUrl || item.photo_url}
                 alt={item.title}
                 isOpen={imageModalOpen}
                 onClose={() => setImageModalOpen(false)}
@@ -248,7 +216,7 @@ export default function ItemDetailPage({ params }: { params: { id: string } }) {
                 </div>
                 <div>
                   <div className="text-[10px] uppercase font-bold text-muted-foreground/80 leading-none">Date Logged</div>
-                  <span className="text-foreground font-medium">{new Date(item.created_at).toLocaleDateString(undefined, { dateStyle: 'medium' })}</span>
+                  <span className="text-foreground font-medium">{new Date(item.createdAt || item.created_at).toLocaleDateString(undefined, { dateStyle: 'medium' })}</span>
                 </div>
               </div>
               
@@ -258,7 +226,7 @@ export default function ItemDetailPage({ params }: { params: { id: string } }) {
                 </div>
                 <div>
                   <div className="text-[10px] uppercase font-bold text-muted-foreground/80 leading-none">Logged By</div>
-                  <span className="text-foreground font-medium">{item.users?.name || item.users?.email || 'Unknown User'}</span>
+                  <span className="text-foreground font-medium">{item.reporter?.name || item.reporter?.email || 'Unknown User'}</span>
                 </div>
               </div>
             </div>
@@ -287,7 +255,7 @@ export default function ItemDetailPage({ params }: { params: { id: string } }) {
               <div className="w-full">
                 <ChatWithReporterButton
                   itemId={item.id}
-                  reporterId={item.reporter_id}
+                  reporterId={item.reporterId || item.reporter_id}
                   currentUserId={user.id}
                   itemStatus={item.status}
                 />
@@ -298,8 +266,8 @@ export default function ItemDetailPage({ params }: { params: { id: string } }) {
             {user && 
              !isReporter && 
              !isLostItem &&
-             item.status !== 'claimed' && 
-             item.status !== 'returned' && (
+             item.status !== 'claimed' && item.status !== 'CLAIMED' &&
+             item.status !== 'returned' && item.status !== 'RETURNED' && (
               <div className="flex flex-col sm:flex-row gap-3">
                 <Button 
                   onClick={() => setClaimModalOpen(true)}
@@ -312,7 +280,7 @@ export default function ItemDetailPage({ params }: { params: { id: string } }) {
                 </Button>
                 <ChatWithReporterButton
                   itemId={item.id}
-                  reporterId={item.reporter_id}
+                  reporterId={item.reporterId || item.reporter_id}
                   currentUserId={user.id}
                   itemStatus={item.status}
                   fullWidth={false}

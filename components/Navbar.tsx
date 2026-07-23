@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
 import { useEffect, useState } from 'react'
 import { Button } from './ui/button'
 import {
@@ -19,158 +18,35 @@ import { ColorThemeToggle } from './color-theme-toggle'
 export function Navbar() {
   const pathname = usePathname()
   const [user, setUser] = useState<any>(null)
-  const [userRole, setUserRole] = useState<string>('user')
   const [pendingClaimsCount, setPendingClaimsCount] = useState(0)
   const [unreadMessagesCount, setUnreadMessagesCount] = useState(0)
-  const supabase = createClient()
+
+  const fetchUser = async () => {
+    try {
+      const res = await fetch('/api/auth/me')
+      const data = await res.json()
+      if (data.user) {
+        setUser(data.user)
+      } else {
+        setUser(null)
+      }
+    } catch (e) {
+      setUser(null)
+    }
+  }
 
   useEffect(() => {
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        setUser(user)
-        
-        // Get user role
-        const { data: userData } = await supabase
-          .from('users')
-          .select('role')
-          .eq('id', user.id)
-          .single()
-        
-        if (userData) {
-          setUserRole(userData.role)
-        }
-
-        // Get pending claims count
-        await fetchPendingClaimsCount(user.id)
-        
-        // Get unread messages count
-        await fetchUnreadMessagesCount(user.id)
-        
-        // Subscribe to new messages
-        const messagesChannel = supabase
-          .channel('navbar-messages')
-          .on(
-            'postgres_changes',
-            {
-              event: 'INSERT',
-              schema: 'public',
-              table: 'messages',
-            },
-            (payload) => {
-              console.log('📨 New message inserted:', payload)
-              // Refresh unread count when new message arrives
-              fetchUnreadMessagesCount(user.id)
-            }
-          )
-          .on(
-            'postgres_changes',
-            {
-              event: 'UPDATE',
-              schema: 'public',
-              table: 'messages',
-            },
-            (payload) => {
-              console.log('📝 Message updated:', payload)
-              // Refresh unread count when message is marked as read
-              fetchUnreadMessagesCount(user.id)
-            }
-          )
-          .subscribe()
-
-        return () => {
-          supabase.removeChannel(messagesChannel)
-        }
-      }
-    }
-    
-    getUser()
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
-      if (session?.user) {
-        fetchPendingClaimsCount(session.user.id)
-        fetchUnreadMessagesCount(session.user.id)
-      }
-    })
-
-    return () => subscription.unsubscribe()
-  }, [])
-
-  const fetchPendingClaimsCount = async (userId: string) => {
-    // Only count claim-type claims, not chat-type
-    const { data } = await supabase
-      .from('claims')
-      .select('id, items!inner(reporter_id)')
-      .eq('items.reporter_id', userId)
-      .eq('status', 'pending')
-      .eq('chat_type', 'claim')
-
-    setPendingClaimsCount(data?.length || 0)
-  }
-
-  const fetchUnreadMessagesCount = async (userId: string) => {
-    console.log('📊 Fetching unread messages for user:', userId)
-    
-    // Get claims where user is claimant
-    const { data: claimsAsClaimant } = await supabase
-      .from('claims')
-      .select('id')
-      .eq('claimant_id', userId)
-      .eq('chat_type', 'chat')
-      .in('status', ['pending', 'approved'])
-
-    // Get claims where user is reporter
-    const { data: claimsAsReporter } = await supabase
-      .from('claims')
-      .select('id, items!inner(reporter_id)')
-      .eq('items.reporter_id', userId)
-      .eq('chat_type', 'chat')
-      .in('status', ['pending', 'approved'])
-
-    const allClaims = [
-      ...(claimsAsClaimant || []),
-      ...(claimsAsReporter || [])
-    ]
-
-    console.log('📋 User claims:', allClaims)
-
-    if (allClaims.length === 0) {
-      console.log('❌ No chat claims found')
-      setUnreadMessagesCount(0)
-      return
-    }
-
-    const claimIds = allClaims.map(c => c.id)
-    console.log('🔑 Claim IDs to check:', claimIds)
-
-    // Count unread messages in these claims (not sent by current user)
-    const { count, error } = await supabase
-      .from('messages')
-      .select('*', { count: 'exact', head: true })
-      .in('claim_id', claimIds)
-      .eq('read', false)
-      .neq('sender_id', userId)
-
-    console.log('💬 Unread count:', count, 'Error:', error)
-
-    if (error) {
-      console.error('Error counting unread messages:', error)
-      setUnreadMessagesCount(0)
-      return
-    }
-
-    console.log('✅ Setting unread count to:', count)
-    setUnreadMessagesCount(count || 0)
-  }
+    fetchUser()
+  }, [pathname])
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut()
+    await fetch('/api/auth/logout', { method: 'POST' })
+    setUser(null)
     window.location.href = '/'
   }
 
-  const initials = user?.user_metadata?.name
-    ? user.user_metadata.name.split(' ').map((n: string) => n[0]).join('').toUpperCase()
+  const initials = user?.name
+    ? user.name.split(' ').map((n: string) => n[0]).join('').toUpperCase()
     : user?.email?.[0].toUpperCase() || 'U'
 
   return (
@@ -231,11 +107,6 @@ export function Navbar() {
                   >
                     <MessageCircle className="w-4 h-4" />
                     Chats
-                    {unreadMessagesCount > 0 && (
-                      <span className="absolute -top-1 -right-1 bg-secondary text-secondary-foreground text-[10px] rounded-full h-5 w-5 flex items-center justify-center font-bold shadow-md animate-pulse">
-                        {unreadMessagesCount}
-                      </span>
-                    )}
                   </Link>
                   
                   <Link
@@ -246,11 +117,6 @@ export function Navbar() {
                   >
                     <FileText className="w-4 h-4" />
                     My Claims
-                    {pendingClaimsCount > 0 && (
-                      <span className="absolute -top-1 -right-1 bg-secondary text-secondary-foreground text-[10px] rounded-full h-5 w-5 flex items-center justify-center font-bold shadow-md animate-pulse">
-                        {pendingClaimsCount}
-                      </span>
-                    )}
                   </Link>
                 </>
               )}
@@ -276,7 +142,7 @@ export function Navbar() {
                       Profile
                     </Link>
                   </DropdownMenuItem>
-                  {userRole === 'admin' && (
+                  {user.role === 'ADMIN' && (
                     <>
                       <DropdownMenuItem asChild>
                         <Link href="/admin" className="cursor-pointer">
@@ -333,7 +199,7 @@ export function Navbar() {
                     <DropdownMenuItem asChild>
                       <Link href="/claims" className="cursor-pointer">My Claims</Link>
                     </DropdownMenuItem>
-                    {userRole === 'admin' && (
+                    {user.role === 'ADMIN' && (
                       <DropdownMenuItem asChild>
                         <Link href="/admin/hidden" className="cursor-pointer">Hidden Posts Review</Link>
                       </DropdownMenuItem>

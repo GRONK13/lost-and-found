@@ -112,9 +112,8 @@ if [ ! -f .env.production.local ]; then
     echo "📝 Please create .env.production.local with your configuration"
     echo ""
     echo "Required variables:"
-    echo "  NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co"
-    echo "  NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key"
-    echo "  SUPABASE_SERVICE_ROLE_KEY=your-service-role-key"
+    echo "  DATABASE_URL=mysql://user:pass@localhost:3306/db_name"
+    echo "  JWT_SECRET=your-secure-jwt-secret"
     echo "  SITE_URL=https://your-subdomain.school.edu"
     echo "  NODE_ENV=production"
     echo "  PORT=20089"
@@ -142,6 +141,12 @@ case $choice in
     1)
         install_dependencies
         
+        echo "🔧 Generating Prisma Client..."
+        npx prisma generate
+
+        echo "🗄️ Pushing database schema to MariaDB..."
+        npx prisma db push
+
         echo "🔨 Building application..."
         npm run build
 
@@ -179,6 +184,12 @@ case $choice in
 
         install_dependencies
         
+        echo "🔧 Generating Prisma Client..."
+        npx prisma generate
+
+        echo "🗄️ Pushing database schema to MariaDB..."
+        npx prisma db push
+
         echo "🔨 Building application..."
         npm run build
 

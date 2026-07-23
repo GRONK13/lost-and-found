@@ -1,55 +1,48 @@
-import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { ClaimCard } from '@/components/ClaimCard'
 import { Card, CardContent } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { db } from '@/lib/db'
+import { getCurrentUser } from '@/lib/auth'
 
 export const dynamic = 'force-dynamic'
 
 export default async function ClaimsPage() {
-  const supabase = await createClient()
-  
-  const { data: { user } } = await supabase.auth.getUser()
+  const user = await getCurrentUser()
   if (!user) redirect('/auth/login')
 
-  // Get all claims for items the user reported (only claim-type, not chat-type)
-  const { data: receivedClaims } = await supabase
-    .from('claims')
-    .select(`
-      *,
-      items!inner(id, title, description, status, category, photo_url, reporter_id),
-      users!claimant_id(name, email)
-    `)
-    .eq('items.reporter_id', user.id)
-    .eq('chat_type', 'claim')
-    .order('created_at', { ascending: false })
+  // Get all claims for items the user reported (only CLAIM chatType)
+  const receivedClaims = await db.claim.findMany({
+    where: {
+      item: { reporterId: user.id },
+      chatType: 'CLAIM',
+    },
+    include: {
+      item: true,
+      claimant: {
+        select: { name: true, email: true },
+      },
+    },
+    orderBy: { createdAt: 'desc' },
+  })
 
-  // Get all claims the user has made (only claim-type, not chat-type)
-  const { data: madeClaims } = await supabase
-    .from('claims')
-    .select(`
-      *,
-      items!inner(id, title, description, status, category, photo_url, reporter_id)
-    `)
-    .eq('claimant_id', user.id)
-    .eq('chat_type', 'claim')
-    .order('created_at', { ascending: false })
-
-  // For made claims, get the reporter info
-  const madeClaimsWithReporter = madeClaims ? await Promise.all(
-    madeClaims.map(async (claim) => {
-      const { data: reporterData } = await supabase
-        .from('users')
-        .select('name, email')
-        .eq('id', claim.items.reporter_id)
-        .single()
-
-      return {
-        ...claim,
-        reporter: reporterData
-      }
-    })
-  ) : []
+  // Get all claims the user has made (only CLAIM chatType)
+  const madeClaims = await db.claim.findMany({
+    where: {
+      claimantId: user.id,
+      chatType: 'CLAIM',
+    },
+    include: {
+      item: {
+        include: {
+          reporter: {
+            select: { name: true, email: true },
+          },
+        },
+      },
+    },
+    orderBy: { createdAt: 'desc' },
+  })
 
   return (
     <div className="container mx-auto px-4 py-10 max-w-5xl space-y-6">
@@ -63,20 +56,27 @@ export default async function ClaimsPage() {
       <Tabs defaultValue="received" className="w-full">
         <TabsList className="grid w-full grid-cols-2 bg-muted/60 p-1.5 rounded-xl border border-primary/5">
           <TabsTrigger value="received" className="rounded-lg py-2.5 font-bold data-[state=active]:bg-background data-[state=active]:shadow-sm data-[state=active]:text-primary transition-all">
-            Claims on My Items ({receivedClaims?.length || 0})
+            Claims on My Items ({receivedClaims.length})
           </TabsTrigger>
           <TabsTrigger value="made" className="rounded-lg py-2.5 font-bold data-[state=active]:bg-background data-[state=active]:shadow-sm data-[state=active]:text-primary transition-all">
-            Claims I Made ({madeClaimsWithReporter?.length || 0})
+            Claims I Made ({madeClaims.length})
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="received" className="mt-6">
-          {receivedClaims && receivedClaims.length > 0 ? (
+          {receivedClaims.length > 0 ? (
             <div className="space-y-4">
               {receivedClaims.map((claim: any) => (
                 <ClaimCard 
                   key={claim.id} 
-                  claim={claim} 
+                  claim={{
+                    ...claim,
+                    items: {
+                      ...claim.item,
+                      photo_url: claim.item.photoUrl,
+                    },
+                    users: claim.claimant,
+                  }} 
                   showItemDetails={true}
                   canApprove={true}
                 />
@@ -94,14 +94,18 @@ export default async function ClaimsPage() {
         </TabsContent>
 
         <TabsContent value="made" className="mt-6">
-          {madeClaimsWithReporter && madeClaimsWithReporter.length > 0 ? (
+          {madeClaims.length > 0 ? (
             <div className="space-y-4">
-              {madeClaimsWithReporter.map((claim: any) => (
+              {madeClaims.map((claim: any) => (
                 <ClaimCard 
                   key={claim.id} 
                   claim={{
                     ...claim,
-                    users: claim.reporter
+                    items: {
+                      ...claim.item,
+                      photo_url: claim.item.photoUrl,
+                    },
+                    users: claim.item.reporter,
                   }}
                   showItemDetails={true}
                   canApprove={false}

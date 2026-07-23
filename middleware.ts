@@ -1,91 +1,51 @@
-import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import { jwtVerify } from 'jose'
+
+const JWT_SECRET = new TextEncoder().encode(
+  process.env.JWT_SECRET || 'dcism_carolinian_lost_n_found_jwt_secret_key_2026'
+)
+
+const AUTH_COOKIE_NAME = 'auth_token'
 
 export async function middleware(request: NextRequest) {
-  let response = NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
-  })
+  const token = request.cookies.get(AUTH_COOKIE_NAME)?.value
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return request.cookies.get(name)?.value
-        },
-        set(name: string, value: string, options: any) {
-          request.cookies.set({
-            name,
-            value,
-            ...options,
-          })
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          })
-          response.cookies.set({
-            name,
-            value,
-            ...options,
-          })
-        },
-        remove(name: string, options: any) {
-          request.cookies.set({
-            name,
-            value: '',
-            ...options,
-          })
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          })
-          response.cookies.set({
-            name,
-            value: '',
-            ...options,
-          })
-        },
-      },
+  let user: { userId: string; email: string; role: 'USER' | 'ADMIN' } | null = null
+
+  if (token) {
+    try {
+      const { payload } = await jwtVerify(token, JWT_SECRET)
+      user = payload as any
+    } catch (e) {
+      user = null
     }
-  )
+  }
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const { pathname } = request.nextUrl
 
   // Protected routes that require authentication
-  if (!user && (
-    request.nextUrl.pathname.startsWith('/report') ||
-    request.nextUrl.pathname.startsWith('/profile') ||
-    request.nextUrl.pathname.startsWith('/claims') ||
-    request.nextUrl.pathname.startsWith('/admin')
-  )) {
+  const isProtectedRoute =
+    pathname.startsWith('/report') ||
+    pathname.startsWith('/profile') ||
+    pathname.startsWith('/claims') ||
+    pathname.startsWith('/chats') ||
+    pathname.startsWith('/admin') ||
+    pathname.endsWith('/edit')
+
+  if (!user && isProtectedRoute) {
     return NextResponse.redirect(new URL('/auth/login', request.url))
   }
 
   // Admin-only routes
-  if (request.nextUrl.pathname.startsWith('/admin')) {
-    if (user) {
-      const { data: userData } = await supabase
-        .from('users')
-        .select('role')
-        .eq('id', user.id)
-        .single()
-
-      if (userData?.role !== 'admin') {
-        return NextResponse.redirect(new URL('/', request.url))
-      }
+  if (pathname.startsWith('/admin')) {
+    if (user?.role !== 'ADMIN') {
+      return NextResponse.redirect(new URL('/', request.url))
     }
   }
 
-  return response
+  return NextResponse.next()
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|uploads).*)'],
 }

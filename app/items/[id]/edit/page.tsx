@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -30,12 +29,10 @@ export const dynamic = 'force-dynamic'
 export default function EditItemPage() {
   const params = useParams()
   const router = useRouter()
-  const supabase = createClient()
   
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [deleting, setDeleting] = useState(false)
-  const [user, setUser] = useState<any>(null)
   const [item, setItem] = useState<any>(null)
   
   const [formData, setFormData] = useState({
@@ -52,53 +49,47 @@ export default function EditItemPage() {
 
   useEffect(() => {
     const fetchItem = async () => {
-      const { data: { user: currentUser } } = await supabase.auth.getUser()
-      
-      if (!currentUser) {
-        router.push('/auth/login')
-        return
-      }
-      
-      setUser(currentUser)
+      try {
+        const res = await fetch(`/api/items/${params.id}`)
+        if (!res.ok) {
+          toast({
+            title: 'Error',
+            description: 'Item not found',
+            variant: 'destructive',
+          })
+          router.push('/my-reports')
+          return
+        }
 
-      const { data, error } = await supabase
-        .from('items')
-        .select('*')
-        .eq('id', params.id)
-        .single()
+        const data = await res.json()
+        const fetchedItem = data.item
+        const currentUser = data.user
 
-      if (error || !data) {
-        toast({
-          title: 'Error',
-          description: 'Item not found',
-          variant: 'destructive',
+        if (!currentUser || (fetchedItem.reporterId !== currentUser.id && currentUser.role !== 'ADMIN')) {
+          toast({
+            title: 'Unauthorized',
+            description: 'You can only edit your own reports',
+            variant: 'destructive',
+          })
+          router.push('/my-reports')
+          return
+        }
+
+        setItem(fetchedItem)
+        setFormData({
+          title: fetchedItem.title,
+          description: fetchedItem.description,
+          category: fetchedItem.category,
+          location: fetchedItem.location || '',
+          campus: fetchedItem.campus || '',
+          status: fetchedItem.status.toLowerCase(),
         })
-        router.push('/my-reports')
-        return
+        setPhotoPreview(fetchedItem.photoUrl || fetchedItem.photo_url)
+      } catch (e) {
+        console.error(e)
+      } finally {
+        setLoading(false)
       }
-
-      // Check if user owns this item
-      if (data.reporter_id !== currentUser.id) {
-        toast({
-          title: 'Unauthorized',
-          description: 'You can only edit your own reports',
-          variant: 'destructive',
-        })
-        router.push('/my-reports')
-        return
-      }
-
-      setItem(data)
-      setFormData({
-        title: data.title,
-        description: data.description,
-        category: data.category,
-        location: data.location || '',
-        campus: data.campus || '',
-        status: data.status,
-      })
-      setPhotoPreview(data.photo_url)
-      setLoading(false)
     }
 
     fetchItem()
@@ -121,41 +112,37 @@ export default function EditItemPage() {
     setSubmitting(true)
 
     try {
-      let photoUrl = item.photo_url
+      let photoUrl = item.photoUrl || item.photo_url
 
-      // Upload new photo if changed
       if (photoFile) {
-        const fileExt = photoFile.name.split('.').pop()
-        const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`
-        
-        const { error: uploadError } = await supabase.storage
-          .from('item-photos')
-          .upload(fileName, photoFile)
+        const uploadData = new FormData()
+        uploadData.append('file', photoFile)
 
-        if (uploadError) throw uploadError
+        const uploadRes = await fetch('/api/upload', {
+          method: 'POST',
+          body: uploadData,
+        })
 
-        const { data: { publicUrl } } = supabase.storage
-          .from('item-photos')
-          .getPublicUrl(fileName)
-
-        photoUrl = publicUrl
-
-        // Delete old photo if it exists
-        if (item.photo_url) {
-          const oldFileName = item.photo_url.split('/').pop()
-          await supabase.storage.from('item-photos').remove([oldFileName])
+        const uploadPayload = await uploadRes.json()
+        if (!uploadRes.ok || !uploadPayload.url) {
+          throw new Error(uploadPayload.error || 'Failed to upload photo')
         }
+
+        photoUrl = uploadPayload.url
       }
 
-      const { error } = await supabase
-        .from('items')
-        .update({
+      const res = await fetch(`/api/items/${params.id}/edit`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
           ...formData,
           photo_url: photoUrl,
-        })
-        .eq('id', params.id)
+        }),
+      })
 
-      if (error) throw error
+      if (!res.ok) {
+        throw new Error('Failed to update item')
+      }
 
       toast({
         title: 'Success',
@@ -163,11 +150,11 @@ export default function EditItemPage() {
       })
 
       router.push('/my-reports')
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating item:', error)
       toast({
         title: 'Error',
-        description: 'Failed to update item',
+        description: error.message || 'Failed to update item',
         variant: 'destructive',
       })
     } finally {
@@ -179,19 +166,11 @@ export default function EditItemPage() {
     setDeleting(true)
 
     try {
-      // Delete photo from storage if exists
-      if (item.photo_url) {
-        const fileName = item.photo_url.split('/').pop()
-        await supabase.storage.from('item-photos').remove([fileName])
-      }
+      const res = await fetch(`/api/items/${params.id}`, {
+        method: 'DELETE',
+      })
 
-      // Delete item
-      const { error } = await supabase
-        .from('items')
-        .delete()
-        .eq('id', params.id)
-
-      if (error) throw error
+      if (!res.ok) throw new Error('Failed to delete item')
 
       toast({
         title: 'Success',
@@ -404,4 +383,3 @@ export default function EditItemPage() {
     </div>
   )
 }
-

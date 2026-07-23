@@ -1,11 +1,18 @@
-import { createClient } from './supabase/client'
+import fs from 'fs/promises'
+import path from 'path'
 
-const BUCKET_NAME = 'item-photos'
+const UPLOAD_DIR = path.join(process.cwd(), 'public', 'uploads')
+
+async function ensureUploadDir() {
+  try {
+    await fs.mkdir(UPLOAD_DIR, { recursive: true })
+  } catch (error) {
+    console.error('Failed to create upload directory:', error)
+  }
+}
 
 export async function uploadItemPhoto(file: File): Promise<string | null> {
   try {
-    const supabase = createClient()
-    
     // Validate file size (5MB max)
     const maxSize = 5 * 1024 * 1024
     if (file.size > maxSize) {
@@ -19,60 +26,36 @@ export async function uploadItemPhoto(file: File): Promise<string | null> {
       console.error('Invalid file type. Allowed: JPG, PNG, WebP')
       return null
     }
-    
-    // Create unique filename
-    const fileExt = file.name.split('.').pop()
+
+    await ensureUploadDir()
+
+    const fileExt = file.name.split('.').pop() || 'jpg'
     const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`
-    const filePath = fileName
+    const filePath = path.join(UPLOAD_DIR, fileName)
 
-    console.log('Uploading file:', fileName, 'Size:', file.size, 'Type:', file.type)
+    const arrayBuffer = await file.arrayBuffer()
+    const buffer = Buffer.from(arrayBuffer)
 
-    // Upload file
-    const { data, error } = await supabase.storage
-      .from(BUCKET_NAME)
-      .upload(filePath, file, {
-        cacheControl: '3600',
-        upsert: false,
-      })
+    await fs.writeFile(filePath, buffer)
 
-    if (error) {
-      console.error('Upload error:', error)
-      throw error
-    }
-
-    console.log('Upload successful:', data)
-
-    // Get public URL
-    const { data: { publicUrl } } = supabase.storage
-      .from(BUCKET_NAME)
-      .getPublicUrl(data.path)
-
-    console.log('Public URL:', publicUrl)
-
-    return publicUrl
+    return `/uploads/${fileName}`
   } catch (error) {
-    console.error('Error uploading file:', error)
-    throw error
+    console.error('Error uploading file locally:', error)
+    return null
   }
 }
 
 export async function deleteItemPhoto(photoUrl: string): Promise<boolean> {
   try {
-    const supabase = createClient()
-    
-    // Extract path from URL
-    const url = new URL(photoUrl)
-    const path = url.pathname.split(`/${BUCKET_NAME}/`)[1]
-    
-    if (!path) return false
+    if (!photoUrl || !photoUrl.startsWith('/uploads/')) return false
 
-    const { error } = await supabase.storage
-      .from(BUCKET_NAME)
-      .remove([path])
+    const fileName = photoUrl.replace('/uploads/', '')
+    const filePath = path.join(UPLOAD_DIR, fileName)
 
-    return !error
+    await fs.unlink(filePath)
+    return true
   } catch (error) {
-    console.error('Error deleting file:', error)
+    console.error('Error deleting local file:', error)
     return false
   }
 }

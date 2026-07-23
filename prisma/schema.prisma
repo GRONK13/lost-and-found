@@ -1,0 +1,138 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  name         String?
+  passwordHash String    @map("password_hash")
+  role         Role      @default(USER)
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  items        Item[]
+  claims       Claim[]
+  messages     Message[]
+  flags        Flag[]
+
+  @@map("users")
+}
+
+enum Role {
+  USER   @map("user")
+  ADMIN  @map("admin")
+}
+
+model Item {
+  id          Int        @id @default(autoincrement())
+  title       String
+  description String     @db.Text
+  category    Category
+  status      ItemStatus @default(LOST)
+  campus      Campus     @default(TC)
+  location    String?
+  photoUrl    String?    @map("photo_url")
+  reporterId  String     @map("reporter_id")
+  hidden      Boolean    @default(false)
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  reporter    User       @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+  claims      Claim[]
+  flags       Flag[]
+
+  @@index([reporterId])
+  @@index([category])
+  @@index([status])
+  @@index([createdAt])
+  @@map("items")
+}
+
+enum Category {
+  ID        @map("ID")
+  Gadget    @map("Gadget")
+  Book      @map("Book")
+  Clothing  @map("Clothing")
+  Other     @map("Other")
+}
+
+enum ItemStatus {
+  LOST      @map("lost")
+  FOUND     @map("found")
+  CLAIMED   @map("claimed")
+  RETURNED  @map("returned")
+}
+
+enum Campus {
+  TC @map("TC")
+  MC @map("MC")
+  DC @map("DC")
+}
+
+model Claim {
+  id         Int         @id @default(autoincrement())
+  itemId     Int         @map("item_id")
+  claimantId String      @map("claimant_id")
+  message    String?     @db.Text
+  status     ClaimStatus @default(PENDING)
+  chatType   ChatType    @default(CLAIM) @map("chat_type")
+  createdAt  DateTime    @default(now()) @map("created_at")
+
+  item       Item        @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  claimant   User        @relation(fields: [claimantId], references: [id], onDelete: Cascade)
+  messages   Message[]
+
+  @@unique([itemId, claimantId])
+  @@index([itemId])
+  @@index([claimantId])
+  @@index([status])
+  @@map("claims")
+}
+
+enum ClaimStatus {
+  PENDING  @map("pending")
+  APPROVED @map("approved")
+  REJECTED @map("rejected")
+}
+
+enum ChatType {
+  CLAIM @map("claim")
+  CHAT  @map("chat")
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  claimId   Int      @map("claim_id")
+  senderId  String   @map("sender_id")
+  content   String   @db.Text
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  claim     Claim    @relation(fields: [claimId], references: [id], onDelete: Cascade)
+  sender    User     @relation(fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@index([claimId])
+  @@index([senderId])
+  @@map("messages")
+}
+
+model Flag {
+  id        Int      @id @default(autoincrement())
+  itemId    Int      @map("item_id")
+  userId    String   @map("user_id")
+  reason    String?  @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+
+  item      Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([itemId, userId])
+  @@index([itemId])
+  @@map("flags")
+}

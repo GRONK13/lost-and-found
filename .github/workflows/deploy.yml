@@ -1,0 +1,45 @@
+name: Auto-Deploy to DCISM Server
+
+on:
+  push:
+    branches:
+      - main
+      - Modernize
+
+jobs:
+  build-and-deploy:
+    name: Build Check & Trigger Server Auto-Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+        env:
+          DATABASE_URL: "mysql://s21100713_lost_n_found:Kennethoy1@web.dcism.org:3306/s21100713_lost_n_found"
+
+      - name: Verify Build
+        run: npm run build
+        env:
+          DATABASE_URL: "mysql://s21100713_lost_n_found:Kennethoy1@web.dcism.org:3306/s21100713_lost_n_found"
+          JWT_SECRET: "dcism_carolinian_lost_n_found_jwt_secret_key_2026"
+
+      - name: Trigger Server Auto-Deployment Webhook
+        if: success()
+        run: |
+          echo "🚀 Triggering production deployment on web.dcism.org..."
+          curl -X POST \
+            -H "Content-Type: application/json" \
+            -H "X-Hub-Signature-256: sha256=$(echo -n '' | openssl dgst -sha256 -hmac "${{ secrets.GITHUB_WEBHOOK_SECRET }}" | sed 's/^.*= //')" \
+            "https://lost-n-found.dcism.org/api/deploy" || true

@@ -2,15 +2,12 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
-import { uploadItemPhoto } from '@/lib/storage'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { toast } from '@/components/ui/use-toast'
 import { Loader2, PlusCircle } from 'lucide-react'
 
@@ -23,7 +20,6 @@ export default function ReportItemPage() {
   const [status, setStatus] = useState('')
   const [campus, setCampus] = useState('')
   const router = useRouter()
-  const supabase = createClient()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -42,39 +38,24 @@ export default function ReportItemPage() {
     const formData = new FormData(e.currentTarget)
     
     try {
-      // Get current user
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) {
-        toast({
-          title: 'Authentication required',
-          description: 'Please log in to report an item',
-          variant: 'destructive',
-        })
-        router.push('/auth/login')
-        return
+      // 1. Upload photo to local server via /api/upload
+      const uploadData = new FormData()
+      uploadData.append('file', photoFile)
+
+      const uploadRes = await fetch('/api/upload', {
+        method: 'POST',
+        body: uploadData,
+      })
+
+      const uploadPayload = await uploadRes.json()
+
+      if (!uploadRes.ok || !uploadPayload.url) {
+        throw new Error(uploadPayload.error || 'Failed to upload photo')
       }
 
-      // Upload photo (required)
-      let photoUrl = null
-      try {
-        console.log('Starting photo upload...')
-        photoUrl = await uploadItemPhoto(photoFile)
-        console.log('Photo uploaded, URL:', photoUrl)
+      const photoUrl = uploadPayload.url
 
-        if (!photoUrl) {
-          throw new Error('Photo upload failed - no URL returned')
-        }
-      } catch (uploadError) {
-        console.error('Photo upload error:', uploadError)
-        toast({
-          title: 'Upload Error',
-          description: 'Failed to upload photo. Please check if the storage bucket "item-photos" exists and is public.',
-          variant: 'destructive',
-        })
-        setLoading(false)
-        return
-      }
-
+      // 2. Submit item report payload
       const response = await fetch('/api/items/report', {
         method: 'POST',
         headers: {
@@ -106,11 +87,11 @@ export default function ReportItemPage() {
 
       router.push('/items')
       router.refresh()
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error reporting item:', error)
       toast({
         title: 'Error',
-        description: 'Failed to report item. Please try again.',
+        description: error.message || 'Failed to report item. Please try again.',
         variant: 'destructive',
       })
     } finally {

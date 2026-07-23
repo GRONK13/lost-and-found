@@ -1,63 +1,51 @@
-import { createClient } from '@/lib/supabase/server'
-import { NextResponse } from 'next/server'
+import { getCurrentUser } from '@/lib/auth'
+import { db } from '@/lib/db'
+import { NextRequest, NextResponse } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const user = await getCurrentUser()
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     const { id, status } = await request.json()
+    const claimId = Number(id)
 
-    if (!id || !status) {
+    if (!Number.isFinite(claimId) || !status) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
-    // Verify that the user owns the item associated with this claim
-    const { data: claim } = await supabase
-      .from('claims')
-      .select('*, items!inner(reporter_id)')
-      .eq('id', id)
-      .single()
+    const claim = await db.claim.findUnique({
+      where: { id: claimId },
+      include: { item: true },
+    })
 
     if (!claim) {
       return NextResponse.json({ error: 'Claim not found' }, { status: 404 })
     }
 
-    if (claim.items.reporter_id !== user.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
+    if (claim.item.reporterId !== user.id && user.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
-    // Update the claim
-    const { error } = await supabase
-      .from('claims')
-      .update({ status })
-      .eq('id', id)
+    const updatedClaim = await db.claim.update({
+      where: { id: claimId },
+      data: { status: status.toUpperCase() as any },
+    })
 
-    if (error) {
-      console.error('Error updating claim:', error)
-      return NextResponse.json({ error: 'Failed to update claim' }, { status: 500 })
+    if (status.toLowerCase() === 'approved' && claim.chatType === 'CLAIM') {
+      await db.item.update({
+        where: { id: claim.itemId },
+        data: { status: 'RETURNED' },
+      })
     }
 
-    // If approved AND it's a claim-type (not chat-type), update the item status to returned
-    if (status === 'approved' && claim.chat_type === 'claim') {
-      const { error: itemError } = await supabase
-        .from('items')
-        .update({ status: 'returned' })
-        .eq('id', claim.item_id)
-
-      if (itemError) {
-        console.error('Error updating item:', itemError)
-      }
-    }
-
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ success: true, claim: updatedClaim })
   } catch (error) {
     console.error('Error in update claim route:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
