@@ -2,24 +2,27 @@ const fs = require('fs/promises')
 const fsSync = require('fs')
 const path = require('path')
 
-// Load .env.local
-try {
-  const envPath = path.join(__dirname, '..', '.env.local')
-  if (fsSync.existsSync(envPath)) {
-    const envConfig = fsSync.readFileSync(envPath, 'utf8')
-    for (const line of envConfig.split('\n')) {
-      const trimmed = line.trim()
-      if (trimmed && !trimmed.startsWith('#') && trimmed.includes('=')) {
-        const [key, ...values] = trimmed.split('=')
-        const val = values.join('=').replace(/^["']|["']$/g, '').trim()
-        if (key && !process.env[key.trim()]) {
-          process.env[key.trim()] = val
+// Load env files
+const envFiles = ['.env', '.env.local']
+for (const file of envFiles) {
+  try {
+    const envPath = path.join(__dirname, '..', file)
+    if (fsSync.existsSync(envPath)) {
+      const envConfig = fsSync.readFileSync(envPath, 'utf8')
+      for (const line of envConfig.split('\n')) {
+        const trimmed = line.trim()
+        if (trimmed && !trimmed.startsWith('#') && trimmed.includes('=')) {
+          const [key, ...values] = trimmed.split('=')
+          const val = values.join('=').replace(/^["']|["']$/g, '').trim()
+          if (key && !process.env[key.trim()]) {
+            process.env[key.trim()] = val
+          }
         }
       }
     }
+  } catch (e) {
+    console.error(`Error loading ${file}:`, e)
   }
-} catch (e) {
-  console.error('Error loading .env.local:', e)
 }
 
 const { PrismaClient } = require('@prisma/client')
