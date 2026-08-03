@@ -1,0 +1,2281 @@
+{
+  "exportedAt": "2026-07-22T07:01:43.071Z",
+  "counts": {
+    "authUsers": 50,
+    "publicUsers": 53,
+    "items": 33,
+    "claims": 4,
+    "messages": 5,
+    "flags": 0
+  },
+  "authUsers": [
+    {
+      "id": "dc42aa78-8ab1-4670-9272-ebc56ec2342a",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "25101270@usc.edu.ph",
+      "email_confirmed_at": "2026-07-22T03:05:14.725532Z",
+      "phone": "",
+      "confirmed_at": "2026-07-22T03:05:14.725532Z",
+      "last_sign_in_at": "2026-07-22T03:05:28.685844Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "25101270@usc.edu.ph",
+        "email_verified": true,
+        "name": "Kris Andrie Ortega",
+        "phone_verified": false,
+        "sub": "dc42aa78-8ab1-4670-9272-ebc56ec2342a"
+      },
+      "identities": null,
+      "created_at": "2026-07-22T03:05:14.622344Z",
+      "updated_at": "2026-07-22T05:37:01.931633Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "0ff187ee-3c00-4580-97d1-4d4f310107b1",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "19103991@usc.edu.ph",
+      "email_confirmed_at": "2026-07-13T17:05:14.248584Z",
+      "phone": "",
+      "confirmed_at": "2026-07-13T17:05:14.248584Z",
+      "last_sign_in_at": "2026-07-13T17:05:36.282414Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "19103991@usc.edu.ph",
+        "email_verified": true,
+        "name": "Shannen Nazareno",
+        "phone_verified": false,
+        "sub": "0ff187ee-3c00-4580-97d1-4d4f310107b1"
+      },
+      "identities": null,
+      "created_at": "2026-07-13T17:05:14.126349Z",
+      "updated_at": "2026-07-13T22:19:19.713484Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "2edacd4a-bad8-4c65-9618-bb813adb6b54",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "23104351@usc.edu.ph",
+      "email_confirmed_at": "2026-05-20T08:03:55.510015Z",
+      "phone": "",
+      "confirmed_at": "2026-05-20T08:03:55.510015Z",
+      "last_sign_in_at": "2026-05-20T08:04:01.335381Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "23104351@usc.edu.ph",
+        "email_verified": true,
+        "name": "jared Gomora",
+        "phone_verified": false,
+        "sub": "2edacd4a-bad8-4c65-9618-bb813adb6b54"
+      },
+      "identities": null,
+      "created_at": "2026-05-20T08:03:55.415675Z",
+      "updated_at": "2026-05-20T09:07:54.528513Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "c1e03b29-1202-429f-97f2-decc5c873cba",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "24102254@usc.edu.ph",
+      "email_confirmed_at": "2026-05-14T08:11:19.988418Z",
+      "phone": "",
+      "confirmed_at": "2026-05-14T08:11:19.988418Z",
+      "last_sign_in_at": "2026-05-14T08:11:20.012735Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "24102254@usc.edu.ph",
+        "email_verified": true,
+        "name": "Cyprianne Murillo",
+        "phone_verified": false,
+        "sub": "c1e03b29-1202-429f-97f2-decc5c873cba"
+      },
+      "identities": null,
+      "created_at": "2026-05-14T08:11:19.894179Z",
+      "updated_at": "2026-05-14T12:18:55.517174Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "e455cdce-ed52-468a-a713-4a244f672eac",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "22103221@usc.edu.ph",
+      "email_confirmed_at": "2026-03-18T01:46:04.01224Z",
+      "phone": "",
+      "confirmed_at": "2026-03-18T01:46:04.01224Z",
+      "last_sign_in_at": "2026-03-18T01:46:24.684107Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "22103221@usc.edu.ph",
+        "email_verified": true,
+        "name": "Don Jhake Sacare",
+        "phone_verified": false,
+        "sub": "e455cdce-ed52-468a-a713-4a244f672eac"
+      },
+      "identities": null,
+      "created_at": "2026-03-18T01:46:03.930608Z",
+      "updated_at": "2026-03-18T01:46:24.687044Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "63df91f3-333d-41ca-b8fd-a10982179d4c",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "you123@example.com",
+      "email_confirmed_at": "2026-03-17T03:11:29.93399Z",
+      "phone": "",
+      "confirmed_at": "2026-03-17T03:11:29.93399Z",
+      "last_sign_in_at": "2026-03-17T03:11:45.127421Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "you123@example.com",
+        "email_verified": true,
+        "name": "123arjoe",
+        "phone_verified": false,
+        "sub": "63df91f3-333d-41ca-b8fd-a10982179d4c"
+      },
+      "identities": null,
+      "created_at": "2026-03-17T03:11:29.873109Z",
+      "updated_at": "2026-03-17T03:11:45.131154Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "249b2d92-2191-431a-aa9f-41c30e302059",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "22800112@usc.edu.ph",
+      "email_confirmed_at": "2026-03-16T10:28:10.362325Z",
+      "phone": "",
+      "confirmed_at": "2026-03-16T10:28:10.362325Z",
+      "last_sign_in_at": "2026-03-16T10:28:16.727054Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "22800112@usc.edu.ph",
+        "email_verified": true,
+        "name": "Manlosa, Faye Ysabelle C.",
+        "phone_verified": false,
+        "sub": "249b2d92-2191-431a-aa9f-41c30e302059"
+      },
+      "identities": null,
+      "created_at": "2026-03-16T10:28:10.247932Z",
+      "updated_at": "2026-03-16T10:28:16.730408Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "953c85e7-76b0-46b4-a6a1-36af9e411a80",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "s25104757@usc.edu.ph",
+      "email_confirmed_at": "2026-03-11T05:41:03.703775Z",
+      "phone": "",
+      "confirmed_at": "2026-03-11T05:41:03.703775Z",
+      "last_sign_in_at": "2026-03-11T05:41:11.661978Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "s25104757@usc.edu.ph",
+        "email_verified": true,
+        "name": "Mariah Frayne C. Leyson",
+        "phone_verified": false,
+        "sub": "953c85e7-76b0-46b4-a6a1-36af9e411a80"
+      },
+      "identities": null,
+      "created_at": "2026-03-11T05:41:03.603175Z",
+      "updated_at": "2026-03-18T02:30:23.913011Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "00d0b125-781a-4c32-aff3-4e23a5a123e1",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "youtube@gmail.com",
+      "email_confirmed_at": "2026-03-05T10:27:55.773545Z",
+      "phone": "",
+      "confirmed_at": "2026-03-05T10:27:55.773545Z",
+      "last_sign_in_at": "2026-03-05T10:28:14.050824Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "youtube@gmail.com",
+        "email_verified": true,
+        "name": "John Doe",
+        "phone_verified": false,
+        "sub": "00d0b125-781a-4c32-aff3-4e23a5a123e1"
+      },
+      "identities": null,
+      "created_at": "2026-03-05T10:27:55.668462Z",
+      "updated_at": "2026-03-06T12:59:31.223943Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "2aa3b0bf-c5ef-412b-8844-10b05c493858",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "23103620@usc.edu.ph",
+      "email_confirmed_at": "2026-03-05T08:03:41.988045Z",
+      "phone": "",
+      "confirmed_at": "2026-03-05T08:03:41.988045Z",
+      "last_sign_in_at": "2026-03-05T08:03:54.107041Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "23103620@usc.edu.ph",
+        "email_verified": true,
+        "name": "John Paul Tautuan",
+        "phone_verified": false,
+        "sub": "2aa3b0bf-c5ef-412b-8844-10b05c493858"
+      },
+      "identities": null,
+      "created_at": "2026-03-05T08:03:41.854914Z",
+      "updated_at": "2026-03-06T06:33:21.21026Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "9957c379-593c-447a-844b-e343601f79b7",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "danieljadeyap@gmail.com",
+      "email_confirmed_at": "2026-03-05T04:38:52.077889Z",
+      "phone": "",
+      "confirmed_at": "2026-03-05T04:38:52.077889Z",
+      "last_sign_in_at": "2026-03-05T04:38:57.807447Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "danieljadeyap@gmail.com",
+        "email_verified": true,
+        "name": "Jeed",
+        "phone_verified": false,
+        "sub": "9957c379-593c-447a-844b-e343601f79b7"
+      },
+      "identities": null,
+      "created_at": "2026-03-05T04:38:51.959475Z",
+      "updated_at": "2026-03-05T05:39:27.527848Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "5d3d1b07-9507-4910-bbf8-2b4e255f643a",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "25104354@usc.edu.ph",
+      "email_confirmed_at": "2026-03-04T07:36:00.253034Z",
+      "phone": "",
+      "confirmed_at": "2026-03-04T07:36:00.253034Z",
+      "last_sign_in_at": "2026-03-04T07:37:03.763613Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "25104354@usc.edu.ph",
+        "email_verified": true,
+        "name": "Herschel S.",
+        "phone_verified": false,
+        "sub": "5d3d1b07-9507-4910-bbf8-2b4e255f643a"
+      },
+      "identities": null,
+      "created_at": "2026-03-04T07:36:00.151048Z",
+      "updated_at": "2026-06-25T06:15:57.825254Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "657f4246-86c8-4e35-9588-0c25b80999ae",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "25103317@usc.edu.ph",
+      "email_confirmed_at": "2026-03-04T02:07:08.071905Z",
+      "phone": "",
+      "confirmed_at": "2026-03-04T02:07:08.071905Z",
+      "last_sign_in_at": "2026-03-04T02:07:15.369028Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "25103317@usc.edu.ph",
+        "email_verified": true,
+        "name": "Torlao, John Kriztoffer A.",
+        "phone_verified": false,
+        "sub": "657f4246-86c8-4e35-9588-0c25b80999ae"
+      },
+      "identities": null,
+      "created_at": "2026-03-04T02:07:07.966283Z",
+      "updated_at": "2026-03-04T02:07:15.380256Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "86fe09e7-7977-4d6d-b54b-851a7664b587",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "25100159@usc.edu.ph",
+      "email_confirmed_at": "2026-03-02T11:16:04.974111Z",
+      "phone": "",
+      "confirmed_at": "2026-03-02T11:16:04.974111Z",
+      "last_sign_in_at": "2026-03-04T02:20:30.886328Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "25100159@usc.edu.ph",
+        "email_verified": true,
+        "name": "Eumir Homeres",
+        "phone_verified": false,
+        "sub": "86fe09e7-7977-4d6d-b54b-851a7664b587"
+      },
+      "identities": null,
+      "created_at": "2026-03-02T11:16:04.859992Z",
+      "updated_at": "2026-03-04T02:20:30.919173Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "5e1757c7-4a0b-4d8b-af5e-be59578fac22",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "19020145@usc.edu.ph",
+      "email_confirmed_at": "2026-02-26T02:08:39.631013Z",
+      "phone": "",
+      "confirmed_at": "2026-02-26T02:08:39.631013Z",
+      "last_sign_in_at": "2026-03-02T04:47:19.317964Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "19020145@usc.edu.ph",
+        "email_verified": true,
+        "name": "Jann Denise Senido",
+        "phone_verified": false,
+        "sub": "5e1757c7-4a0b-4d8b-af5e-be59578fac22"
+      },
+      "identities": null,
+      "created_at": "2026-02-26T02:08:39.538262Z",
+      "updated_at": "2026-03-02T04:47:19.391413Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "9548a786-6741-445f-be05-f9c1626c5e7c",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "31200482@usc.edu.ph",
+      "email_confirmed_at": "2026-02-24T20:29:28.518136Z",
+      "phone": "",
+      "confirmed_at": "2026-02-24T20:29:28.518136Z",
+      "last_sign_in_at": "2026-02-24T20:29:28.548829Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "31200482@usc.edu.ph",
+        "email_verified": true,
+        "name": "Daniel Jade Sanding",
+        "phone_verified": false,
+        "sub": "9548a786-6741-445f-be05-f9c1626c5e7c"
+      },
+      "identities": null,
+      "created_at": "2026-02-24T20:29:28.405685Z",
+      "updated_at": "2026-02-24T20:29:28.605218Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "e0df9307-afee-4813-849c-7b0cfc52eb5a",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "11600135@usc.edu.ph",
+      "email_confirmed_at": "2026-02-20T03:24:32.087152Z",
+      "phone": "",
+      "confirmed_at": "2026-02-20T03:24:32.087152Z",
+      "last_sign_in_at": "2026-02-20T03:24:36.627832Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "11600135@usc.edu.ph",
+        "email_verified": true,
+        "name": "Jemuel Singco Valencia",
+        "phone_verified": false,
+        "sub": "e0df9307-afee-4813-849c-7b0cfc52eb5a"
+      },
+      "identities": null,
+      "created_at": "2026-02-20T03:24:31.983382Z",
+      "updated_at": "2026-02-20T03:24:36.634091Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "7031c47b-5ae8-4f5d-befc-def730ee0311",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "maligrojennymae@gmail.com",
+      "email_confirmed_at": "2026-02-04T06:59:06.102407Z",
+      "phone": "",
+      "confirmed_at": "2026-02-04T06:59:06.102407Z",
+      "last_sign_in_at": "2026-02-04T06:59:15.6863Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "maligrojennymae@gmail.com",
+        "email_verified": true,
+        "name": "Jenny Mae R Maligro ",
+        "phone_verified": false,
+        "sub": "7031c47b-5ae8-4f5d-befc-def730ee0311"
+      },
+      "identities": null,
+      "created_at": "2026-02-04T06:59:05.978814Z",
+      "updated_at": "2026-02-04T13:12:00.983614Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "07d7d232-d5a6-424f-bd53-a0da29565b5f",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "24104795@usc.edu.ph",
+      "email_confirmed_at": "2026-02-02T04:38:02.312095Z",
+      "phone": "",
+      "confirmed_at": "2026-02-02T04:38:02.312095Z",
+      "last_sign_in_at": "2026-02-02T04:38:15.459811Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "24104795@usc.edu.ph",
+        "email_verified": true,
+        "name": "Andre Siaton",
+        "phone_verified": false,
+        "sub": "07d7d232-d5a6-424f-bd53-a0da29565b5f"
+      },
+      "identities": null,
+      "created_at": "2026-02-02T04:38:02.215108Z",
+      "updated_at": "2026-02-02T04:38:15.462998Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "ce3473af-c0a6-46b0-af80-0d5d7388363d",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "zae@gmail.com",
+      "email_confirmed_at": "2026-01-30T11:27:59.235772Z",
+      "phone": "",
+      "confirmed_at": "2026-01-30T11:27:59.235772Z",
+      "last_sign_in_at": "2026-01-30T11:28:05.245538Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "zae@gmail.com",
+        "email_verified": true,
+        "name": "zae",
+        "phone_verified": false,
+        "sub": "ce3473af-c0a6-46b0-af80-0d5d7388363d"
+      },
+      "identities": null,
+      "created_at": "2026-01-30T11:27:59.127643Z",
+      "updated_at": "2026-01-30T11:28:05.247983Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "85438f13-2e79-4720-bb0b-1cb8fdb073f0",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "25100022@usc.edu.ph",
+      "email_confirmed_at": "2026-01-30T03:40:19.350535Z",
+      "phone": "",
+      "confirmed_at": "2026-01-30T03:40:19.350535Z",
+      "last_sign_in_at": "2026-01-30T03:40:26.898441Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "25100022@usc.edu.ph",
+        "email_verified": true,
+        "name": "Armond B. Lim",
+        "phone_verified": false,
+        "sub": "85438f13-2e79-4720-bb0b-1cb8fdb073f0"
+      },
+      "identities": null,
+      "created_at": "2026-01-30T03:40:19.233252Z",
+      "updated_at": "2026-02-02T03:05:16.671277Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "8a38de0b-0aef-44ec-8ff0-5c3971dcfbde",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "24102788@usc.edu.ph",
+      "email_confirmed_at": "2026-01-27T12:18:53.497773Z",
+      "phone": "",
+      "confirmed_at": "2026-01-27T12:18:53.497773Z",
+      "last_sign_in_at": "2026-02-02T01:20:02.316567Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "24102788@usc.edu.ph",
+        "email_verified": true,
+        "name": "Kurt Florentino",
+        "phone_verified": false,
+        "sub": "8a38de0b-0aef-44ec-8ff0-5c3971dcfbde"
+      },
+      "identities": null,
+      "created_at": "2026-01-27T12:18:53.402692Z",
+      "updated_at": "2026-02-03T05:30:00.674198Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "3773f805-2be5-4ce2-bc6f-b29a71fff1aa",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "25103705@usc.edu.ph",
+      "email_confirmed_at": "2026-01-27T06:23:54.951027Z",
+      "phone": "",
+      "confirmed_at": "2026-01-27T06:23:54.951027Z",
+      "last_sign_in_at": "2026-01-27T06:24:10.631007Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "25103705@usc.edu.ph",
+        "email_verified": true,
+        "name": "Mark Ely Salinas",
+        "phone_verified": false,
+        "sub": "3773f805-2be5-4ce2-bc6f-b29a71fff1aa"
+      },
+      "identities": null,
+      "created_at": "2026-01-27T06:23:54.874506Z",
+      "updated_at": "2026-01-27T06:24:10.642379Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "9bdd5c0d-0260-47c7-8b51-7693417fc07b",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "23200084@usc.edu.ph",
+      "email_confirmed_at": "2026-01-26T23:58:55.418137Z",
+      "phone": "",
+      "confirmed_at": "2026-01-26T23:58:55.418137Z",
+      "last_sign_in_at": "2026-03-06T08:15:08.052245Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "23200084@usc.edu.ph",
+        "email_verified": true,
+        "name": "MatthewE",
+        "phone_verified": false,
+        "sub": "9bdd5c0d-0260-47c7-8b51-7693417fc07b"
+      },
+      "identities": null,
+      "created_at": "2026-01-26T23:58:55.316854Z",
+      "updated_at": "2026-03-06T08:15:08.117258Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "6cf21a83-9465-4754-9c6c-9fe2e3be6947",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "25103257@usc.edu.ph",
+      "email_confirmed_at": "2026-01-20T03:07:08.715091Z",
+      "phone": "",
+      "confirmed_at": "2026-01-20T03:07:08.715091Z",
+      "last_sign_in_at": "2026-01-27T02:05:04.860408Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "25103257@usc.edu.ph",
+        "email_verified": true,
+        "name": "Koji Hangai",
+        "phone_verified": false,
+        "sub": "6cf21a83-9465-4754-9c6c-9fe2e3be6947"
+      },
+      "identities": null,
+      "created_at": "2026-01-20T03:07:08.596605Z",
+      "updated_at": "2026-01-27T02:05:04.891503Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "4e4a7bb7-641b-4fa4-91ab-ca8258a92613",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "23103431@usc.edu.ph",
+      "email_confirmed_at": "2025-12-12T12:24:11.757694Z",
+      "phone": "",
+      "confirmed_at": "2025-12-12T12:24:11.757694Z",
+      "last_sign_in_at": "2025-12-12T12:24:27.718791Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "23103431@usc.edu.ph",
+        "email_verified": true,
+        "name": "Rae Barcelona",
+        "phone_verified": false,
+        "sub": "4e4a7bb7-641b-4fa4-91ab-ca8258a92613"
+      },
+      "identities": null,
+      "created_at": "2025-12-12T12:24:11.666685Z",
+      "updated_at": "2025-12-12T13:34:16.474055Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "c5db6d21-ff39-4272-a883-b4e54c86c7b3",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "24104152@usc.edu.ph",
+      "email_confirmed_at": "2025-12-09T06:21:26.352007Z",
+      "phone": "",
+      "confirmed_at": "2025-12-09T06:21:26.352007Z",
+      "last_sign_in_at": "2025-12-09T06:21:34.741632Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "24104152@usc.edu.ph",
+        "email_verified": true,
+        "name": "Maria Gilbero",
+        "phone_verified": false,
+        "sub": "c5db6d21-ff39-4272-a883-b4e54c86c7b3"
+      },
+      "identities": null,
+      "created_at": "2025-12-09T06:21:26.258713Z",
+      "updated_at": "2025-12-09T06:21:34.744542Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "6be9df93-db7b-423c-bfa8-265552103992",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "24101450@usc.edu.ph",
+      "email_confirmed_at": "2025-12-02T10:46:21.982207Z",
+      "phone": "",
+      "confirmed_at": "2025-12-02T10:46:21.982207Z",
+      "last_sign_in_at": "2025-12-02T10:46:38.495584Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "24101450@usc.edu.ph",
+        "email_verified": true,
+        "name": "Miguel Tristan Sebastian Y. Ebao",
+        "phone_verified": false,
+        "sub": "6be9df93-db7b-423c-bfa8-265552103992"
+      },
+      "identities": null,
+      "created_at": "2025-12-02T10:46:21.862173Z",
+      "updated_at": "2025-12-02T10:46:38.502827Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "36c791e2-e7d2-49e8-a1fc-dbfcf718baf5",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "22101372@usc.edu.ph",
+      "email_confirmed_at": "2025-12-02T03:34:18.320645Z",
+      "phone": "",
+      "confirmed_at": "2025-12-02T03:34:18.320645Z",
+      "last_sign_in_at": "2025-12-02T03:34:26.807538Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "22101372@usc.edu.ph",
+        "email_verified": true,
+        "name": "Joseph Pascua",
+        "phone_verified": false,
+        "sub": "36c791e2-e7d2-49e8-a1fc-dbfcf718baf5"
+      },
+      "identities": null,
+      "created_at": "2025-12-02T03:34:18.258802Z",
+      "updated_at": "2025-12-03T23:57:27.187307Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "72e02b9f-6f1e-4796-b50f-ebbb319a80ec",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "you@example.com",
+      "email_confirmed_at": "2025-11-29T03:20:41.266263Z",
+      "phone": "",
+      "confirmed_at": "2025-11-29T03:20:41.266263Z",
+      "last_sign_in_at": "2025-11-29T03:20:51.419654Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "you@example.com",
+        "email_verified": true,
+        "name": "John Doe",
+        "phone_verified": false,
+        "sub": "72e02b9f-6f1e-4796-b50f-ebbb319a80ec"
+      },
+      "identities": null,
+      "created_at": "2025-11-29T03:20:41.142491Z",
+      "updated_at": "2025-11-29T03:20:51.422186Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "ff3d08d9-f450-44e5-beb1-841e8d910cba",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "18030885@usc.edu.ph",
+      "email_confirmed_at": "2025-11-27T01:32:30.62536Z",
+      "phone": "",
+      "confirmed_at": "2025-11-27T01:32:30.62536Z",
+      "last_sign_in_at": "2025-11-27T01:32:37.011524Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "18030885@usc.edu.ph",
+        "email_verified": true,
+        "name": "Kristian Mesola",
+        "phone_verified": false,
+        "sub": "ff3d08d9-f450-44e5-beb1-841e8d910cba"
+      },
+      "identities": null,
+      "created_at": "2025-11-27T01:32:30.493787Z",
+      "updated_at": "2025-11-27T01:32:37.015099Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "15ce3114-9363-41a9-98b2-cd80fdbec957",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "25900011@usc.edu.ph",
+      "email_confirmed_at": "2025-11-26T23:56:01.31076Z",
+      "phone": "",
+      "confirmed_at": "2025-11-26T23:56:01.31076Z",
+      "last_sign_in_at": "2025-11-26T23:56:09.210269Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "25900011@usc.edu.ph",
+        "email_verified": true,
+        "name": "Vinz Ralei Revalde Ouano",
+        "phone_verified": false,
+        "sub": "15ce3114-9363-41a9-98b2-cd80fdbec957"
+      },
+      "identities": null,
+      "created_at": "2025-11-26T23:56:01.218066Z",
+      "updated_at": "2025-11-26T23:56:09.212834Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "dffbc0ce-242a-417b-a722-cc290c89dbaf",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "dcismlab@usc.edu.ph",
+      "email_confirmed_at": "2025-11-26T08:20:21.988559Z",
+      "phone": "",
+      "confirmed_at": "2025-11-26T08:20:21.988559Z",
+      "last_sign_in_at": "2025-11-26T08:20:27.37914Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "dcismlab@usc.edu.ph",
+        "email_verified": true,
+        "name": "Jellian",
+        "phone_verified": false,
+        "sub": "dffbc0ce-242a-417b-a722-cc290c89dbaf"
+      },
+      "identities": null,
+      "created_at": "2025-11-26T08:20:21.934444Z",
+      "updated_at": "2025-11-26T08:20:27.381772Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "861f838d-a77b-40f7-9599-2c7b1dbaa1a8",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "cecilhermoza@yahoo.com",
+      "email_confirmed_at": "2025-11-26T06:23:02.791121Z",
+      "phone": "",
+      "confirmed_at": "2025-11-26T06:23:02.791121Z",
+      "last_sign_in_at": "2025-11-26T06:23:02.802254Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "cecilhermoza@yahoo.com",
+        "email_verified": true,
+        "name": "cecil hermoza",
+        "phone_verified": false,
+        "sub": "861f838d-a77b-40f7-9599-2c7b1dbaa1a8"
+      },
+      "identities": null,
+      "created_at": "2025-11-26T06:23:02.713318Z",
+      "updated_at": "2025-11-26T06:23:02.843085Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "701b94e1-49c6-414f-bc0e-4cc376da844e",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "24101890@usc.edu.ph",
+      "email_confirmed_at": "2025-11-26T04:53:05.59867Z",
+      "phone": "",
+      "confirmed_at": "2025-11-26T04:53:05.59867Z",
+      "last_sign_in_at": "2026-01-27T02:20:35.92806Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "24101890@usc.edu.ph",
+        "email_verified": true,
+        "name": "Leigh Avery N. Lamayo",
+        "phone_verified": false,
+        "sub": "701b94e1-49c6-414f-bc0e-4cc376da844e"
+      },
+      "identities": null,
+      "created_at": "2025-11-26T04:53:05.524035Z",
+      "updated_at": "2026-01-27T02:20:35.979954Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "975a89bd-ecfa-4ccf-bcc1-213d2f442992",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "24103441@usc.edu.ph",
+      "email_confirmed_at": "2025-11-21T07:30:42.723423Z",
+      "phone": "",
+      "confirmed_at": "2025-11-21T07:30:42.723423Z",
+      "last_sign_in_at": "2025-11-21T07:30:42.757429Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "24103441@usc.edu.ph",
+        "email_verified": true,
+        "name": "yanzki",
+        "phone_verified": false,
+        "sub": "975a89bd-ecfa-4ccf-bcc1-213d2f442992"
+      },
+      "identities": null,
+      "created_at": "2025-11-21T07:30:42.622991Z",
+      "updated_at": "2025-11-21T07:30:42.811599Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "e7936bb0-dc7a-4341-b879-4b40819aa75e",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "23101134@usc.edu.ph",
+      "email_confirmed_at": "2025-11-20T02:18:59.202385Z",
+      "phone": "",
+      "confirmed_at": "2025-11-20T02:18:59.202385Z",
+      "last_sign_in_at": "2025-11-20T02:18:59.223735Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "23101134@usc.edu.ph",
+        "email_verified": true,
+        "name": "Emilton Bontia",
+        "phone_verified": false,
+        "sub": "e7936bb0-dc7a-4341-b879-4b40819aa75e"
+      },
+      "identities": null,
+      "created_at": "2025-11-20T02:18:59.100291Z",
+      "updated_at": "2025-11-20T02:18:59.256676Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "dc930a97-b6ac-457f-929e-6fc35661b701",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "25101081@gmail.com",
+      "email_confirmed_at": "2025-11-19T23:29:56.620267Z",
+      "phone": "",
+      "confirmed_at": "2025-11-19T23:29:56.620267Z",
+      "last_sign_in_at": "2025-11-19T23:30:07.167439Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "25101081@gmail.com",
+        "email_verified": true,
+        "name": "Sven Laurence Zoei M. Olsen",
+        "phone_verified": false,
+        "sub": "dc930a97-b6ac-457f-929e-6fc35661b701"
+      },
+      "identities": null,
+      "created_at": "2025-11-19T23:29:56.531499Z",
+      "updated_at": "2025-11-19T23:30:07.169591Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "26217f1f-1d12-4061-a7eb-7e6292c20dab",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "24100535@usc.edu.ph",
+      "email_confirmed_at": "2025-11-19T04:25:34.055292Z",
+      "phone": "",
+      "confirmed_at": "2025-11-19T04:25:34.055292Z",
+      "last_sign_in_at": "2025-11-19T04:25:40.159348Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "24100535@usc.edu.ph",
+        "email_verified": true,
+        "name": "kaina gutierrez",
+        "phone_verified": false,
+        "sub": "26217f1f-1d12-4061-a7eb-7e6292c20dab"
+      },
+      "identities": null,
+      "created_at": "2025-11-19T04:25:33.931776Z",
+      "updated_at": "2025-11-19T04:25:40.163241Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "1f527ebc-d2e2-4ff1-b509-fcb78d302721",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "21102868@usc.edu.ph",
+      "email_confirmed_at": "2025-11-19T02:03:43.666491Z",
+      "phone": "",
+      "confirmed_at": "2025-11-19T02:03:43.666491Z",
+      "last_sign_in_at": "2025-11-19T02:03:51.480227Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "21102868@usc.edu.ph",
+        "email_verified": true,
+        "name": "Clark Basilgo",
+        "phone_verified": false,
+        "sub": "1f527ebc-d2e2-4ff1-b509-fcb78d302721"
+      },
+      "identities": null,
+      "created_at": "2025-11-19T02:03:43.646478Z",
+      "updated_at": "2025-11-19T02:03:51.482684Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "1c5d3691-8876-4495-b922-bcd9eb22cbe2",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "neto@gmail.com",
+      "email_confirmed_at": "2025-11-18T07:25:35.625027Z",
+      "phone": "",
+      "confirmed_at": "2025-11-18T07:25:35.625027Z",
+      "last_sign_in_at": "2025-11-18T07:25:46.854395Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "neto@gmail.com",
+        "email_verified": true,
+        "name": "neto",
+        "phone_verified": false,
+        "sub": "1c5d3691-8876-4495-b922-bcd9eb22cbe2"
+      },
+      "identities": null,
+      "created_at": "2025-11-18T07:25:35.594822Z",
+      "updated_at": "2025-11-18T07:25:46.858694Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "fb8ba6cf-0aa5-4200-bf8e-5fcba8618133",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "23103439@usc.edu.ph",
+      "email_confirmed_at": "2025-11-18T07:17:31.600947Z",
+      "phone": "",
+      "confirmed_at": "2025-11-18T07:17:31.600947Z",
+      "last_sign_in_at": "2025-11-20T08:16:10.530003Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "23103439@usc.edu.ph",
+        "email_verified": true,
+        "name": "Clarke",
+        "phone_verified": false,
+        "sub": "fb8ba6cf-0aa5-4200-bf8e-5fcba8618133"
+      },
+      "identities": null,
+      "created_at": "2025-11-18T07:17:31.537282Z",
+      "updated_at": "2025-11-20T08:16:10.567395Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "fb05a924-8a0a-4e50-a6f4-28fa968a10b8",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "jrbarestutiless@usc.edu.ph",
+      "email_confirmed_at": "2025-11-18T05:47:06.979838Z",
+      "phone": "",
+      "confirmed_at": "2025-11-18T05:47:06.979838Z",
+      "last_sign_in_at": "2025-11-18T05:47:38.04603Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "jrbarestutiless@usc.edu.ph",
+        "email_verified": true,
+        "name": "John Rey",
+        "phone_verified": false,
+        "sub": "fb05a924-8a0a-4e50-a6f4-28fa968a10b8"
+      },
+      "identities": null,
+      "created_at": "2025-11-18T05:47:06.920981Z",
+      "updated_at": "2025-12-12T08:01:06.988389Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "6bf49318-7195-4e3e-89d0-b2f8a0d4b3fd",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "rijg374t66134!ugpgg3@proton.me",
+      "email_confirmed_at": "2025-11-18T04:46:40.486056Z",
+      "phone": "",
+      "confirmed_at": "2025-11-18T04:46:40.486056Z",
+      "last_sign_in_at": "2025-11-18T04:46:49.351861Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "rijg374t66134!ugpgg3@proton.me",
+        "email_verified": true,
+        "name": "wgat vtge fasS",
+        "phone_verified": false,
+        "sub": "6bf49318-7195-4e3e-89d0-b2f8a0d4b3fd"
+      },
+      "identities": null,
+      "created_at": "2025-11-18T04:46:40.479956Z",
+      "updated_at": "2025-11-18T05:58:44.844256Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "590c8a03-7da5-488c-b278-dbac24888eb2",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "24100726@usc.edu.ph",
+      "email_confirmed_at": "2025-11-18T04:46:01.290386Z",
+      "phone": "",
+      "confirmed_at": "2025-11-18T04:46:01.290386Z",
+      "last_sign_in_at": "2025-11-18T04:46:07.584138Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "24100726@usc.edu.ph",
+        "email_verified": true,
+        "name": "Kenzho Suarez",
+        "phone_verified": false,
+        "sub": "590c8a03-7da5-488c-b278-dbac24888eb2"
+      },
+      "identities": null,
+      "created_at": "2025-11-18T04:46:01.238696Z",
+      "updated_at": "2025-11-18T04:46:07.586039Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "d7f1056b-09c4-4be7-aa96-0071e2416d20",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "jcliloan@usc.edu.ph",
+      "email_confirmed_at": "2025-11-14T10:14:07.164678Z",
+      "phone": "",
+      "confirmed_at": "2025-11-14T10:14:07.164678Z",
+      "last_sign_in_at": "2025-11-14T10:14:27.291779Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "jcliloan@usc.edu.ph",
+        "email_verified": true,
+        "name": "Joshua Lilo-an",
+        "phone_verified": false,
+        "sub": "d7f1056b-09c4-4be7-aa96-0071e2416d20"
+      },
+      "identities": null,
+      "created_at": "2025-11-14T10:14:07.068605Z",
+      "updated_at": "2026-03-11T12:14:42.42498Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "6ac6ea37-c1aa-4c02-b15a-82e013bd364c",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "cmumakigangay@usc.edu.ph",
+      "email_confirmed_at": "2025-11-13T05:24:21.440484Z",
+      "phone": "",
+      "confirmed_at": "2025-11-13T05:24:21.440484Z",
+      "last_sign_in_at": "2025-11-13T05:24:21.445664Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "cmumakigangay@usc.edu.ph",
+        "email_verified": true,
+        "name": "Christian Mel",
+        "phone_verified": false,
+        "sub": "6ac6ea37-c1aa-4c02-b15a-82e013bd364c"
+      },
+      "identities": null,
+      "created_at": "2025-11-13T05:24:21.429568Z",
+      "updated_at": "2026-03-05T08:32:08.653428Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "35986233-6b44-48ea-808e-6a9f1378b68a",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "cmumakigangay@gmail.com",
+      "email_confirmed_at": "2025-11-13T05:22:00.130662Z",
+      "phone": "",
+      "confirmed_at": "2025-11-13T05:22:00.130662Z",
+      "last_sign_in_at": "2025-11-13T05:22:00.144243Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "cmumakigangay@gmail.com",
+        "email_verified": true,
+        "name": "Christian Mel Makig-angay",
+        "phone_verified": false,
+        "sub": "35986233-6b44-48ea-808e-6a9f1378b68a"
+      },
+      "identities": null,
+      "created_at": "2025-11-13T05:22:00.060186Z",
+      "updated_at": "2025-11-13T05:22:00.162963Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "9c959139-47b7-42d8-a45b-d10933d428e6",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "pfillo@usc.edu.ph",
+      "email_confirmed_at": "2025-11-13T05:04:40.253564Z",
+      "phone": "",
+      "confirmed_at": "2025-11-13T05:04:40.253564Z",
+      "last_sign_in_at": "2025-11-13T05:05:13.242522Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "pfillo@usc.edu.ph",
+        "email_verified": true,
+        "name": "Peter Fillo",
+        "phone_verified": false,
+        "sub": "9c959139-47b7-42d8-a45b-d10933d428e6"
+      },
+      "identities": null,
+      "created_at": "2025-11-13T05:04:40.133362Z",
+      "updated_at": "2025-11-13T05:05:13.244343Z",
+      "is_anonymous": false
+    },
+    {
+      "id": "3bf3b967-2dc9-44c6-b9b9-23ce9c10f690",
+      "aud": "authenticated",
+      "role": "authenticated",
+      "email": "24104059@usc.edu.ph",
+      "email_confirmed_at": "2025-11-13T00:11:47.312827Z",
+      "phone": "",
+      "confirmed_at": "2025-11-13T00:11:47.312827Z",
+      "last_sign_in_at": "2025-11-13T00:12:00.542323Z",
+      "app_metadata": {
+        "provider": "email",
+        "providers": [
+          "email"
+        ]
+      },
+      "user_metadata": {
+        "email": "24104059@usc.edu.ph",
+        "email_verified": true,
+        "name": "Klyde Yshmael B. Rojas",
+        "phone_verified": false,
+        "sub": "3bf3b967-2dc9-44c6-b9b9-23ce9c10f690"
+      },
+      "identities": null,
+      "created_at": "2025-11-13T00:11:47.213905Z",
+      "updated_at": "2025-11-16T04:09:03.911419Z",
+      "is_anonymous": false
+    }
+  ],
+  "publicUsers": [
+    {
+      "id": "8842847e-2144-4d05-96ce-60b17d067580",
+      "email": "gregg.marayan@gmail.com",
+      "name": "Gregg Marayan",
+      "role": "admin",
+      "created_at": "2025-11-01T20:39:50.345432+00:00"
+    },
+    {
+      "id": "0794bf4a-d1ef-4e4b-ab92-b177f8633d7d",
+      "email": "19104146@usc.edu.ph",
+      "name": "boyo",
+      "role": "user",
+      "created_at": "2025-11-02T01:18:59.521138+00:00"
+    },
+    {
+      "id": "3bf3b967-2dc9-44c6-b9b9-23ce9c10f690",
+      "email": "24104059@usc.edu.ph",
+      "name": "Klyde Yshmael B. Rojas",
+      "role": "user",
+      "created_at": "2025-11-13T00:11:47.212924+00:00"
+    },
+    {
+      "id": "9c959139-47b7-42d8-a45b-d10933d428e6",
+      "email": "pfillo@usc.edu.ph",
+      "name": "Peter Fillo",
+      "role": "user",
+      "created_at": "2025-11-13T05:04:40.130168+00:00"
+    },
+    {
+      "id": "35986233-6b44-48ea-808e-6a9f1378b68a",
+      "email": "cmumakigangay@gmail.com",
+      "name": "Christian Mel Makig-angay",
+      "role": "user",
+      "created_at": "2025-11-13T05:22:00.059789+00:00"
+    },
+    {
+      "id": "6ac6ea37-c1aa-4c02-b15a-82e013bd364c",
+      "email": "cmumakigangay@usc.edu.ph",
+      "name": "Christian Mel",
+      "role": "user",
+      "created_at": "2025-11-13T05:24:21.429238+00:00"
+    },
+    {
+      "id": "d7f1056b-09c4-4be7-aa96-0071e2416d20",
+      "email": "jcliloan@usc.edu.ph",
+      "name": "Joshua Lilo-an",
+      "role": "user",
+      "created_at": "2025-11-14T10:14:07.067642+00:00"
+    },
+    {
+      "id": "590c8a03-7da5-488c-b278-dbac24888eb2",
+      "email": "24100726@usc.edu.ph",
+      "name": "Kenzho Suarez",
+      "role": "user",
+      "created_at": "2025-11-18T04:46:01.238338+00:00"
+    },
+    {
+      "id": "6bf49318-7195-4e3e-89d0-b2f8a0d4b3fd",
+      "email": "rijg374t66134!ugpgg3@proton.me",
+      "name": "wgat vtge fasS",
+      "role": "user",
+      "created_at": "2025-11-18T04:46:40.479594+00:00"
+    },
+    {
+      "id": "fb05a924-8a0a-4e50-a6f4-28fa968a10b8",
+      "email": "jrbarestutiless@usc.edu.ph",
+      "name": "John Rey",
+      "role": "user",
+      "created_at": "2025-11-18T05:47:06.920141+00:00"
+    },
+    {
+      "id": "fb8ba6cf-0aa5-4200-bf8e-5fcba8618133",
+      "email": "23103439@usc.edu.ph",
+      "name": "Clarke",
+      "role": "user",
+      "created_at": "2025-11-18T07:17:31.533812+00:00"
+    },
+    {
+      "id": "1c5d3691-8876-4495-b922-bcd9eb22cbe2",
+      "email": "neto@gmail.com",
+      "name": "neto",
+      "role": "user",
+      "created_at": "2025-11-18T07:25:35.594485+00:00"
+    },
+    {
+      "id": "1f527ebc-d2e2-4ff1-b509-fcb78d302721",
+      "email": "21102868@usc.edu.ph",
+      "name": "Clark Basilgo",
+      "role": "user",
+      "created_at": "2025-11-19T02:03:43.646127+00:00"
+    },
+    {
+      "id": "26217f1f-1d12-4061-a7eb-7e6292c20dab",
+      "email": "24100535@usc.edu.ph",
+      "name": "kaina gutierrez",
+      "role": "user",
+      "created_at": "2025-11-19T04:25:33.9295+00:00"
+    },
+    {
+      "id": "dc930a97-b6ac-457f-929e-6fc35661b701",
+      "email": "25101081@gmail.com",
+      "name": "Sven Laurence Zoei M. Olsen",
+      "role": "user",
+      "created_at": "2025-11-19T23:29:56.529333+00:00"
+    },
+    {
+      "id": "e7936bb0-dc7a-4341-b879-4b40819aa75e",
+      "email": "23101134@usc.edu.ph",
+      "name": "Emilton Bontia",
+      "role": "user",
+      "created_at": "2025-11-20T02:18:59.098236+00:00"
+    },
+    {
+      "id": "975a89bd-ecfa-4ccf-bcc1-213d2f442992",
+      "email": "24103441@usc.edu.ph",
+      "name": "yanzki",
+      "role": "user",
+      "created_at": "2025-11-21T07:30:42.621186+00:00"
+    },
+    {
+      "id": "701b94e1-49c6-414f-bc0e-4cc376da844e",
+      "email": "24101890@usc.edu.ph",
+      "name": "Leigh Avery N. Lamayo",
+      "role": "user",
+      "created_at": "2025-11-26T04:53:05.519538+00:00"
+    },
+    {
+      "id": "861f838d-a77b-40f7-9599-2c7b1dbaa1a8",
+      "email": "cecilhermoza@yahoo.com",
+      "name": "cecil hermoza",
+      "role": "user",
+      "created_at": "2025-11-26T06:23:02.709732+00:00"
+    },
+    {
+      "id": "dffbc0ce-242a-417b-a722-cc290c89dbaf",
+      "email": "dcismlab@usc.edu.ph",
+      "name": "Jellian",
+      "role": "user",
+      "created_at": "2025-11-26T08:20:21.933298+00:00"
+    },
+    {
+      "id": "15ce3114-9363-41a9-98b2-cd80fdbec957",
+      "email": "25900011@usc.edu.ph",
+      "name": "Vinz Ralei Revalde Ouano",
+      "role": "user",
+      "created_at": "2025-11-26T23:56:01.214001+00:00"
+    },
+    {
+      "id": "ff3d08d9-f450-44e5-beb1-841e8d910cba",
+      "email": "18030885@usc.edu.ph",
+      "name": "Kristian Mesola",
+      "role": "user",
+      "created_at": "2025-11-27T01:32:30.492247+00:00"
+    },
+    {
+      "id": "72e02b9f-6f1e-4796-b50f-ebbb319a80ec",
+      "email": "you@example.com",
+      "name": "John Doe",
+      "role": "user",
+      "created_at": "2025-11-29T03:20:41.142128+00:00"
+    },
+    {
+      "id": "36c791e2-e7d2-49e8-a1fc-dbfcf718baf5",
+      "email": "22101372@usc.edu.ph",
+      "name": "Joseph Pascua",
+      "role": "user",
+      "created_at": "2025-12-02T03:34:18.249287+00:00"
+    },
+    {
+      "id": "6be9df93-db7b-423c-bfa8-265552103992",
+      "email": "24101450@usc.edu.ph",
+      "name": "Miguel Tristan Sebastian Y. Ebao",
+      "role": "user",
+      "created_at": "2025-12-02T10:46:21.860994+00:00"
+    },
+    {
+      "id": "c5db6d21-ff39-4272-a883-b4e54c86c7b3",
+      "email": "24104152@usc.edu.ph",
+      "name": "Maria Gilbero",
+      "role": "user",
+      "created_at": "2025-12-09T06:21:26.255642+00:00"
+    },
+    {
+      "id": "4e4a7bb7-641b-4fa4-91ab-ca8258a92613",
+      "email": "23103431@usc.edu.ph",
+      "name": "Rae Barcelona",
+      "role": "user",
+      "created_at": "2025-12-12T12:24:11.66575+00:00"
+    },
+    {
+      "id": "6cf21a83-9465-4754-9c6c-9fe2e3be6947",
+      "email": "25103257@usc.edu.ph",
+      "name": "Koji Hangai",
+      "role": "user",
+      "created_at": "2026-01-20T03:07:08.592616+00:00"
+    },
+    {
+      "id": "9bdd5c0d-0260-47c7-8b51-7693417fc07b",
+      "email": "23200084@usc.edu.ph",
+      "name": "MatthewE",
+      "role": "user",
+      "created_at": "2026-01-26T23:58:55.316476+00:00"
+    },
+    {
+      "id": "3773f805-2be5-4ce2-bc6f-b29a71fff1aa",
+      "email": "25103705@usc.edu.ph",
+      "name": "Mark Ely Salinas",
+      "role": "user",
+      "created_at": "2026-01-27T06:23:54.871746+00:00"
+    },
+    {
+      "id": "8a38de0b-0aef-44ec-8ff0-5c3971dcfbde",
+      "email": "24102788@usc.edu.ph",
+      "name": "Kurt Florentino",
+      "role": "user",
+      "created_at": "2026-01-27T12:18:53.395365+00:00"
+    },
+    {
+      "id": "85438f13-2e79-4720-bb0b-1cb8fdb073f0",
+      "email": "25100022@usc.edu.ph",
+      "name": "Armond B. Lim",
+      "role": "user",
+      "created_at": "2026-01-30T03:40:19.230578+00:00"
+    },
+    {
+      "id": "ce3473af-c0a6-46b0-af80-0d5d7388363d",
+      "email": "zae@gmail.com",
+      "name": "zae",
+      "role": "user",
+      "created_at": "2026-01-30T11:27:59.127291+00:00"
+    },
+    {
+      "id": "07d7d232-d5a6-424f-bd53-a0da29565b5f",
+      "email": "24104795@usc.edu.ph",
+      "name": "Andre Siaton",
+      "role": "user",
+      "created_at": "2026-02-02T04:38:02.21407+00:00"
+    },
+    {
+      "id": "7031c47b-5ae8-4f5d-befc-def730ee0311",
+      "email": "maligrojennymae@gmail.com",
+      "name": "Jenny Mae R Maligro ",
+      "role": "user",
+      "created_at": "2026-02-04T06:59:05.976155+00:00"
+    },
+    {
+      "id": "e0df9307-afee-4813-849c-7b0cfc52eb5a",
+      "email": "11600135@usc.edu.ph",
+      "name": "Jemuel Singco Valencia",
+      "role": "user",
+      "created_at": "2026-02-20T03:24:31.978806+00:00"
+    },
+    {
+      "id": "9548a786-6741-445f-be05-f9c1626c5e7c",
+      "email": "31200482@usc.edu.ph",
+      "name": "Daniel Jade Sanding",
+      "role": "user",
+      "created_at": "2026-02-24T20:29:28.403511+00:00"
+    },
+    {
+      "id": "5e1757c7-4a0b-4d8b-af5e-be59578fac22",
+      "email": "19020145@usc.edu.ph",
+      "name": "Jann Denise Senido",
+      "role": "user",
+      "created_at": "2026-02-26T02:08:39.53652+00:00"
+    },
+    {
+      "id": "86fe09e7-7977-4d6d-b54b-851a7664b587",
+      "email": "25100159@usc.edu.ph",
+      "name": "Eumir Homeres",
+      "role": "user",
+      "created_at": "2026-03-02T11:16:04.858352+00:00"
+    },
+    {
+      "id": "657f4246-86c8-4e35-9588-0c25b80999ae",
+      "email": "25103317@usc.edu.ph",
+      "name": "Torlao, John Kriztoffer A.",
+      "role": "user",
+      "created_at": "2026-03-04T02:07:07.964649+00:00"
+    },
+    {
+      "id": "5d3d1b07-9507-4910-bbf8-2b4e255f643a",
+      "email": "25104354@usc.edu.ph",
+      "name": "Herschel S.",
+      "role": "user",
+      "created_at": "2026-03-04T07:36:00.149447+00:00"
+    },
+    {
+      "id": "9957c379-593c-447a-844b-e343601f79b7",
+      "email": "danieljadeyap@gmail.com",
+      "name": "Jeed",
+      "role": "user",
+      "created_at": "2026-03-05T04:38:51.957831+00:00"
+    },
+    {
+      "id": "2aa3b0bf-c5ef-412b-8844-10b05c493858",
+      "email": "23103620@usc.edu.ph",
+      "name": "John Paul Tautuan",
+      "role": "user",
+      "created_at": "2026-03-05T08:03:41.853932+00:00"
+    },
+    {
+      "id": "00d0b125-781a-4c32-aff3-4e23a5a123e1",
+      "email": "youtube@gmail.com",
+      "name": "John Doe",
+      "role": "user",
+      "created_at": "2026-03-05T10:27:55.666989+00:00"
+    },
+    {
+      "id": "953c85e7-76b0-46b4-a6a1-36af9e411a80",
+      "email": "s25104757@usc.edu.ph",
+      "name": "Mariah Frayne C. Leyson",
+      "role": "user",
+      "created_at": "2026-03-11T05:41:03.599774+00:00"
+    },
+    {
+      "id": "249b2d92-2191-431a-aa9f-41c30e302059",
+      "email": "22800112@usc.edu.ph",
+      "name": "Manlosa, Faye Ysabelle C.",
+      "role": "user",
+      "created_at": "2026-03-16T10:28:10.245679+00:00"
+    },
+    {
+      "id": "63df91f3-333d-41ca-b8fd-a10982179d4c",
+      "email": "you123@example.com",
+      "name": "123arjoe",
+      "role": "user",
+      "created_at": "2026-03-17T03:11:29.872704+00:00"
+    },
+    {
+      "id": "e455cdce-ed52-468a-a713-4a244f672eac",
+      "email": "22103221@usc.edu.ph",
+      "name": "Don Jhake Sacare",
+      "role": "user",
+      "created_at": "2026-03-18T01:46:03.93026+00:00"
+    },
+    {
+      "id": "c1e03b29-1202-429f-97f2-decc5c873cba",
+      "email": "24102254@usc.edu.ph",
+      "name": "Cyprianne Murillo",
+      "role": "user",
+      "created_at": "2026-05-14T08:11:19.893814+00:00"
+    },
+    {
+      "id": "2edacd4a-bad8-4c65-9618-bb813adb6b54",
+      "email": "23104351@usc.edu.ph",
+      "name": "jared Gomora",
+      "role": "user",
+      "created_at": "2026-05-20T08:03:55.415327+00:00"
+    },
+    {
+      "id": "cddf2d95-cc71-40eb-b83e-2a2d65ce6257",
+      "email": "21100713@usc.edu.ph",
+      "name": "Alexander Marayan",
+      "role": "admin",
+      "created_at": "2025-11-01T20:54:04.892699+00:00"
+    },
+    {
+      "id": "0ff187ee-3c00-4580-97d1-4d4f310107b1",
+      "email": "19103991@usc.edu.ph",
+      "name": "Shannen Nazareno",
+      "role": "user",
+      "created_at": "2026-07-13T17:05:14.124155+00:00"
+    },
+    {
+      "id": "dc42aa78-8ab1-4670-9272-ebc56ec2342a",
+      "email": "25101270@usc.edu.ph",
+      "name": "Kris Andrie Ortega",
+      "role": "user",
+      "created_at": "2026-07-22T03:05:14.621321+00:00"
+    }
+  ],
+  "items": [
+    {
+      "id": 17,
+      "title": "Airpads case",
+      "description": "Airpads case\nYou may pick it up at the CONTROL ROOM.\n\n",
+      "category": "Gadget",
+      "status": "found",
+      "location": "LB469",
+      "photo_url": "https://hmrmnvejtomdvowtmklf.supabase.co/storage/v1/object/public/item-photos/swb7cxsj7sk-1763443332228.jpeg",
+      "reporter_id": "6ac6ea37-c1aa-4c02-b15a-82e013bd364c",
+      "created_at": "2025-11-18T05:22:13.393721+00:00",
+      "updated_at": "2026-01-27T06:31:07.687024+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 59,
+      "title": "Laptop Charger",
+      "description": "Black-wired laptop charger.\nHP Brand.\nBlue-circular tip on one end, 3 pin plug\nNear Instructors' Table",
+      "category": "Gadget",
+      "status": "returned",
+      "location": "LB486, LB485, LB484, LB483",
+      "photo_url": null,
+      "reporter_id": "8a38de0b-0aef-44ec-8ff0-5c3971dcfbde",
+      "created_at": "2026-01-27T12:24:00.990141+00:00",
+      "updated_at": "2026-02-02T01:20:16.13687+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 71,
+      "title": "USB ",
+      "description": "USB-A to USB-C OTG adapter. You may claim it at the DCISM Control Room.",
+      "category": "Gadget",
+      "status": "found",
+      "location": "LB443",
+      "photo_url": "https://hmrmnvejtomdvowtmklf.supabase.co/storage/v1/object/public/item-photos/1dm35teym86-1772874574944.jpeg",
+      "reporter_id": "d7f1056b-09c4-4be7-aa96-0071e2416d20",
+      "created_at": "2026-03-07T09:09:35.572502+00:00",
+      "updated_at": "2026-03-07T09:23:40.403612+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 60,
+      "title": "Black Coach Wallet ",
+      "description": "Black Coach Wallet with my driver license and money ",
+      "category": "Other",
+      "status": "lost",
+      "location": "Idk",
+      "photo_url": "https://hmrmnvejtomdvowtmklf.supabase.co/storage/v1/object/public/item-photos/142j5dg4xw3q-1769744758259.jpg",
+      "reporter_id": "85438f13-2e79-4720-bb0b-1cb8fdb073f0",
+      "created_at": "2026-01-30T03:46:00.053514+00:00",
+      "updated_at": "2026-01-30T03:46:00.053514+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 64,
+      "title": "Black badminton bag (Yonex)",
+      "description": "I accidentally left 2 rackets and 3 shuttlecocks (2 feather, 1 plastic) at the JB building (PE parking area) around 4:30 PM on Monday, February 24. ",
+      "category": "Other",
+      "status": "returned",
+      "location": "JB building parking area",
+      "photo_url": "https://hmrmnvejtomdvowtmklf.supabase.co/storage/v1/object/public/item-photos/otywhtj05lr-1772073081336.jpg",
+      "reporter_id": "5e1757c7-4a0b-4d8b-af5e-be59578fac22",
+      "created_at": "2026-02-26T02:31:22.948489+00:00",
+      "updated_at": "2026-03-02T04:47:36.793592+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 66,
+      "title": "Aramco notebook",
+      "description": "it has a white exterior with a bottom black on the front. At the end of the notebook has gold or yellow colored parts on the wires from a built-in power bank. It also has my medical certificate somewhere in the notebook. A weird looking flash drive in one of the small pouches on the front cover of the notebook.\n\n",
+      "category": "Book",
+      "status": "lost",
+      "location": "Maybe from the grass area canteen, or in one of 48X, 44X rooms in the Bunzel building",
+      "photo_url": null,
+      "reporter_id": "657f4246-86c8-4e35-9588-0c25b80999ae",
+      "created_at": "2026-03-04T02:14:36.189505+00:00",
+      "updated_at": "2026-03-04T02:14:36.189505+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 14,
+      "title": "GOOJODOQ Wireless Mouse",
+      "description": "GOOJODOQ Wireless Mouse (sky blue).\nYou may claim it in the CONTROL ROOM.",
+      "category": "Gadget",
+      "status": "found",
+      "location": "LB484",
+      "photo_url": "https://hmrmnvejtomdvowtmklf.supabase.co/storage/v1/object/public/item-photos/84z3tvc4vmn-1763115706733.jpeg",
+      "reporter_id": "d7f1056b-09c4-4be7-aa96-0071e2416d20",
+      "created_at": "2025-11-14T10:21:47.999718+00:00",
+      "updated_at": "2025-11-14T10:23:12.26316+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 75,
+      "title": "Blank Black Pencil Case",
+      "description": "Blank in the front and back\ncolor black\ninside are pens, there is that has a capybara themed one (violet siya)  and my LTAR slip and many more pens some of which are new 3 are steel point 0.5mm (pink, blue white) and 4 are ball point 0.5mm (blue, lighter blue, violet, pink)\n\nPLS I RLLY NEED IT BACK, I think I left it on small desk compartment at the last rows of LB468 classroom\n\nplease call 09686161845 or email 22800112@usc.edu.ph",
+      "category": "Other",
+      "status": "lost",
+      "location": "LB468",
+      "photo_url": null,
+      "reporter_id": "249b2d92-2191-431a-aa9f-41c30e302059",
+      "created_at": "2026-03-16T10:31:39.649073+00:00",
+      "updated_at": "2026-03-16T10:34:08.007504+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 68,
+      "title": "arjoe",
+      "description": "arjoe is gone i miss him",
+      "category": "Clothing",
+      "status": "lost",
+      "location": "USCTC",
+      "photo_url": "https://hmrmnvejtomdvowtmklf.supabase.co/storage/v1/object/public/item-photos/g6lf2s6brmu-1772685581222.png",
+      "reporter_id": "9957c379-593c-447a-844b-e343601f79b7",
+      "created_at": "2026-03-05T04:39:42.96602+00:00",
+      "updated_at": "2026-04-15T07:51:13.101909+00:00",
+      "hidden": true,
+      "campus": "TC"
+    },
+    {
+      "id": 11,
+      "title": "Wireless mouse",
+      "description": "A Huawie gray wireless mouse with its USB connector missing plz return if found",
+      "category": "Gadget",
+      "status": "lost",
+      "location": "Lb447TC",
+      "photo_url": null,
+      "reporter_id": "3bf3b967-2dc9-44c6-b9b9-23ce9c10f690",
+      "created_at": "2025-11-13T00:15:24.096101+00:00",
+      "updated_at": "2025-11-13T07:21:59.014561+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 73,
+      "title": "Casio Watch",
+      "description": "Black Casio watch. You may claim it at the DCISM Control Room.",
+      "category": "Other",
+      "status": "found",
+      "location": "Laboratory",
+      "photo_url": "https://hmrmnvejtomdvowtmklf.supabase.co/storage/v1/object/public/item-photos/5kl5w1vkzkq-1772875346794.jpeg",
+      "reporter_id": "d7f1056b-09c4-4be7-aa96-0071e2416d20",
+      "created_at": "2026-03-07T09:22:27.193269+00:00",
+      "updated_at": "2026-03-07T09:22:27.193269+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 77,
+      "title": "Black RealMe Cobble Speaker",
+      "description": "Lost around 2pm at the USC TC BCT please return to control room or lost and found by basement please :((",
+      "category": "Gadget",
+      "status": "lost",
+      "location": "BCT ",
+      "photo_url": "https://hmrmnvejtomdvowtmklf.supabase.co/storage/v1/object/public/item-photos/723xg6ojlwd-1778746358984.png",
+      "reporter_id": "c1e03b29-1202-429f-97f2-decc5c873cba",
+      "created_at": "2026-05-14T08:12:45.694309+00:00",
+      "updated_at": "2026-05-14T08:12:45.694309+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 79,
+      "title": "Digital Logic HOTS Yellow Notebook",
+      "description": "HOTS Yellow notebook used in digilog class, lost at july 21, 2026 tuesday",
+      "category": "Book",
+      "status": "returned",
+      "location": "LB484",
+      "photo_url": "https://hmrmnvejtomdvowtmklf.supabase.co/storage/v1/object/public/item-photos/b2pcsw73jvf-1784689922056.jpg",
+      "reporter_id": "dc42aa78-8ab1-4670-9272-ebc56ec2342a",
+      "created_at": "2026-07-22T03:12:03.980981+00:00",
+      "updated_at": "2026-07-22T05:47:43.329371+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 26,
+      "title": "REALME EARPHONE",
+      "description": "Combination of black and yellow earphone. Claim it at the CONTROL ROOM. Thank you!",
+      "category": "Gadget",
+      "status": "found",
+      "location": "LB470",
+      "photo_url": "https://hmrmnvejtomdvowtmklf.supabase.co/storage/v1/object/public/item-photos/kin1x0iia9a-1764116493871.jpeg",
+      "reporter_id": "fb05a924-8a0a-4e50-a6f4-28fa968a10b8",
+      "created_at": "2025-11-26T00:21:35.725934+00:00",
+      "updated_at": "2025-11-26T05:28:49.096952+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 21,
+      "title": "White and blue bowed owala",
+      "description": "A 32oz white owala decorated with blue bows and scratches around the bows",
+      "category": "Other",
+      "status": "lost",
+      "location": "Bunzel",
+      "photo_url": "https://hmrmnvejtomdvowtmklf.supabase.co/storage/v1/object/public/item-photos/b9t8xyc82z-1763526589257.jpg",
+      "reporter_id": "26217f1f-1d12-4061-a7eb-7e6292c20dab",
+      "created_at": "2025-11-19T04:29:50.680343+00:00",
+      "updated_at": "2025-11-19T04:29:50.680343+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 13,
+      "title": "Logitech Mouse",
+      "description": "Logitech wireless mouse G304 (black).\nYou may claim it in the CONTROL ROOM.",
+      "category": "Gadget",
+      "status": "returned",
+      "location": "LB448",
+      "photo_url": "https://hmrmnvejtomdvowtmklf.supabase.co/storage/v1/object/public/item-photos/h1u9v2cck7-1763115482268.jpeg",
+      "reporter_id": "d7f1056b-09c4-4be7-aa96-0071e2416d20",
+      "created_at": "2025-11-14T10:18:03.592019+00:00",
+      "updated_at": "2025-11-19T05:01:57.632061+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 22,
+      "title": "CASIO",
+      "description": "Found in LB446\nYou may pick it up at the CONTROL ROOM\n",
+      "category": "Gadget",
+      "status": "found",
+      "location": "LB446",
+      "photo_url": "https://hmrmnvejtomdvowtmklf.supabase.co/storage/v1/object/public/item-photos/k30xqq8qio8-1763612072379.jpeg",
+      "reporter_id": "6ac6ea37-c1aa-4c02-b15a-82e013bd364c",
+      "created_at": "2025-11-20T04:14:34.019409+00:00",
+      "updated_at": "2025-11-20T04:14:34.019409+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 35,
+      "title": "Blue Thermos Water Bottle",
+      "description": "Two weeks ago, I lost my water bottle after school during TPE class (3:30-4:30 PM) or some time during the afternoon. The water bottle looks exactly like the one you see in this picture. I have already checked both OSFA and the security office to see if they have it, but to no avail. If someone has my water bottle, please meet up at around 12:00-12:30 noon at LB442, or call 0920-858-7250. Ok, thank you.",
+      "category": "Other",
+      "status": "lost",
+      "location": "Meet at LB442",
+      "photo_url": "https://hmrmnvejtomdvowtmklf.supabase.co/storage/v1/object/public/item-photos/kym5uhm01d-1764672942968.jpeg",
+      "reporter_id": "6be9df93-db7b-423c-bfa8-265552103992",
+      "created_at": "2025-12-02T10:55:44.472903+00:00",
+      "updated_at": "2025-12-02T10:56:36.775249+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 34,
+      "title": "Infinix Note 10 Pro Phone",
+      "description": "Has a wallpaper of Tengen from Demon Slayer. In an old clear phone case with a drawing of Jimbob (has a detailed face) and a quantum ticket paper. ",
+      "category": "Gadget",
+      "status": "returned",
+      "location": "Somewhere in Bunzel",
+      "photo_url": "https://hmrmnvejtomdvowtmklf.supabase.co/storage/v1/object/public/item-photos/gqwqbfglcyd-1764646767564.jpg",
+      "reporter_id": "36c791e2-e7d2-49e8-a1fc-dbfcf718baf5",
+      "created_at": "2025-12-02T03:39:03.084222+00:00",
+      "updated_at": "2025-12-03T23:57:35.343303+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 42,
+      "title": "Casio",
+      "description": "Casio. Claim it at the CONTROL ROOM. Thank you!",
+      "category": "Other",
+      "status": "found",
+      "location": "LB483",
+      "photo_url": "https://hmrmnvejtomdvowtmklf.supabase.co/storage/v1/object/public/item-photos/21whhajq0se-1765012302033.jpeg",
+      "reporter_id": "6ac6ea37-c1aa-4c02-b15a-82e013bd364c",
+      "created_at": "2025-12-06T09:11:43.133114+00:00",
+      "updated_at": "2025-12-06T09:11:43.133114+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 61,
+      "title": "Black penshoppe pouch",
+      "description": "Contains xiaomi earphones (1 earphone inside) and light blue type C cable",
+      "category": "Gadget",
+      "status": "lost",
+      "location": "Around Bunzel Lobby",
+      "photo_url": null,
+      "reporter_id": "07d7d232-d5a6-424f-bd53-a0da29565b5f",
+      "created_at": "2026-02-02T04:42:41.622658+00:00",
+      "updated_at": "2026-02-02T04:42:41.622658+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 63,
+      "title": "Gold earrings ",
+      "description": "It is either in LRC(had pe) or Bunzel 4th floor (most of my classes)",
+      "category": "Other",
+      "status": "lost",
+      "location": "Lrc or Bunzel ",
+      "photo_url": "https://hmrmnvejtomdvowtmklf.supabase.co/storage/v1/object/public/item-photos/u3zmk1jit5j-1770188645073.jpg",
+      "reporter_id": "7031c47b-5ae8-4f5d-befc-def730ee0311",
+      "created_at": "2026-02-04T07:04:11.65139+00:00",
+      "updated_at": "2026-02-04T07:04:11.65139+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 46,
+      "title": "Motorcycle Key",
+      "description": "YAMAHA KEY",
+      "category": "Other",
+      "status": "found",
+      "location": "AT THE LOBBY",
+      "photo_url": "https://hmrmnvejtomdvowtmklf.supabase.co/storage/v1/object/public/item-photos/xly4m49nef-1765512873566.jpeg",
+      "reporter_id": "fb05a924-8a0a-4e50-a6f4-28fa968a10b8",
+      "created_at": "2025-12-12T04:14:35.86041+00:00",
+      "updated_at": "2025-12-12T04:14:35.86041+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 45,
+      "title": "Car Key ",
+      "description": "Color blue ",
+      "category": "Other",
+      "status": "returned",
+      "location": "LB447",
+      "photo_url": "https://hmrmnvejtomdvowtmklf.supabase.co/storage/v1/object/public/item-photos/weaffzayem-1765512784606.jpeg",
+      "reporter_id": "fb05a924-8a0a-4e50-a6f4-28fa968a10b8",
+      "created_at": "2025-12-12T04:12:42.420252+00:00",
+      "updated_at": "2025-12-12T08:16:03.756541+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 47,
+      "title": "Pink Hydro Flask 21oz",
+      "description": "has some scratches",
+      "category": "Other",
+      "status": "lost",
+      "location": "Bunzel Building",
+      "photo_url": "https://hmrmnvejtomdvowtmklf.supabase.co/storage/v1/object/public/item-photos/35ueq0aaf1j-1765542587302.png",
+      "reporter_id": "4e4a7bb7-641b-4fa4-91ab-ca8258a92613",
+      "created_at": "2025-12-12T12:29:47.969648+00:00",
+      "updated_at": "2025-12-12T12:29:47.969648+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 70,
+      "title": "Black USC totebag with my PE inside",
+      "description": "It had a PE shirt and usc SHS pants. Please give it back 😿😿😿",
+      "category": "Clothing",
+      "status": "lost",
+      "location": "Last seen LRC PE changing rooms",
+      "photo_url": null,
+      "reporter_id": "2aa3b0bf-c5ef-412b-8844-10b05c493858",
+      "created_at": "2026-03-05T08:05:20.413408+00:00",
+      "updated_at": "2026-03-05T08:05:20.413408+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 72,
+      "title": "Power Bank",
+      "description": "White power bank. You may claim it at the DCISM Control Room.",
+      "category": "Gadget",
+      "status": "returned",
+      "location": "LB484",
+      "photo_url": "https://hmrmnvejtomdvowtmklf.supabase.co/storage/v1/object/public/item-photos/rb8cud34wdi-1772874833557.jpeg",
+      "reporter_id": "d7f1056b-09c4-4be7-aa96-0071e2416d20",
+      "created_at": "2026-03-07T09:13:54.261957+00:00",
+      "updated_at": "2026-03-11T05:23:57.345841+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 53,
+      "title": "Umbrella assorted color",
+      "description": "Umbrella assorted color. Claim it at the CONTROL ROOM. Thank you!",
+      "category": "Other",
+      "status": "found",
+      "location": "LB486",
+      "photo_url": "https://hmrmnvejtomdvowtmklf.supabase.co/storage/v1/object/public/item-photos/exf454w39w5-1765867101719.jpeg",
+      "reporter_id": "6ac6ea37-c1aa-4c02-b15a-82e013bd364c",
+      "created_at": "2025-12-16T06:38:22.711783+00:00",
+      "updated_at": "2025-12-16T06:38:22.711783+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 55,
+      "title": "Charger Black",
+      "description": "Charger Black. Claim it at the CONTROL ROOM. Thank you!",
+      "category": "Gadget",
+      "status": "found",
+      "location": "LB442",
+      "photo_url": "https://hmrmnvejtomdvowtmklf.supabase.co/storage/v1/object/public/item-photos/rbwi5czylc8-1766201977631.jpeg",
+      "reporter_id": "6ac6ea37-c1aa-4c02-b15a-82e013bd364c",
+      "created_at": "2025-12-20T03:39:38.968789+00:00",
+      "updated_at": "2025-12-20T03:39:38.968789+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 74,
+      "title": "Grey wallet with coins",
+      "description": "has a key on the keychain-ish, wala nakoy pamplete ani pauli 💔💔💔",
+      "category": "Other",
+      "status": "lost",
+      "location": "LB469TC 10:00-12:30 PM",
+      "photo_url": null,
+      "reporter_id": "953c85e7-76b0-46b4-a6a1-36af9e411a80",
+      "created_at": "2026-03-11T05:42:24.001732+00:00",
+      "updated_at": "2026-03-11T06:02:39.450317+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 67,
+      "title": "Dark Blue Mask",
+      "description": "lost the mask inside the computer lab. seated on the very front, on the left side.",
+      "category": "Clothing",
+      "status": "returned",
+      "location": "LB446",
+      "photo_url": "https://hmrmnvejtomdvowtmklf.supabase.co/storage/v1/object/public/item-photos/f69m1015qcp-1772610116764.jpg",
+      "reporter_id": "5d3d1b07-9507-4910-bbf8-2b4e255f643a",
+      "created_at": "2026-03-04T07:41:25.484914+00:00",
+      "updated_at": "2026-03-17T01:39:38.276946+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 58,
+      "title": "Black Wallet",
+      "description": "Has my ID, has a M emblem",
+      "category": "ID",
+      "status": "lost",
+      "location": "IDK",
+      "photo_url": null,
+      "reporter_id": "3773f805-2be5-4ce2-bc6f-b29a71fff1aa",
+      "created_at": "2026-01-27T06:24:53.86345+00:00",
+      "updated_at": "2026-01-27T06:24:53.86345+00:00",
+      "hidden": false,
+      "campus": "TC"
+    },
+    {
+      "id": 76,
+      "title": "Bembi",
+      "description": "pls i miss bembi",
+      "category": "Other",
+      "status": "lost",
+      "location": "PE building",
+      "photo_url": "https://hmrmnvejtomdvowtmklf.supabase.co/storage/v1/object/public/item-photos/tgmf1lshgk-1773717178009.jpg",
+      "reporter_id": "63df91f3-333d-41ca-b8fd-a10982179d4c",
+      "created_at": "2026-03-17T03:12:59.723508+00:00",
+      "updated_at": "2026-04-15T07:51:04.313817+00:00",
+      "hidden": true,
+      "campus": "TC"
+    }
+  ],
+  "claims": [
+    {
+      "id": 10,
+      "item_id": 11,
+      "claimant_id": "6ac6ea37-c1aa-4c02-b15a-82e013bd364c",
+      "message": "Christian Mel would like to discuss this item with you.",
+      "status": "pending",
+      "created_at": "2025-11-13T05:41:12.89516+00:00",
+      "chat_type": "chat"
+    },
+    {
+      "id": 11,
+      "item_id": 11,
+      "claimant_id": "cddf2d95-cc71-40eb-b83e-2a2d65ce6257",
+      "message": "Alexander Marayan would like to discuss this item with you.",
+      "status": "pending",
+      "created_at": "2025-11-18T09:30:14.026892+00:00",
+      "chat_type": "chat"
+    },
+    {
+      "id": 13,
+      "item_id": 55,
+      "claimant_id": "6cf21a83-9465-4754-9c6c-9fe2e3be6947",
+      "message": "Koji Hangai would like to discuss this item with you.",
+      "status": "pending",
+      "created_at": "2026-01-20T03:21:02.928782+00:00",
+      "chat_type": "chat"
+    },
+    {
+      "id": 14,
+      "item_id": 67,
+      "claimant_id": "d7f1056b-09c4-4be7-aa96-0071e2416d20",
+      "message": "Joshua Lilo-an would like to discuss this item with you.",
+      "status": "pending",
+      "created_at": "2026-03-07T09:35:58.28616+00:00",
+      "chat_type": "chat"
+    }
+  ],
+  "messages": [
+    {
+      "id": 35,
+      "claim_id": 10,
+      "sender_id": "6ac6ea37-c1aa-4c02-b15a-82e013bd364c",
+      "content": "please claim here in the control room",
+      "created_at": "2025-11-13T05:42:51.85389+00:00",
+      "read": false
+    },
+    {
+      "id": 36,
+      "claim_id": 11,
+      "sender_id": "cddf2d95-cc71-40eb-b83e-2a2d65ce6257",
+      "content": "Hello, I saw your lost listing. There was also a found listing for a huawei mouse, you can check it in the control room if it was yours, if it is can you also claim the listing as found, thank you",
+      "created_at": "2025-11-18T09:31:32.446816+00:00",
+      "read": false
+    },
+    {
+      "id": 37,
+      "claim_id": 13,
+      "sender_id": "6cf21a83-9465-4754-9c6c-9fe2e3be6947",
+      "content": "is there a name on the back?",
+      "created_at": "2026-01-20T03:21:22.43289+00:00",
+      "read": true
+    },
+    {
+      "id": 40,
+      "claim_id": 14,
+      "sender_id": "d7f1056b-09c4-4be7-aa96-0071e2416d20",
+      "content": "This item was found and is currently kept at the DCISM Control Room. You may claim it there.",
+      "created_at": "2026-03-07T09:38:03.015734+00:00",
+      "read": true
+    },
+    {
+      "id": 41,
+      "claim_id": 14,
+      "sender_id": "5d3d1b07-9507-4910-bbf8-2b4e255f643a",
+      "content": "Noted, will check on it later.",
+      "created_at": "2026-03-17T00:03:45.545699+00:00",
+      "read": false
+    }
+  ],
+  "flags": []
+}

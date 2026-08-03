@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { createClient } from '@/lib/supabase/server'
 import { ItemCard } from '@/components/ItemCard'
+import { db } from '@/lib/db'
+import { getCurrentUser } from '@/lib/auth'
 import {
   Search,
   PlusCircle,
@@ -20,36 +21,34 @@ import {
 export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
-  const supabase = await createClient()
+  // Get recent non-hidden items
+  const items = await db.item.findMany({
+    where: { hidden: false },
+    orderBy: { createdAt: 'desc' },
+    take: 6,
+  })
 
-  // Get recent items
-  const { data: items } = await supabase
-    .from('items')
-    .select('*')
-    .eq('hidden', false)
-    .order('created_at', { ascending: false })
-    .limit(6)
-
-  // Get current user
-  const { data: { user } } = await supabase.auth.getUser()
+  // Get current user session
+  const user = await getCurrentUser()
 
   // Fetch dynamic statistics
-  const { count: activeCount } = await supabase
-    .from('items')
-    .select('*', { count: 'exact', head: true })
-    .in('status', ['lost', 'found'])
-    .eq('hidden', false)
+  const activeCount = await db.item.count({
+    where: {
+      hidden: false,
+      status: { in: ['LOST', 'FOUND'] },
+    },
+  })
 
-  const { count: reunitedCount } = await supabase
-    .from('items')
-    .select('*', { count: 'exact', head: true })
-    .eq('status', 'returned')
-    .eq('hidden', false)
+  const reunitedCount = await db.item.count({
+    where: {
+      hidden: false,
+      status: 'RETURNED',
+    },
+  })
 
-  const { count: totalCount } = await supabase
-    .from('items')
-    .select('*', { count: 'exact', head: true })
-    .eq('hidden', false)
+  const totalCount = await db.item.count({
+    where: { hidden: false },
+  })
 
   const categories = [
     { name: 'ID / Documents', value: 'ID', icon: CreditCard, color: 'text-amber-500 bg-amber-500/10' },
@@ -178,7 +177,7 @@ export default async function HomePage() {
 
           {items && items.length > 0 ? (
             <div className="grid sm:grid-cols-2 gap-6">
-              {items.map((item) => (
+              {items.map((item: any) => (
                 <ItemCard key={item.id} item={item} />
               ))}
             </div>
@@ -192,7 +191,6 @@ export default async function HomePage() {
 
         {/* Localized Helpdesk Guidelines Card */}
         <div className="glass-card rounded-2xl p-6 border-primary/10 relative overflow-hidden space-y-6">
-          {/* Subtle logo pattern background */}
           <div className="absolute -bottom-8 -right-8 text-primary/5 pointer-events-none">
             <GraduationCap className="h-40 w-40" />
           </div>

@@ -1,6 +1,5 @@
 'use client'
 
-import { createClient } from '@/lib/supabase/client'
 import { ChatBox } from '@/components/ChatBox'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -25,175 +24,52 @@ interface Claim {
 
 function ChatsContent() {
   const [user, setUser] = useState<any>(null)
-  const [currentUserProfile, setCurrentUserProfile] = useState<any>(null)
   const [allClaims, setAllClaims] = useState<Claim[]>([])
   const [selectedClaimId, setSelectedClaimId] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
   const searchParams = useSearchParams()
   const claimIdFromUrl = searchParams.get('claimId')
-  const supabase = createClient()
 
-  // Function to refresh unread count for all claims
-  const refreshUnreadCounts = async (userId: string) => {
-    const updatedClaims = [...allClaims]
-    
-    for (const claim of updatedClaims) {
-      const { count } = await supabase
-        .from('messages')
-        .select('*', { count: 'exact', head: true })
-        .eq('claim_id', claim.id)
-        .eq('read', false)
-        .neq('sender_id', userId)
-      
-      claim.unreadCount = count || 0
-    }
-    
-    setAllClaims(updatedClaims)
-  }
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const supabase = createClient()
-      
-      const { data: { user: currentUser } } = await supabase.auth.getUser()
-      
-      if (!currentUser) {
+  const fetchChats = async () => {
+    try {
+      const res = await fetch('/api/chats')
+      if (res.status === 401) {
         window.location.href = '/auth/login'
         return
       }
 
-      setUser(currentUser)
+      const data = await res.json()
+      if (res.ok && data.conversations) {
+        setUser(data.user)
+        setAllClaims(data.conversations)
 
-      // Get current user's profile
-      const { data: profile } = await supabase
-        .from('users')
-        .select('name, email')
-        .eq('id', currentUser.id)
-        .single()
-
-      setCurrentUserProfile(profile)
-
-      // Get all claims where the user is either the claimant or the reporter
-      // Only get chat-type claims (not regular claim requests)
-      const { data: claimsAsClaimant } = await supabase
-        .from('claims')
-        .select(`
-          *,
-          items!inner(
-            id,
-            title,
-            photo_url,
-            users!reporter_id(name, email)
-          )
-        `)
-        .eq('claimant_id', currentUser.id)
-        .eq('chat_type', 'chat')
-        .in('status', ['pending', 'approved'])
-        .order('created_at', { ascending: false })
-
-      const { data: claimsAsReporter } = await supabase
-        .from('claims')
-        .select(`
-          *,
-          users!claimant_id(name, email),
-          items!inner(id, title, photo_url, reporter_id)
-        `)
-        .eq('items.reporter_id', currentUser.id)
-        .eq('chat_type', 'chat')
-        .in('status', ['pending', 'approved'])
-        .order('created_at', { ascending: false })
-
-      const claims = [
-        ...(claimsAsClaimant || []).map(claim => ({
-          id: claim.id,
-          status: claim.status,
-          created_at: claim.created_at,
-          role: 'claimant' as const,
-          otherUserName: claim.items?.users?.name || claim.items?.users?.email || 'Reporter',
-          itemTitle: claim.items?.title || 'Unknown Item',
-          itemId: claim.items?.id,
-          unreadCount: 0, // Will be populated below
-        })),
-        ...(claimsAsReporter || []).map(claim => ({
-          id: claim.id,
-          status: claim.status,
-          created_at: claim.created_at,
-          role: 'reporter' as const,
-          otherUserName: claim.users?.name || claim.users?.email || 'Claimant',
-          itemTitle: claim.items?.title || 'Unknown Item',
-          itemId: claim.items?.id,
-          unreadCount: 0, // Will be populated below
-        })),
-      ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-
-      // Fetch unread count for each claim
-      for (const claim of claims) {
-        const { count } = await supabase
-          .from('messages')
-          .select('*', { count: 'exact', head: true })
-          .eq('claim_id', claim.id)
-          .eq('read', false)
-          .neq('sender_id', currentUser.id)
-        
-        claim.unreadCount = count || 0
-      }
-
-      setAllClaims(claims)
-      
-      // Auto-select claim from URL or first claim
-      if (claimIdFromUrl) {
-        const claimId = parseInt(claimIdFromUrl)
-        if (claims.find(c => c.id === claimId)) {
-          setSelectedClaimId(claimId)
-        } else if (claims.length > 0) {
-          setSelectedClaimId(claims[0].id)
+        if (!selectedClaimId) {
+          if (claimIdFromUrl) {
+            const claimId = parseInt(claimIdFromUrl)
+            if (data.conversations.find((c: Claim) => c.id === claimId)) {
+              setSelectedClaimId(claimId)
+            } else if (data.conversations.length > 0) {
+              setSelectedClaimId(data.conversations[0].id)
+            }
+          } else if (data.conversations.length > 0) {
+            setSelectedClaimId(data.conversations[0].id)
+          }
         }
-      } else if (claims.length > 0) {
-        setSelectedClaimId(claims[0].id)
       }
-
+    } catch (e) {
+      console.error(e)
+    } finally {
       setLoading(false)
     }
+  }
 
-    fetchData()
+  useEffect(() => {
+    fetchChats()
+    const interval = setInterval(() => {
+      fetchChats()
+    }, 3000)
+    return () => clearInterval(interval)
   }, [claimIdFromUrl])
-
-  // Subscribe to message updates to refresh unread counts in real-time
-  useEffect(() => {
-    if (!user) return
-
-    const channel = supabase
-      .channel('chats-page-messages')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'messages',
-        },
-        () => {
-          // Refresh unread counts when any message is inserted or updated
-          refreshUnreadCounts(user.id)
-        }
-      )
-      .subscribe()
-
-    return () => {
-      supabase.removeChannel(channel)
-    }
-  }, [user, allClaims])
-
-  // Refresh unread counts when a conversation is selected
-  useEffect(() => {
-    if (user && selectedClaimId) {
-      // Small delay to allow ChatBox to mark messages as read first
-      const timer = setTimeout(() => {
-        refreshUnreadCounts(user.id)
-      }, 500)
-      
-      return () => clearTimeout(timer)
-    }
-  }, [selectedClaimId, user])
 
   const statusColor: Record<'pending' | 'approved' | 'rejected', 'default' | 'destructive'> = {
     pending: 'default',
@@ -328,7 +204,7 @@ function ChatsContent() {
                   <ChatBox
                     claimId={selectedClaim.id}
                     currentUserId={user.id}
-                    currentUserName={currentUserProfile?.name || 'You'}
+                    currentUserName={user.name || 'You'}
                     otherUserName={selectedClaim.otherUserName}
                     borderless={true}
                   />

@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { EyeOff, Flag, Trash2, ShieldAlert, User2, AlertTriangle } from 'lucide-react'
+import { EyeOff, Flag, Trash2, ShieldAlert, User2, AlertTriangle, Database as DatabaseIcon, RefreshCw, RotateCcw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
 import { cn } from '@/lib/utils'
@@ -51,7 +51,69 @@ export function AdminDashboardClient({ allItems, flaggedItems, allUsers, stats }
   const [campusFilter, setCampusFilter] = useState<'all' | 'TC' | 'MC'>('all')
   const [userEmailTypeFilter, setUserEmailTypeFilter] = useState<'all' | 'non-usc'>('all')
   const [isDeleting, setIsDeleting] = useState<string | null>(null)
+  const [isMigrating, setIsMigrating] = useState(false)
+  const [isRollingBack, setIsRollingBack] = useState(false)
   const router = useRouter()
+
+  const handleRunMigration = async () => {
+    if (!window.confirm('Import pre-existing records from Supabase into MariaDB? An automatic pre-migration snapshot will be saved first.')) {
+      return
+    }
+
+    setIsMigrating(true)
+    try {
+      const res = await fetch('/api/admin/migrate', { method: 'POST' })
+      const data = await res.json()
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Migration failed')
+      }
+
+      toast({
+        title: 'Migration Successful 🎉',
+        description: `Migrated ${data.migrated.users} users, ${data.migrated.items} items, ${data.migrated.claims} claims, and ${data.migrated.messages} messages into MariaDB!`,
+      })
+      router.refresh()
+    } catch (err: any) {
+      toast({
+        title: 'Migration Error',
+        description: err.message,
+        variant: 'destructive',
+      })
+    } finally {
+      setIsMigrating(false)
+    }
+  }
+
+  const handleRunRollback = async () => {
+    if (!window.confirm('⚠️ WARNING: Revert MariaDB to the pre-migration snapshot? This will reset MariaDB data to the state prior to migration.')) {
+      return
+    }
+
+    setIsRollingBack(true)
+    try {
+      const res = await fetch('/api/admin/rollback', { method: 'POST' })
+      const data = await res.json()
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Rollback failed')
+      }
+
+      toast({
+        title: 'Rollback Completed 🔄',
+        description: 'MariaDB database has been safely restored to pre-migration snapshot.',
+      })
+      router.refresh()
+    } catch (err: any) {
+      toast({
+        title: 'Rollback Error',
+        description: err.message,
+        variant: 'destructive',
+      })
+    } finally {
+      setIsRollingBack(false)
+    }
+  }
 
   const handleDeleteUser = async (userId: string, userEmail: string) => {
     if (!window.confirm(`Are you absolutely sure you want to delete user ${userEmail}? This will permanently delete their account and all their reported items, claims, and messages.`)) {
@@ -173,6 +235,38 @@ export function AdminDashboardClient({ allItems, flaggedItems, allUsers, stats }
           </CardHeader>
         </Card>
       </div>
+
+      <Card className="mb-8 glass-card border-primary/10 bg-primary/5">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base flex items-center gap-2">
+            <DatabaseIcon className="h-5 w-5 text-primary" />
+            Database Migration & Revert Tools
+          </CardTitle>
+          <CardDescription>
+            Import pre-existing records from Supabase into MariaDB, or revert to a pre-migration snapshot.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-wrap gap-3">
+          <Button
+            onClick={handleRunMigration}
+            disabled={isMigrating || isRollingBack}
+            className="brand-button-hover bg-primary text-primary-foreground font-bold shadow-sm rounded-xl h-10 px-5"
+          >
+            <RefreshCw className={cn("h-4 w-4 mr-2", isMigrating && "animate-spin")} />
+            {isMigrating ? 'Migrating Supabase Records...' : 'Import Data from Supabase'}
+          </Button>
+
+          <Button
+            onClick={handleRunRollback}
+            disabled={isMigrating || isRollingBack}
+            variant="outline"
+            className="border-destructive/30 text-destructive hover:bg-destructive/10 font-bold rounded-xl h-10 px-5"
+          >
+            <RotateCcw className={cn("h-4 w-4 mr-2", isRollingBack && "animate-spin")} />
+            {isRollingBack ? 'Reverting Database...' : 'Revert / Rollback Database'}
+          </Button>
+        </CardContent>
+      </Card>
 
       <Card className="mb-8">
         <CardHeader className="pb-3">

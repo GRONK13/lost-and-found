@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card'
@@ -22,113 +21,51 @@ interface ChatBoxProps {
 
 interface Message {
   id: number
-  claim_id: number
-  sender_id: string
+  claimId: number
+  senderId: string
   content: string
-  created_at: string
+  createdAt: string
+  sender?: {
+    id: string
+    name: string | null
+    email: string
+  }
 }
 
 export function ChatBox({ claimId, currentUserId, currentUserName = 'You', otherUserName, borderless = false }: ChatBoxProps) {
   const [messages, setMessages] = useState<Message[]>([])
   const [newMessage, setNewMessage] = useState('')
   const [loading, setLoading] = useState(false)
-  const [itemTitle, setItemTitle] = useState<string>('')
   const scrollRef = useRef<HTMLDivElement>(null)
-  const supabase = createClient()
+
+  const fetchMessages = async () => {
+    try {
+      const res = await fetch(`/api/messages?claimId=${claimId}`)
+      if (res.ok) {
+        const data = await res.json()
+        setMessages(data.messages || [])
+      }
+    } catch (e) {
+      console.error('Error fetching messages:', e)
+    }
+  }
 
   useEffect(() => {
-    // Request notification permission on mount
     requestNotificationPermission()
-    
     fetchMessages()
-    fetchItemTitle()
-    
-    // Mark messages as read for this claim (messages not sent by current user)
-    markMessagesAsRead()
-    
-    // Subscribe to new messages using Supabase Realtime
-    const channel = supabase
-      .channel(`claim-${claimId}`)
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'messages',
-          filter: `claim_id=eq.${claimId}`,
-        },
-        (payload) => {
-          console.log('New message received:', payload)
-          const newMsg = payload.new as Message
-          setMessages((current) => [...current, newMsg])
-          
-          // If message is from another user, show notification
-          if (newMsg.sender_id !== currentUserId) {
-            markMessageAsRead(newMsg.id)
-            // Show browser notification
-            notifyNewMessage(otherUserName, newMsg.content, itemTitle || 'Lost & Found Item')
-          }
-        }
-      )
-      .subscribe()
 
-    return () => {
-      supabase.removeChannel(channel)
-    }
+    const interval = setInterval(() => {
+      fetchMessages()
+    }, 3000)
+
+    return () => clearInterval(interval)
   }, [claimId])
 
   useEffect(() => {
-    // Scroll to bottom when messages change
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     }
   }, [messages])
-
-  const fetchMessages = async () => {
-    const { data, error } = await supabase
-      .from('messages')
-      .select('*')
-      .eq('claim_id', claimId)
-      .order('created_at', { ascending: true })
-
-    if (!error && data) {
-      setMessages(data)
-    }
-  }
-
-  const fetchItemTitle = async () => {
-    // Fetch the item title for this claim
-    const { data } = await supabase
-      .from('claims')
-      .select('items(title)')
-      .eq('id', claimId)
-      .single()
-
-    if (data?.items && typeof data.items === 'object' && 'title' in data.items) {
-      setItemTitle(data.items.title as string)
-    }
-  }
-
-  const markMessagesAsRead = async () => {
-    // Mark all unread messages in this claim as read (except those sent by current user)
-    console.log('📖 Marking messages as read for claim:', claimId)
-    const { data, error } = await supabase
-      .from('messages')
-      .update({ read: true })
-      .eq('claim_id', claimId)
-      .eq('read', false)
-      .neq('sender_id', currentUserId)
-      .select()
-    
-    console.log('📖 Marked messages:', data, 'Error:', error)
-  }
-
-  const markMessageAsRead = async (messageId: number) => {
-    await supabase
-      .from('messages')
-      .update({ read: true })
-      .eq('id', messageId)
-  }
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -138,15 +75,21 @@ export function ChatBox({ claimId, currentUserId, currentUserName = 'You', other
     setLoading(true)
 
     try {
-      const { error } = await supabase.from('messages').insert({
-        claim_id: claimId,
-        sender_id: currentUserId,
-        content: newMessage.trim(),
+      const res = await fetch('/api/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          claimId,
+          content: newMessage.trim(),
+        }),
       })
 
-      if (error) throw error
+      if (!res.ok) {
+        throw new Error('Failed to send message')
+      }
 
       setNewMessage('')
+      await fetchMessages()
     } catch (error) {
       console.error('Error sending message:', error)
       toast({
@@ -185,7 +128,8 @@ export function ChatBox({ claimId, currentUserId, currentUserName = 'You', other
               </div>
             ) : (
               messages.map((message) => {
-                const isCurrentUser = message.sender_id === currentUserId
+                const isCurrentUser = (message.senderId || (message as any).sender_id) === currentUserId
+                const createdAt = message.createdAt || (message as any).created_at
                 return (
                   <div
                     key={message.id}
@@ -214,7 +158,7 @@ export function ChatBox({ claimId, currentUserId, currentUserName = 'You', other
                         <p>{message.content}</p>
                       </div>
                       <span className="text-[9px] text-muted-foreground px-1">
-                        {new Date(message.created_at).toLocaleTimeString([], {
+                        {new Date(createdAt).toLocaleTimeString([], {
                           hour: '2-digit',
                           minute: '2-digit',
                         })}

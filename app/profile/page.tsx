@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import { ItemCard } from '@/components/ItemCard'
 import { ClaimCard } from '@/components/ClaimCard'
 import { ChangePasswordForm } from '@/components/ChangePasswordForm'
@@ -13,53 +12,30 @@ export const dynamic = 'force-dynamic'
 
 export default function ProfilePage() {
   const [user, setUser] = useState<any>(null)
-  const [userData, setUserData] = useState<any>(null)
   const [reportedItems, setReportedItems] = useState<any[]>([])
   const [claims, setClaims] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  const supabase = createClient()
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data: { user: currentUser } } = await supabase.auth.getUser()
-      
-      if (!currentUser) {
-        window.location.href = '/auth/login'
-        return
+      try {
+        const res = await fetch('/api/profile')
+        if (res.status === 401) {
+          window.location.href = '/auth/login'
+          return
+        }
+
+        const data = await res.json()
+        if (res.ok) {
+          setUser(data.user)
+          setReportedItems(data.reportedItems || [])
+          setClaims(data.claims || [])
+        }
+      } catch (e) {
+        console.error(e)
+      } finally {
+        setLoading(false)
       }
-
-      setUser(currentUser)
-
-      // Get user metadata
-      const { data: userDataRes } = await supabase
-        .from('users')
-        .select('*')
-        .eq('id', currentUser.id)
-        .single()
-
-      setUserData(userDataRes)
-
-      // Get user's reported items
-      const { data: reportedItemsRes } = await supabase
-        .from('items')
-        .select('*')
-        .eq('reporter_id', currentUser.id)
-        .order('created_at', { ascending: false })
-
-      setReportedItems(reportedItemsRes || [])
-
-      // Get user's claims
-      const { data: claimsRes } = await supabase
-        .from('claims')
-        .select(`
-          *,
-          items(*)
-        `)
-        .eq('claimant_id', currentUser.id)
-        .order('created_at', { ascending: false })
-
-      setClaims(claimsRes || [])
-      setLoading(false)
     }
 
     fetchData()
@@ -98,7 +74,7 @@ export default function ProfilePage() {
           <CardContent className="pt-5 space-y-4 text-sm">
             <div className="flex justify-between items-center py-2 border-b border-border/40">
               <span className="font-semibold text-muted-foreground">Full Name:</span>
-              <span className="font-bold text-foreground">{userData?.name || 'Not set'}</span>
+              <span className="font-bold text-foreground">{user?.name || 'Not set'}</span>
             </div>
             <div className="flex justify-between items-center py-2 border-b border-border/40">
               <span className="font-semibold text-muted-foreground">Email Address:</span>
@@ -107,7 +83,7 @@ export default function ProfilePage() {
             <div className="flex justify-between items-center py-2">
               <span className="font-semibold text-muted-foreground">Portal Role:</span>
               <span className="px-2 py-0.5 rounded-md bg-primary/10 text-primary font-bold text-xs uppercase tracking-wide">
-                {userData?.role || 'user'}
+                {user?.role || 'USER'}
               </span>
             </div>
           </CardContent>

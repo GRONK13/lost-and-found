@@ -2,15 +2,14 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-
-export const dynamic = 'force-dynamic'
 import { toast } from '@/components/ui/use-toast'
 import Link from 'next/link'
+
+export const dynamic = 'force-dynamic'
 
 export default function RegisterPage() {
   const [name, setName] = useState('')
@@ -19,7 +18,6 @@ export default function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
-  const supabase = createClient()
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -44,31 +42,34 @@ export default function RegisterPage() {
 
     setLoading(true)
 
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          name,
-        },
-      },
-    })
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, name }),
+      })
 
-    if (error) {
+      const data = await res.json()
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to create account')
+      }
+
+      toast({
+        title: 'Success',
+        description: 'Account created successfully! Welcome to Lost & Found.',
+      })
+      router.push('/')
+      router.refresh()
+    } catch (error: any) {
       toast({
         title: 'Error',
         description: error.message,
         variant: 'destructive',
       })
-    } else {
-      toast({
-        title: 'Success',
-        description: 'Account created! Please check your email to verify.',
-      })
-      router.push('/auth/login')
+    } finally {
+      setLoading(false)
     }
-
-    setLoading(false)
   }
 
   return (

@@ -1,6 +1,5 @@
 'use client'
 
-import { createClient } from '@/lib/supabase/client'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { MessageCircle, User2, ArrowLeft } from 'lucide-react'
@@ -20,94 +19,30 @@ interface Claim {
   itemTitle: string
   itemId: number
   unreadCount: number
-  chatType: string
 }
 
 export default function AllChatsPage() {
-  const [user, setUser] = useState<any>(null)
   const [allClaims, setAllClaims] = useState<Claim[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchData = async () => {
-      const supabase = createClient()
-      
-      const { data: { user: currentUser } } = await supabase.auth.getUser()
-      
-      if (!currentUser) {
-        window.location.href = '/auth/login'
-        return
+      try {
+        const res = await fetch('/api/chats')
+        if (res.status === 401) {
+          window.location.href = '/auth/login'
+          return
+        }
+
+        const data = await res.json()
+        if (res.ok && data.conversations) {
+          setAllClaims(data.conversations)
+        }
+      } catch (e) {
+        console.error(e)
+      } finally {
+        setLoading(false)
       }
-
-      setUser(currentUser)
-
-      // Get all claims where the user is either the claimant or the reporter
-      // Get ALL chat-type claims (not just pending/approved)
-      const { data: claimsAsClaimant } = await supabase
-        .from('claims')
-        .select(`
-          *,
-          items!inner(
-            id,
-            title,
-            photo_url,
-            users!reporter_id(name, email)
-          )
-        `)
-        .eq('claimant_id', currentUser.id)
-        .eq('chat_type', 'chat')
-        .order('created_at', { ascending: false })
-
-      const { data: claimsAsReporter } = await supabase
-        .from('claims')
-        .select(`
-          *,
-          users!claimant_id(name, email),
-          items!inner(id, title, photo_url, reporter_id)
-        `)
-        .eq('items.reporter_id', currentUser.id)
-        .eq('chat_type', 'chat')
-        .order('created_at', { ascending: false })
-
-      const claims = [
-        ...(claimsAsClaimant || []).map(claim => ({
-          id: claim.id,
-          status: claim.status,
-          created_at: claim.created_at,
-          role: 'claimant' as const,
-          otherUserName: claim.items?.users?.name || claim.items?.users?.email || 'Reporter',
-          itemTitle: claim.items?.title || 'Unknown Item',
-          itemId: claim.items?.id,
-          unreadCount: 0,
-          chatType: claim.chat_type,
-        })),
-        ...(claimsAsReporter || []).map(claim => ({
-          id: claim.id,
-          status: claim.status,
-          created_at: claim.created_at,
-          role: 'reporter' as const,
-          otherUserName: claim.users?.name || claim.users?.email || 'Claimant',
-          itemTitle: claim.items?.title || 'Unknown Item',
-          itemId: claim.items?.id,
-          unreadCount: 0,
-          chatType: claim.chat_type,
-        })),
-      ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-
-      // Fetch unread count for each claim
-      for (const claim of claims) {
-        const { count } = await supabase
-          .from('messages')
-          .select('*', { count: 'exact', head: true })
-          .eq('claim_id', claim.id)
-          .eq('read', false)
-          .neq('sender_id', currentUser.id)
-        
-        claim.unreadCount = count || 0
-      }
-
-      setAllClaims(claims)
-      setLoading(false)
     }
 
     fetchData()

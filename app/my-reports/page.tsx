@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import { ItemCard } from '@/components/ItemCard'
 import { Card, CardContent } from '@/components/ui/card'
 import { FileQuestion } from 'lucide-react'
@@ -15,28 +14,23 @@ export default function MyReportsPage() {
 
   useEffect(() => {
     const fetchMyReports = async () => {
-      const supabase = createClient()
-      
-      const { data: { user } } = await supabase.auth.getUser()
-      
-      if (!user) {
-        window.location.href = '/auth/login'
-        return
+      try {
+        const res = await fetch('/api/my-reports')
+        if (res.status === 401) {
+          window.location.href = '/auth/login'
+          return
+        }
+
+        const data = await res.json()
+        if (res.ok && data.items) {
+          setItems(data.items)
+          setUserId(data.userId)
+        }
+      } catch (e) {
+        console.error(e)
+      } finally {
+        setLoading(false)
       }
-
-      setUserId(user.id)
-
-      const { data, error } = await supabase
-        .from('items')
-        .select('*')
-        .eq('reporter_id', user.id)
-        .order('created_at', { ascending: false })
-
-      if (!error && data) {
-        setItems(data)
-      }
-
-      setLoading(false)
     }
 
     fetchMyReports()

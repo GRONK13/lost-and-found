@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
 import { Button } from './ui/button'
 import { Textarea } from './ui/textarea'
 import { Label } from './ui/label'
@@ -27,53 +26,39 @@ export function ClaimItemModal({ itemId, itemTitle, isOpen, onClose }: ClaimItem
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
-  const supabase = createClient()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
 
     try {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) {
-        router.push('/auth/login')
-        return
-      }
-
-      // Upsert a claim-type claim (overwrites/updates existing chat if they started one)
-      const { error } = await supabase.from('claims').upsert({
-        item_id: itemId,
-        claimant_id: user.id,
-        message,
-        chat_type: 'claim',
-        status: 'pending'
-      }, {
-        onConflict: 'item_id,claimant_id'
+      const res = await fetch('/api/claims', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          itemId,
+          chatType: 'CLAIM',
+          message,
+        }),
       })
 
-      if (error) {
-        if (error.code === '23505') {
-          toast({
-            title: 'Error',
-            description: 'You have already claimed this item',
-            variant: 'destructive',
-          })
-        } else {
-          throw error
-        }
-      } else {
-        toast({
-          title: 'Success',
-          description: 'Claim submitted! The reporter will review it.',
-        })
-        setMessage('')
-        onClose()
-        router.refresh()
+      const data = await res.json()
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to submit claim')
       }
-    } catch (error) {
+
+      toast({
+        title: 'Success',
+        description: 'Claim submitted! The reporter will review it.',
+      })
+      setMessage('')
+      onClose()
+      router.refresh()
+    } catch (error: any) {
       toast({
         title: 'Error',
-        description: 'Failed to submit claim',
+        description: error.message || 'Failed to submit claim',
         variant: 'destructive',
       })
     } finally {

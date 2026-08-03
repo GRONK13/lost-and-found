@@ -6,10 +6,8 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from './ui/card'
 import { StatusBadge } from './StatusBadge'
 import { Badge } from './ui/badge'
 import { Button } from './ui/button'
-import { MapPin, Calendar, Edit, Trash2, CheckCircle } from 'lucide-react'
-import { Database } from '@/lib/database.types'
+import { MapPin, Calendar, Edit, CheckCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
 import { toast } from '@/components/ui/use-toast'
 import { useState } from 'react'
 import {
@@ -24,17 +22,14 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
-type Item = Database['public']['Tables']['items']['Row']
-
 interface ItemCardProps {
-  item: Item
+  item: any
   showActions?: boolean
   userId?: string
 }
 
 export function ItemCard({ item, showActions = false, userId }: ItemCardProps) {
   const router = useRouter()
-  const supabase = createClient()
   const [updating, setUpdating] = useState(false)
 
   const handleMarkAsReturned = async (e: React.MouseEvent) => {
@@ -43,13 +38,15 @@ export function ItemCard({ item, showActions = false, userId }: ItemCardProps) {
     setUpdating(true)
 
     try {
-      // Update item status to returned
-      const { error } = await supabase
-        .from('items')
-        .update({ status: 'returned' })
-        .eq('id', item.id)
+      const res = await fetch(`/api/items/${item.id}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'RETURNED' }),
+      })
 
-      if (error) throw error
+      if (!res.ok) {
+        throw new Error('Failed to update status')
+      }
 
       toast({
         title: 'Success',
@@ -74,9 +71,11 @@ export function ItemCard({ item, showActions = false, userId }: ItemCardProps) {
     router.push(`/items/${item.id}/edit`)
   }
 
-  const isOwner = showActions && userId && item.reporter_id === userId
+  const isOwner = showActions && userId && (item.reporterId === userId || item.reporter_id === userId)
+  const photoUrl = item.photoUrl || item.photo_url
+  const createdAt = item.createdAt || item.created_at
 
-  const formattedDate = new Date(item.created_at).toLocaleDateString('en-US', {
+  const formattedDate = new Date(createdAt).toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
@@ -86,10 +85,10 @@ export function ItemCard({ item, showActions = false, userId }: ItemCardProps) {
     <Card className="group h-full overflow-hidden rounded-2xl border bg-card/60 shadow-sm transition-all duration-300 hover:shadow-md hover:border-primary/20 hover:-translate-y-1 relative backdrop-blur-sm flex flex-col justify-between">
       <Link href={`/items/${item.id}`} className="flex-1 flex flex-col">
         <CardHeader className="p-0 overflow-hidden">
-          {item.photo_url ? (
+          {photoUrl ? (
             <div className="relative h-48 sm:h-56 w-full">
               <Image
-                src={item.photo_url}
+                src={photoUrl}
                 alt={item.title}
                 fill
                 className="object-cover rounded-t-2xl transition-transform duration-500 group-hover:scale-105"
@@ -158,10 +157,10 @@ export function ItemCard({ item, showActions = false, userId }: ItemCardProps) {
                 variant="outline"
                 size="sm"
                 className="flex-1 text-xs h-9 hover:bg-muted font-semibold"
-                disabled={updating || item.status === 'returned'}
+                disabled={updating || item.status === 'returned' || item.status === 'RETURNED'}
               >
                 <CheckCircle className="h-3.5 w-3.5 mr-1.5 text-secondary" />
-                {item.status === 'returned' ? 'Returned' : 'Mark as Returned'}
+                {item.status === 'returned' || item.status === 'RETURNED' ? 'Returned' : 'Mark as Returned'}
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent onClick={(e: React.MouseEvent) => e.stopPropagation()} className="glass-card">

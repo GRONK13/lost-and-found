@@ -47,6 +47,14 @@ git pull origin main 2>&1 | tee -a "$LOG_DIR/deploy.log"
 # Install dependencies (in case package.json changed)
 install_dependencies
 
+# Generate Prisma Client
+echo "🔧 Generating Prisma Client..." | tee -a "$LOG_DIR/deploy.log"
+npx prisma generate 2>&1 | tee -a "$LOG_DIR/deploy.log"
+
+# Push database schema to MariaDB
+echo "🗄️ Pushing database schema to MariaDB..." | tee -a "$LOG_DIR/deploy.log"
+npx prisma db push 2>&1 | tee -a "$LOG_DIR/deploy.log"
+
 # Build the application
 echo "🔨 Building application..." | tee -a "$LOG_DIR/deploy.log"
 npm run build 2>&1 | tee -a "$LOG_DIR/deploy.log"

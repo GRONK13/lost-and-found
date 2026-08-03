@@ -1,43 +1,35 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ItemCard } from '@/components/ItemCard'
 import { AdminItemActions } from '@/components/admin/AdminItemActions'
 import { ArrowLeft, EyeOff, ShieldAlert } from 'lucide-react'
+import { db } from '@/lib/db'
+import { getCurrentUser } from '@/lib/auth'
 
 export const dynamic = 'force-dynamic'
 
 export default async function AdminHiddenPostsPage() {
-  const supabase = await createClient()
+  const user = await getCurrentUser()
+  if (!user) redirect('/auth/login')
+  if (user.role !== 'ADMIN') redirect('/')
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const rawHiddenItems = await db.item.findMany({
+    where: { hidden: true },
+    orderBy: { createdAt: 'desc' },
+  })
 
-  if (!user) {
-    redirect('/auth/login')
-  }
+  const hiddenItems = rawHiddenItems.map((item) => ({
+    ...item,
+    created_at: item.createdAt.toISOString(),
+    photo_url: item.photoUrl,
+    reporter_id: item.reporterId,
+    status: item.status.toLowerCase(),
+  }))
 
-  const { data: userData } = await supabase
-    .from('users')
-    .select('role')
-    .eq('id', user.id)
-    .single()
-
-  if (userData?.role !== 'admin') {
-    redirect('/')
-  }
-
-  const { data: hiddenItems } = await supabase
-    .from('items')
-    .select('*')
-    .eq('hidden', true)
-    .order('created_at', { ascending: false })
-
-  const totalHidden = hiddenItems?.length || 0
+  const totalHidden = hiddenItems.length
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -72,9 +64,9 @@ export default async function AdminHiddenPostsPage() {
         </CardContent>
       </Card>
 
-      {hiddenItems && hiddenItems.length > 0 ? (
+      {hiddenItems.length > 0 ? (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
-          {hiddenItems.map((item) => (
+          {hiddenItems.map((item: any) => (
             <div key={item.id} className="relative isolate flex flex-col gap-2 h-full">
               <Badge className="absolute top-2 right-2 z-10" variant="secondary">
                 <EyeOff className="h-3 w-3 mr-1" />

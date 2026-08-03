@@ -1,8 +1,8 @@
-import { createClient } from '@/lib/supabase/server'
+import { getCurrentUser } from '@/lib/auth'
+import { db } from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
 
 export const dynamic = 'force-dynamic'
-export const runtime = 'nodejs'
 
 interface RouteContext {
   params: Promise<{
@@ -12,51 +12,28 @@ interface RouteContext {
 
 export async function PATCH(request: NextRequest, context: RouteContext) {
   try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const adminUser = await getCurrentUser()
 
-    if (!user) {
+    if (!adminUser || adminUser.role !== 'ADMIN') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
-    const { data: userData } = await supabase
-      .from('users')
-      .select('role')
-      .eq('id', user.id)
-      .single()
-
-    if (userData?.role !== 'admin') {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
     const { id } = await context.params
     const itemId = Number(id)
+    const { hidden } = await request.json()
 
-    if (!Number.isFinite(itemId)) {
-      return NextResponse.json({ error: 'Invalid item id' }, { status: 400 })
+    if (!Number.isFinite(itemId) || typeof hidden !== 'boolean') {
+      return NextResponse.json({ error: 'Invalid parameters' }, { status: 400 })
     }
 
-    const body = await request.json().catch(() => null)
+    const item = await db.item.update({
+      where: { id: itemId },
+      data: { hidden },
+    })
 
-    if (!body || typeof body.hidden !== 'boolean') {
-      return NextResponse.json({ error: 'Missing or invalid hidden value' }, { status: 400 })
-    }
-
-    const { data: updatedItem, error } = await supabase
-      .from('items')
-      .update({ hidden: body.hidden })
-      .eq('id', itemId)
-      .select('id, hidden')
-      .single()
-
-    if (error) {
-      console.error('Error updating item visibility:', error)
-      return NextResponse.json({ error: 'Failed to update item visibility' }, { status: 500 })
-    }
-
-    return NextResponse.json({ success: true, item: updatedItem })
+    return NextResponse.json({ success: true, item })
   } catch (error) {
-    console.error('Error in visibility route:', error)
+    console.error('Error updating item visibility:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
