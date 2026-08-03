@@ -11,12 +11,15 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Get chat-type claims where user is claimant
-    const claimsAsClaimant = await db.claim.findMany({
+    // Combined query: Get claims where user is claimant OR item reporter is user in a single request
+    const claims = await db.claim.findMany({
       where: {
-        claimantId: user.id,
         chatType: 'CHAT',
         status: { in: ['PENDING', 'APPROVED'] },
+        OR: [
+          { claimantId: user.id },
+          { item: { reporterId: user.id } },
+        ],
       },
       include: {
         item: {
@@ -26,19 +29,6 @@ export async function GET() {
             },
           },
         },
-      },
-      orderBy: { createdAt: 'desc' },
-    })
-
-    // Get chat-type claims where user is reporter
-    const claimsAsReporter = await db.claim.findMany({
-      where: {
-        item: { reporterId: user.id },
-        chatType: 'CHAT',
-        status: { in: ['PENDING', 'APPROVED'] },
-      },
-      include: {
-        item: true,
         claimant: {
           select: { name: true, email: true },
         },
@@ -46,39 +36,42 @@ export async function GET() {
       orderBy: { createdAt: 'desc' },
     })
 
-    const conversations = [
-      ...claimsAsClaimant.map((claim) => ({
-        id: claim.id,
-        status: claim.status.toLowerCase(),
-        created_at: claim.createdAt.toISOString(),
-        role: 'claimant' as const,
-        otherUserName: claim.item.reporter.name || claim.item.reporter.email || 'Reporter',
-        itemTitle: claim.item.title,
-        itemId: claim.item.id,
-        unreadCount: 0,
-      })),
-      ...claimsAsReporter.map((claim) => ({
-        id: claim.id,
-        status: claim.status.toLowerCase(),
-        created_at: claim.createdAt.toISOString(),
-        role: 'reporter' as const,
-        otherUserName: claim.claimant.name || claim.claimant.email || 'Claimant',
-        itemTitle: claim.item.title,
-        itemId: claim.item.id,
-        unreadCount: 0,
-      })),
-    ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+    const conversations = claims.map((claim) => {
+      const isClaimant = claim.claimantId === user.id
+      const otherUser = isClaimant ? claim.item.reporter : claim.claimant
+      const role = isClaimant ? ('claimant' as const) : ('reporter' as const)
 
-    // Fetch unread count for each conversation
-    for (const conv of conversations) {
-      const unreadCount = await db.message.count({
+      return {
+        id: claim.id,
+        status: claim.status.toLowerCase(),
+        created_at: claim.createdAt.toISOString(),
+        role,
+        otherUserName: otherUser.name || otherUser.email || (isClaimant ? 'Reporter' : 'Claimant'),
+        itemTitle: claim.item.title,
+        itemId: claim.item.id,
+        unreadCount: 0,
+      }
+    })
+
+    // Batch query: Fetch unread counts for all conversations in a single aggregate query to avoid N+1
+    const claimIds = conversations.map((c) => c.id)
+    if (claimIds.length > 0) {
+      const unreadCounts = await db.message.groupBy({
+        by: ['claimId'],
+        _count: {
+          id: true,
+        },
         where: {
-          claimId: conv.id,
+          claimId: { in: claimIds },
           read: false,
           senderId: { not: user.id },
         },
       })
-      conv.unreadCount = unreadCount
+
+      const countsMap = new Map(unreadCounts.map((u) => [u.claimId, u._count.id]))
+      for (const conv of conversations) {
+        conv.unreadCount = countsMap.get(conv.id) || 0
+      }
     }
 
     return NextResponse.json({

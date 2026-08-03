@@ -30,15 +30,18 @@ export async function GET(request: NextRequest) {
       },
     })
 
-    // Mark unread messages sent by others as read
-    await db.message.updateMany({
-      where: {
-        claimId,
-        read: false,
-        senderId: { not: user.id },
-      },
-      data: { read: true },
-    })
+    // Optimize database writes: Only trigger updateMany if there are actually unread messages sent by others
+    const hasUnread = messages.some(msg => !msg.read && msg.senderId !== user.id)
+    if (hasUnread) {
+      await db.message.updateMany({
+        where: {
+          claimId,
+          read: false,
+          senderId: { not: user.id },
+        },
+        data: { read: true },
+      })
+    }
 
     return NextResponse.json({ messages })
   } catch (error) {
