@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs'
 import { SignJWT, jwtVerify } from 'jose'
 import { cookies } from 'next/headers'
 import { db } from './db'
+import { cache } from 'react'
 
 const JWT_SECRET = new TextEncoder().encode(
   process.env.JWT_SECRET || 'dcism_carolinian_lost_n_found_jwt_secret_key_2026'
@@ -64,7 +65,8 @@ export async function clearAuthCookie() {
   })
 }
 
-export async function getCurrentUser() {
+// Wrap with React's cache to memoize session lookups within the same request lifecycle (e.g. layout + pages)
+export const getCurrentUser = cache(async () => {
   try {
     const cookieStore = await cookies()
     const token = cookieStore.get(AUTH_COOKIE_NAME)?.value
@@ -89,4 +91,4 @@ export async function getCurrentUser() {
   } catch (error) {
     return null
   }
-}
+})

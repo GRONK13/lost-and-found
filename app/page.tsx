@@ -21,34 +21,32 @@ import {
 export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
-  // Get recent non-hidden items
-  const items = await db.item.findMany({
-    where: { hidden: false },
-    orderBy: { createdAt: 'desc' },
-    take: 6,
-  })
-
-  // Get current user session
+  // Get current user session first to keep Next.js request context boundary safe
   const user = await getCurrentUser()
 
-  // Fetch dynamic statistics
-  const activeCount = await db.item.count({
-    where: {
-      hidden: false,
-      status: { in: ['LOST', 'FOUND'] },
-    },
-  })
-
-  const reunitedCount = await db.item.count({
-    where: {
-      hidden: false,
-      status: 'RETURNED',
-    },
-  })
-
-  const totalCount = await db.item.count({
-    where: { hidden: false },
-  })
+  // Optimize queries: run recent items and all stats counts concurrently
+  const [items, activeCount, reunitedCount, totalCount] = await Promise.all([
+    db.item.findMany({
+      where: { hidden: false },
+      orderBy: { createdAt: 'desc' },
+      take: 6,
+    }),
+    db.item.count({
+      where: {
+        hidden: false,
+        status: { in: ['LOST', 'FOUND'] },
+      },
+    }),
+    db.item.count({
+      where: {
+        hidden: false,
+        status: 'RETURNED',
+      },
+    }),
+    db.item.count({
+      where: { hidden: false },
+    }),
+  ])
 
   const categories = [
     { name: 'ID / Documents', value: 'ID', icon: CreditCard, color: 'text-amber-500 bg-amber-500/10' },
