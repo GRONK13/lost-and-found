@@ -7,6 +7,7 @@ interface StatusBadgeProps {
 }
 
 export function StatusBadge({ status }: StatusBadgeProps) {
+  const normalizedStatus = (status || 'lost').toLowerCase() as ItemStatus
   const variants: Record<ItemStatus, { variant: 'default' | 'secondary' | 'destructive' | 'outline'; label: string }> = {
     lost: { variant: 'destructive', label: 'Lost' },
     found: { variant: 'default', label: 'Found' },
@@ -14,7 +15,7 @@ export function StatusBadge({ status }: StatusBadgeProps) {
     returned: { variant: 'outline', label: 'Returned' },
   }
 
-  const config = variants[status]
+  const config = variants[normalizedStatus] || variants.lost
 
   return (
     <Badge variant={config.variant}>

@@ -21,14 +21,16 @@ import {
 export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
-  // Optimize queries: run recent items, current user, and all stats counts concurrently
-  const [items, user, activeCount, reunitedCount, totalCount] = await Promise.all([
+  // Get current user session first to keep Next.js request context boundary safe
+  const user = await getCurrentUser()
+
+  // Optimize queries: run recent items and all stats counts concurrently
+  const [items, activeCount, reunitedCount, totalCount] = await Promise.all([
     db.item.findMany({
       where: { hidden: false },
       orderBy: { createdAt: 'desc' },
       take: 6,
     }),
-    getCurrentUser(),
     db.item.count({
       where: {
         hidden: false,
