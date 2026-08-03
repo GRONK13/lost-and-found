@@ -179,8 +179,9 @@ case $choice in
         echo "   5. Select: Just the push event"
         ;;
     2)
-        echo "⬇️  Pulling latest changes..."
-        git pull origin main
+        CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "main")
+        echo "⬇️  Pulling latest changes from $CURRENT_BRANCH..."
+        git pull origin "$CURRENT_BRANCH"
 
         install_dependencies
         
