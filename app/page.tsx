@@ -15,7 +15,11 @@ import {
   HelpCircle,
   ArrowRight,
   CheckCircle2,
-  Bookmark
+  Bookmark,
+  HardDrive,
+  MessageSquareText,
+  ExternalLink,
+  LayoutGrid
 } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
@@ -245,6 +249,84 @@ export default async function HomePage() {
               </span>
             </p>
           </div>
+        </div>
+      </div>
+
+      {/* DCISM Student Ecosystem Showcase Section */}
+      <div className="max-w-6xl mx-auto space-y-6 pt-6">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-border/60 pb-4">
+          <div>
+            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-primary uppercase tracking-wider mb-1">
+              <LayoutGrid className="h-3.5 w-3.5" />
+              Connected Carolinian Platforms
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+              Explore the DCISM Student Ecosystem
+            </h2>
+          </div>
+          <p className="text-xs text-muted-foreground max-w-sm">
+            Discover other essential student services created for the USC DCISM community
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          {/* DCISM Drive Card */}
+          <a
+            href="https://drive.dcism.org"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative overflow-hidden rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-card via-card to-emerald-500/5 p-6 sm:p-8 shadow-sm hover:shadow-md hover:border-emerald-500/40 transition-all duration-300 hover:-translate-y-1"
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform">
+                <HardDrive className="h-6 w-6" />
+              </div>
+              <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full">
+                drive.dcism.org
+                <ExternalLink className="w-3 h-3" />
+              </span>
+            </div>
+            <div className="mt-5 space-y-1.5">
+              <h3 className="text-lg font-bold text-foreground group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                DCISM Drive
+              </h3>
+              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                Centralized academic cloud storage, syllabus repository, past study materials, and course resource archive for computer science and IT students.
+              </p>
+            </div>
+            <div className="mt-5 pt-4 border-t border-border/40 flex items-center text-xs font-bold text-emerald-600 dark:text-emerald-400 group-hover:translate-x-1 transition-transform">
+              Access Student Drive →
+            </div>
+          </a>
+
+          {/* DCISM Freedom Wall Card */}
+          <a
+            href="https://wall.dcism.org"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative overflow-hidden rounded-2xl border border-blue-500/20 bg-gradient-to-br from-card via-card to-blue-500/5 p-6 sm:p-8 shadow-sm hover:shadow-md hover:border-blue-500/40 transition-all duration-300 hover:-translate-y-1"
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">
+                <MessageSquareText className="h-6 w-6" />
+              </div>
+              <span className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-500/10 px-3 py-1 rounded-full">
+                wall.dcism.org
+                <ExternalLink className="w-3 h-3" />
+              </span>
+            </div>
+            <div className="mt-5 space-y-1.5">
+              <h3 className="text-lg font-bold text-foreground group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                DCISM Freedom Wall
+              </h3>
+              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                Carolinian community board, anonymous freedom wall, department discussions, student announcements, peer advice, and campus life stories.
+              </p>
+            </div>
+            <div className="mt-5 pt-4 border-t border-border/40 flex items-center text-xs font-bold text-blue-600 dark:text-blue-400 group-hover:translate-x-1 transition-transform">
+              Visit Freedom Wall →
+            </div>
+          </a>
         </div>
       </div>
     </div>

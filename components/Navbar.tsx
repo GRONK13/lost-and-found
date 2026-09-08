@@ -9,11 +9,13 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from './ui/dropdown-menu'
 import { Avatar, AvatarFallback } from './ui/avatar'
-import { Menu, Search, PlusCircle, User, LogOut, Shield, MessageCircle, FileText, EyeOff, GraduationCap } from 'lucide-react'
+import { Menu, Search, PlusCircle, User, LogOut, Shield, MessageCircle, FileText, EyeOff, GraduationCap, HardDrive, MessageSquareText, ExternalLink } from 'lucide-react'
 import { ThemeToggle } from './theme-toggle'
 import { ColorThemeToggle } from './color-theme-toggle'
+import { DcismAppsDropdown } from './DcismAppsDropdown'
 
 export function Navbar() {
   const pathname = usePathname()
@@ -124,6 +126,7 @@ export function Navbar() {
           </div>
  
           <div className="flex items-center gap-2">
+            <DcismAppsDropdown />
             <ColorThemeToggle />
             <ThemeToggle />
             {user ? (
@@ -174,14 +177,14 @@ export function Navbar() {
                 </Link>
               </div>
             )}
- 
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild className="md:hidden">
                 <Button variant="ghost" size="icon" className="hover:bg-muted">
                   <Menu />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 glass-card">
+              <DropdownMenuContent align="end" className="w-64 glass-card p-2 rounded-2xl">
                 <DropdownMenuItem asChild>
                   <Link href="/items" className="cursor-pointer">Browse Items</Link>
                 </DropdownMenuItem>
@@ -206,6 +209,38 @@ export function Navbar() {
                     )}
                   </>
                 )}
+                <DropdownMenuSeparator className="my-1.5" />
+                <div className="px-2 py-1 text-[10px] font-extrabold uppercase tracking-wider text-muted-foreground">
+                  DCISM Student Suite
+                </div>
+                <DropdownMenuItem asChild>
+                  <a
+                    href="https://drive.dcism.org"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cursor-pointer flex items-center justify-between text-emerald-600 dark:text-emerald-400 font-semibold"
+                  >
+                    <span className="flex items-center gap-2">
+                      <HardDrive className="w-4 h-4" />
+                      DCISM Drive
+                    </span>
+                    <ExternalLink className="w-3 h-3 text-muted-foreground" />
+                  </a>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <a
+                    href="https://wall.dcism.org"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cursor-pointer flex items-center justify-between text-blue-600 dark:text-blue-400 font-semibold"
+                  >
+                    <span className="flex items-center gap-2">
+                      <MessageSquareText className="w-4 h-4" />
+                      DCISM Wall
+                    </span>
+                    <ExternalLink className="w-3 h-3 text-muted-foreground" />
+                  </a>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
