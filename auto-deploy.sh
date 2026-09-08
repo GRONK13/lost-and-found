@@ -40,20 +40,21 @@ mkdir -p logs
 # Navigate to project directory
 cd "$PROJECT_DIR"
 
-# Pull latest changes
-echo "⬇️  Pulling latest changes from main..." | tee -a "$LOG_DIR/deploy.log"
-git pull origin main 2>&1 | tee -a "$LOG_DIR/deploy.log"
+# Pull latest changes from active branch
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "main")
+echo "⬇️  Pulling latest changes from $CURRENT_BRANCH..." | tee -a "$LOG_DIR/deploy.log"
+git pull origin "$CURRENT_BRANCH" 2>&1 | tee -a "$LOG_DIR/deploy.log"
 
 # Install dependencies (in case package.json changed)
 install_dependencies
 
 # Generate Prisma Client
 echo "🔧 Generating Prisma Client..." | tee -a "$LOG_DIR/deploy.log"
-npx prisma generate 2>&1 | tee -a "$LOG_DIR/deploy.log"
+npx --no-install prisma generate 2>&1 | tee -a "$LOG_DIR/deploy.log"
 
 # Push database schema to MariaDB
 echo "🗄️ Pushing database schema to MariaDB..." | tee -a "$LOG_DIR/deploy.log"
-npx prisma db push 2>&1 | tee -a "$LOG_DIR/deploy.log"
+npx --no-install prisma db push 2>&1 | tee -a "$LOG_DIR/deploy.log"
 
 # Build the application
 echo "🔨 Building application..." | tee -a "$LOG_DIR/deploy.log"
