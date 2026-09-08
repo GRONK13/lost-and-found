@@ -1,6 +1,10 @@
 const fs = require('fs/promises')
 const fsSync = require('fs')
 const path = require('path')
+const { exec } = require('child_process')
+const { promisify } = require('util')
+
+const execAsync = promisify(exec)
 
 // Load env files
 const envFiles = ['.env', '.env.local']
@@ -28,12 +32,25 @@ for (const file of envFiles) {
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
+function getStorageDir() {
+  const envDir = process.env.PERSISTENT_STORAGE_DIR || process.env.UPLOAD_DIR
+  if (envDir && envDir.trim() !== '') {
+    return path.resolve(envDir)
+  }
+  const sibling = path.resolve(__dirname, '..', '..', 'storage', 'uploads')
+  if (fsSync.existsSync(sibling)) {
+    return sibling
+  }
+  return path.resolve(__dirname, '..', 'public', 'uploads')
+}
+
 async function backupMariaDB() {
-  console.log('🛡️ Starting MariaDB table backup...')
+  console.log('🛡️ Starting Unified MariaDB & Persistent Storage Backup...')
 
   const backupDir = path.join(__dirname, 'backups')
   await fs.mkdir(backupDir, { recursive: true })
 
+  // 1. Database Table Backup
   const users = await prisma.user.findMany()
   const items = await prisma.item.findMany()
   const claims = await prisma.claim.findMany()
@@ -65,8 +82,25 @@ async function backupMariaDB() {
   const latestPath = path.join(backupDir, 'mariadb-backup-latest.json')
   await fs.writeFile(latestPath, JSON.stringify(snapshot, null, 2))
 
-  console.log(`✅ MariaDB Backup Complete! Saved to ${filename}`)
+  console.log(`✅ MariaDB Tables Backup Complete! Saved to ${filename}`)
   console.log('Snapshot Counts:', snapshot.counts)
+
+  // 2. Photos Storage Backup
+  const storageDir = getStorageDir()
+  console.log(`📁 Archiving photos from storage directory: ${storageDir}`)
+
+  if (fsSync.existsSync(storageDir)) {
+    try {
+      const photosArchiveName = `photos-backup-${timestamp}.tar.gz`
+      const photosArchivePath = path.join(backupDir, photosArchiveName)
+      await execAsync(`tar -czf "${photosArchivePath}" -C "${path.dirname(storageDir)}" "${path.basename(storageDir)}"`)
+      console.log(`✅ Photos Storage Archive Complete! Saved to ${photosArchiveName}`)
+    } catch (err) {
+      console.warn('⚠️ Tar compression skipped or not available on system:', err.message)
+    }
+  }
+
+  console.log('🎉 Unified Backup Finished Successfully!')
   return snapshot
 }
 

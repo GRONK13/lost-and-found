@@ -194,13 +194,29 @@ case $choice in
         echo "🔨 Building application..."
         npm run build
 
-        echo "📂 Preserving and linking persistent uploads..."
-        mkdir -p public/uploads
-        mkdir -p .next/standalone/.next/static
-        cp -r .next/static/. .next/standalone/.next/static/
-        mkdir -p .next/standalone/public
-        cp -r public/. .next/standalone/public/
-        ln -sfn "$(pwd)/public/uploads" ".next/standalone/public/uploads"
+        echo "📂 Setting up Dedicated Persistent Linux Storage..."
+        PROJECT_DIR="$(pwd)"
+        PARENT_DIR="$(cd .. && pwd)"
+        STORAGE_DIR="$PARENT_DIR/storage/uploads"
+
+        # Create external storage directory if not already existing
+        mkdir -p "$STORAGE_DIR"
+        chmod 755 "$STORAGE_DIR" 2>/dev/null || true
+
+        # Migrate any existing local images to external storage without overwriting
+        if [ -d "$PROJECT_DIR/public/uploads" ] && [ ! -L "$PROJECT_DIR/public/uploads" ]; then
+            echo "📦 Migrating existing local photos to external storage..."
+            cp -rn "$PROJECT_DIR/public/uploads/." "$STORAGE_DIR/" 2>/dev/null || true
+            rm -rf "$PROJECT_DIR/public/uploads"
+        fi
+
+        # Create persistent symlinks
+        ln -sfn "$STORAGE_DIR" "$PROJECT_DIR/public/uploads"
+        mkdir -p "$PROJECT_DIR/.next/standalone/.next/static"
+        cp -r "$PROJECT_DIR/.next/static/." "$PROJECT_DIR/.next/standalone/.next/static/"
+        mkdir -p "$PROJECT_DIR/.next/standalone/public"
+        cp -r "$PROJECT_DIR/public/." "$PROJECT_DIR/.next/standalone/public/" 2>/dev/null || true
+        ln -sfn "$STORAGE_DIR" "$PROJECT_DIR/.next/standalone/public/uploads"
         
         ensure_process_running
         ensure_pm2_startup
