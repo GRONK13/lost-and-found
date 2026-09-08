@@ -25,32 +25,47 @@ import {
 export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
-  // Get current user session first to keep Next.js request context boundary safe
-  const user = await getCurrentUser()
+  let user = null
+  let items: any[] = []
+  let activeCount = 0
+  let reunitedCount = 0
+  let totalCount = 0
 
-  // Optimize queries: run recent items and all stats counts concurrently
-  const [items, activeCount, reunitedCount, totalCount] = await Promise.all([
-    db.item.findMany({
-      where: { hidden: false },
-      orderBy: { createdAt: 'desc' },
-      take: 6,
-    }),
-    db.item.count({
-      where: {
-        hidden: false,
-        status: { in: ['LOST', 'FOUND'] },
-      },
-    }),
-    db.item.count({
-      where: {
-        hidden: false,
-        status: 'RETURNED',
-      },
-    }),
-    db.item.count({
-      where: { hidden: false },
-    }),
-  ])
+  try {
+    // Get current user session first to keep Next.js request context boundary safe
+    user = await getCurrentUser()
+
+    // Optimize queries: run recent items and all stats counts concurrently
+    const [fetchedItems, active, reunited, total] = await Promise.all([
+      db.item.findMany({
+        where: { hidden: false },
+        orderBy: { createdAt: 'desc' },
+        take: 6,
+      }),
+      db.item.count({
+        where: {
+          hidden: false,
+          status: { in: ['LOST', 'FOUND'] },
+        },
+      }),
+      db.item.count({
+        where: {
+          hidden: false,
+          status: 'RETURNED',
+        },
+      }),
+      db.item.count({
+        where: { hidden: false },
+      }),
+    ])
+
+    items = fetchedItems
+    activeCount = active
+    reunitedCount = reunited
+    totalCount = total
+  } catch (error) {
+    console.warn('Database query skipped / offline fallback.')
+  }
 
   const categories = [
     { name: 'ID / Documents', value: 'ID', icon: CreditCard, color: 'text-amber-500 bg-amber-500/10' },
