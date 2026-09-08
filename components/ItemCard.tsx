@@ -6,7 +6,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from './ui/card'
 import { StatusBadge } from './StatusBadge'
 import { Badge } from './ui/badge'
 import { Button } from './ui/button'
-import { MapPin, Calendar, Edit, CheckCircle } from 'lucide-react'
+import { MapPin, Calendar, Edit, CheckCircle, Laptop, CreditCard, BookOpen, Shirt, HelpCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { toast } from '@/components/ui/use-toast'
 import { useState } from 'react'
@@ -31,6 +31,7 @@ interface ItemCardProps {
 export function ItemCard({ item, showActions = false, userId }: ItemCardProps) {
   const router = useRouter()
   const [updating, setUpdating] = useState(false)
+  const [imageError, setImageError] = useState(false)
 
   const handleMarkAsReturned = async (e: React.MouseEvent) => {
     e.preventDefault()
@@ -40,7 +41,9 @@ export function ItemCard({ item, showActions = false, userId }: ItemCardProps) {
     try {
       const res = await fetch(`/api/items/${item.id}/status`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({ status: 'RETURNED' }),
       })
 
@@ -55,12 +58,13 @@ export function ItemCard({ item, showActions = false, userId }: ItemCardProps) {
 
       router.refresh()
     } catch (error) {
-      console.error('Error updating item:', error)
+      console.error('Error updating status:', error)
       toast({
         title: 'Error',
-        description: 'Failed to update item',
+        description: 'Failed to update item status',
         variant: 'destructive',
       })
+    } finally {
       setUpdating(false)
     }
   }
@@ -85,19 +89,29 @@ export function ItemCard({ item, showActions = false, userId }: ItemCardProps) {
     <Card className="group h-full overflow-hidden rounded-2xl border bg-card/60 shadow-sm transition-all duration-300 hover:shadow-md hover:border-primary/20 hover:-translate-y-1 relative backdrop-blur-sm flex flex-col justify-between">
       <Link href={`/items/${item.id}`} className="flex-1 flex flex-col">
         <CardHeader className="p-0 overflow-hidden">
-          {photoUrl ? (
-            <div className="relative h-48 sm:h-56 w-full">
+          {photoUrl && !imageError ? (
+            <div className="relative h-48 sm:h-56 w-full bg-muted">
               <Image
                 src={photoUrl}
                 alt={item.title}
                 fill
                 className="object-cover rounded-t-2xl transition-transform duration-500 group-hover:scale-105"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                onError={() => setImageError(true)}
               />
             </div>
           ) : (
-            <div className="h-48 sm:h-56 w-full bg-muted rounded-t-2xl flex items-center justify-center">
-              <p className="text-muted-foreground text-xs font-semibold">No image available</p>
+            <div className="h-48 sm:h-56 w-full bg-muted/60 rounded-t-2xl flex flex-col items-center justify-center gap-2 border-b border-border/40">
+              <div className="p-3 rounded-2xl bg-primary/10 text-primary">
+                {item.category === 'ID' && <CreditCard className="w-6 h-6" />}
+                {item.category === 'Gadget' && <Laptop className="w-6 h-6" />}
+                {item.category === 'Book' && <BookOpen className="w-6 h-6" />}
+                {item.category === 'Clothing' && <Shirt className="w-6 h-6" />}
+                {!['ID', 'Gadget', 'Book', 'Clothing'].includes(item.category) && <HelpCircle className="w-6 h-6" />}
+              </div>
+              <p className="text-muted-foreground text-[11px] font-semibold tracking-wide">
+                {item.category || 'Carolinian Item'}
+              </p>
             </div>
           )}
         </CardHeader>
