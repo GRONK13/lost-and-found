@@ -194,13 +194,13 @@ case $choice in
         echo "🔨 Building application..."
         npm run build
 
-        echo "📂 Copying static assets for standalone server..."
+        echo "📂 Preserving and linking persistent uploads..."
+        mkdir -p public/uploads
         mkdir -p .next/standalone/.next/static
         cp -r .next/static/. .next/standalone/.next/static/
-        if [ -d public ]; then
-            mkdir -p .next/standalone/public
-            cp -r public/. .next/standalone/public/
-        fi
+        mkdir -p .next/standalone/public
+        cp -r public/. .next/standalone/public/
+        ln -sfn "$(pwd)/public/uploads" ".next/standalone/public/uploads"
         
         ensure_process_running
         ensure_pm2_startup

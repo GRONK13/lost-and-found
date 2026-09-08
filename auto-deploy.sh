@@ -65,13 +65,13 @@ npx --no-install prisma db push 2>&1 | tee -a "$LOG_DIR/deploy.log"
 echo "🔨 Building application..." | tee -a "$LOG_DIR/deploy.log"
 npm run build 2>&1 | tee -a "$LOG_DIR/deploy.log"
 
-echo "📂 Copying static assets for standalone server..." | tee -a "$LOG_DIR/deploy.log"
-mkdir -p .next/standalone/.next/static
-cp -r .next/static/. .next/standalone/.next/static/ 2>&1 | tee -a "$LOG_DIR/deploy.log"
-if [ -d public ]; then
-	mkdir -p .next/standalone/public
-	cp -r public/. .next/standalone/public/ 2>&1 | tee -a "$LOG_DIR/deploy.log"
-fi
+echo "📂 Preserving and linking persistent uploads..." | tee -a "$LOG_DIR/deploy.log"
+mkdir -p "$PROJECT_DIR/public/uploads"
+mkdir -p "$PROJECT_DIR/.next/standalone/.next/static"
+cp -r "$PROJECT_DIR/.next/static/." "$PROJECT_DIR/.next/standalone/.next/static/" 2>&1 | tee -a "$LOG_DIR/deploy.log"
+mkdir -p "$PROJECT_DIR/.next/standalone/public"
+cp -r "$PROJECT_DIR/public/." "$PROJECT_DIR/.next/standalone/public/" 2>&1 | tee -a "$LOG_DIR/deploy.log"
+ln -sfn "$PROJECT_DIR/public/uploads" "$PROJECT_DIR/.next/standalone/public/uploads" 2>&1 | tee -a "$LOG_DIR/deploy.log"
 
 # Reload PM2 with zero downtime, or start fresh if process is missing.
 if pm2 describe "$APP_NAME" > /dev/null 2>&1; then

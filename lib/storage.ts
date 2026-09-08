@@ -1,11 +1,23 @@
 import fs from 'fs/promises'
 import path from 'path'
 
-const UPLOAD_DIR = path.join(process.cwd(), 'public', 'uploads')
+export function getUploadDir(): string {
+  if (process.env.UPLOAD_DIR) {
+    return path.resolve(process.env.UPLOAD_DIR)
+  }
+
+  const cwd = process.cwd()
+  if (cwd.includes('.next')) {
+    return path.resolve(cwd.split('.next')[0], 'public', 'uploads')
+  }
+
+  return path.resolve(cwd, 'public', 'uploads')
+}
 
 async function ensureUploadDir() {
   try {
-    await fs.mkdir(UPLOAD_DIR, { recursive: true })
+    const uploadDir = getUploadDir()
+    await fs.mkdir(uploadDir, { recursive: true })
   } catch (error) {
     console.error('Failed to create upload directory:', error)
   }
@@ -29,9 +41,10 @@ export async function uploadItemPhoto(file: File): Promise<string | null> {
 
     await ensureUploadDir()
 
+    const uploadDir = getUploadDir()
     const fileExt = file.name.split('.').pop() || 'jpg'
     const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`
-    const filePath = path.join(UPLOAD_DIR, fileName)
+    const filePath = path.join(uploadDir, fileName)
 
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
@@ -49,8 +62,9 @@ export async function deleteItemPhoto(photoUrl: string): Promise<boolean> {
   try {
     if (!photoUrl || !photoUrl.startsWith('/uploads/')) return false
 
+    const uploadDir = getUploadDir()
     const fileName = photoUrl.replace('/uploads/', '')
-    const filePath = path.join(UPLOAD_DIR, fileName)
+    const filePath = path.join(uploadDir, fileName)
 
     await fs.unlink(filePath)
     return true

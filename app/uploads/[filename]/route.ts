@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import fs from 'fs/promises'
 import path from 'path'
+import { getUploadDir } from '@/lib/storage'
 
 export const dynamic = 'force-dynamic'
 
@@ -25,18 +26,18 @@ export async function GET(
       return new NextResponse('Invalid filename', { status: 400 })
     }
 
-    // Try primary public/uploads location first
-    const primaryPath = path.join(process.cwd(), 'public', 'uploads', filename)
-    // Fallback to standalone public/uploads if present
-    const standalonePath = path.join(process.cwd(), '.next', 'standalone', 'public', 'uploads', filename)
+    const uploadDir = getUploadDir()
+    const filePath = path.join(uploadDir, filename)
 
     let fileBuffer: Buffer | null = null
 
     try {
-      fileBuffer = await fs.readFile(primaryPath)
+      fileBuffer = await fs.readFile(filePath)
     } catch {
+      // Fallback search in public/uploads relative to cwd
       try {
-        fileBuffer = await fs.readFile(standalonePath)
+        const fallbackPath = path.join(process.cwd(), 'public', 'uploads', filename)
+        fileBuffer = await fs.readFile(fallbackPath)
       } catch {
         return new NextResponse('Image not found', { status: 404 })
       }
