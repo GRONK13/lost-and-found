@@ -21,9 +21,9 @@ export async function uploadItemPhoto(file: File): Promise<string | null> {
     }
 
     // Validate file type
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg']
-    if (!allowedTypes.includes(file.type)) {
-      console.error('Invalid file type. Allowed: JPG, PNG, WebP')
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg', 'image/jfif', 'image/pjpeg', 'image/svg+xml']
+    if (!allowedTypes.includes(file.type) && !file.name.match(/\.(jpe?g|png|webp|jfif|gif)$/i)) {
+      console.error('Invalid file type. Allowed: JPG, PNG, WebP, JFIF')
       return null
     }
 

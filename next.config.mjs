@@ -4,6 +4,7 @@ const nextConfig = {
   optimizeFonts: false,
   staticPageGenerationTimeout: 180,
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
