@@ -5,6 +5,11 @@
 
 set -Eeuo pipefail
 
+# Ensure PM2, npm, and Node are in PATH even in background subshells
+export PATH="$HOME/.nvm/versions/node/$(ls $HOME/.nvm/versions/node 2>/dev/null | tail -n 1)/bin:$HOME/.npm-global/bin:$HOME/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
+if [ -f "$HOME/.bashrc" ]; then source "$HOME/.bashrc" 2>/dev/null || true; fi
+if [ -f "$HOME/.profile" ]; then source "$HOME/.profile" 2>/dev/null || true; fi
+
 APP_NAME="lost-and-found"
 PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
 LOG_DIR="$PROJECT_DIR/logs"

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 import crypto from 'crypto';
+import path from 'path';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -70,13 +71,20 @@ export async function POST(request: NextRequest) {
     console.log(`✅ Valid deployment trigger detected for ${targetRef}`);
     console.log(`👤 Pusher: ${payload.pusher?.name || 'github-actions'}`);
 
-    // Trigger the auto-deploy script
-    const scriptPath = './auto-deploy.sh';
+    // Trigger the auto-deploy script with absolute path and proper environment
+    const projectDir = process.cwd();
+    const scriptPath = path.join(projectDir, 'auto-deploy.sh');
 
     console.log(`🚀 Executing auto-deploy script: ${scriptPath}`);
 
     // Run the deploy script in the background
-    execAsync(`bash ${scriptPath}`)
+    execAsync(`bash "${scriptPath}"`, {
+      cwd: projectDir,
+      env: {
+        ...process.env,
+        PATH: `${process.env.PATH || ''}:/usr/local/bin:/usr/bin:/bin:$HOME/.nvm/versions/node/$(ls $HOME/.nvm/versions/node 2>/dev/null | tail -n 1)/bin:$HOME/.npm-global/bin:$HOME/bin`,
+      },
+    })
       .then(({ stdout, stderr }) => {
         console.log('Deploy stdout:', stdout);
         if (stderr) console.error('Deploy stderr:', stderr);
